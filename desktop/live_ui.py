@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 import time
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QComboBox, QSpinBox, QSlider
@@ -36,22 +37,22 @@ class LiveMixin:
         self.play_timer.setSingleShot(True)
         self.play_timer.timeout.connect(self.play_tick)
         row = FlowLayout()
-        self.live_toggle = QPushButton('Live ON')
+        self.live_toggle = QPushButton(tr('Live ON'))
         self.live_toggle.setCheckable(True)
         self.live_toggle.setChecked(True)
         self.live_toggle.toggled.connect(self.toggle_live)
         row.addWidget(self.live_toggle)
-        row.addWidget(QLabel('Proxy'))
+        row.addWidget(QLabel(tr('Proxy')))
         self.proxy = QComboBox()
         for label, value in [('Full', 1), ('1/2', 2), ('1/4', 4)]:
             self.proxy.addItem(label, value)
         self.proxy.setCurrentIndex(1)
         self.proxy.currentIndexChanged.connect(self.invalidate_live)
         row.addWidget(self.proxy)
-        self.cache_button = QPushButton('Cache range')
+        self.cache_button = QPushButton(tr('Cache range'))
         self.cache_button.clicked.connect(self.cache_range)
         row.addWidget(self.cache_button)
-        self.live_state = QLabel('Iniciando motor...')
+        self.live_state = QLabel(tr('Iniciando motor...'))
         from PySide6.QtWidgets import QSizePolicy
         self.live_state.setSizePolicy(QSizePolicy.Ignored,QSizePolicy.Fixed)
         row.addWidget(self.live_state, 1)
@@ -66,16 +67,16 @@ class LiveMixin:
         self.cache_scan=QTimer(self);self.cache_scan.setInterval(25);self.cache_scan.timeout.connect(self.scan_cache_marks)
         for label, callback in [('|<', lambda: self.jump(self.project['first'])),
                                 ('<', lambda: self.jump(self.project['frame'] - 1))]:
-            b = QPushButton(label)
+            b = QPushButton(tr(label))
             b.setMaximumWidth(34)
             b.clicked.connect(callback)
             timeline.addWidget(b)
-        self.play_button = QPushButton('Play')
+        self.play_button = QPushButton(tr('Play'))
         self.play_button.clicked.connect(self.toggle_play)
         timeline.addWidget(self.play_button)
         for label, callback in [('>', lambda: self.jump(self.project['frame'] + 1)),
                                 ('>|', lambda: self.jump(self.project['last']))]:
-            b = QPushButton(label)
+            b = QPushButton(tr(label))
             b.setMaximumWidth(34)
             b.clicked.connect(callback)
             timeline.addWidget(b)
@@ -84,14 +85,14 @@ class LiveMixin:
         self.fps.setValue(24)
         self.fps.setSuffix(' fps')
         timeline.addWidget(self.fps)
-        self.loop = QPushButton('Loop')
+        self.loop = QPushButton(tr('Loop'))
         self.loop.setCheckable(True)
         self.loop.setChecked(True)
         timeline.addWidget(self.loop)
-        QTimer.singleShot(200, lambda: self.request_live() if self.live_toggle.isChecked() else None)
+        QTimer.singleShot(200, self, lambda: self.request_live() if self.live_toggle.isChecked() else None)
 
     def toggle_live(self, enabled):
-        self.live_toggle.setText('Live ON' if enabled else 'Live OFF')
+        self.live_toggle.setText(tr('Live ON') if enabled else tr('Live OFF'))
         self.live_timer.stop()
         if enabled:
             self.request_live()
@@ -126,14 +127,14 @@ class LiveMixin:
             return
         target = self.project.get('viewer')
         if not target:
-            self.live_state.setText('Selecciona un nodo y pulsa 1')
+            self.live_state.setText(tr('Selecciona un nodo y pulsa 1'))
             return
         try:
             frame = self.project['frame']
             self.expected_key = fingerprint(self.project, target, frame, self.proxy.currentData())
             self.waiting_frame = True
             self.request_time = time.perf_counter()
-            self.live_state.setText(f'Buffering {frame}...' if self.playing else f'Actualizando {target}...')
+            self.live_state.setText(tr('Buffering {0}...').format(frame) if self.playing else tr('Actualizando {0}...').format(target))
             self.engine.request(self.project, target, frame, self.proxy.currentData())
         except (ValueError, OSError, KeyError) as exc:
             self.live_error(str(exc))
@@ -157,7 +158,7 @@ class LiveMixin:
                 self.live_error(str(exc))
                 return
             self.waiting_frame = False
-            self.viewer_label.setText(f"VIEWER A / {info['target']} / frame {info['frame']} / {info['width']} x {info['height']}")
+            self.viewer_label.setText(tr('VIEWER A / {0} / frame {1} / {2} x {3}').format(info['target'], info['frame'], info['width'], info['height']))
             now = time.perf_counter()
             self.display_times = (self.display_times + [now])[-24:]
             measured = (len(self.display_times)-1)/(now-self.display_times[0]) if len(self.display_times)>1 else 0
@@ -178,7 +179,7 @@ class LiveMixin:
         import numpy as np
         try:self.viewer.reference=np.fromfile(info['raw'],np.float32).reshape(info['height'],info['width'],4)
         except (OSError,ValueError) as exc:self.live_error(str(exc));return
-        self.viewer.reference_label.setText(f"B: {info['target']} / frame {info['frame']}")
+        self.viewer.reference_label.setText(tr('B: {0} / frame {1}').format(info['target'], info['frame']))
         self.accepting_pair=True
         try:self.live_ready(self.pending_a)
         finally:self.accepting_pair=False
@@ -190,14 +191,14 @@ class LiveMixin:
         self.warm_frames = []
         self.waiting_frame = False
         self.live_state.setText('Error: ' + message)
-        self.viewer_label.setText('VIEWER / imagen anterior · error de evaluacion')
+        self.viewer_label.setText(tr('VIEWER / imagen anterior · error de evaluacion'))
         self.log.appendPlainText('LIVE ERROR: ' + message)
 
     def pause(self):
         self.playing = False
         if hasattr(self, 'play_timer'):
             self.play_timer.stop()
-            self.play_button.setText('Play')
+            self.play_button.setText(tr('Play'))
             self.play_button.setIcon(icon('play'))
 
     def toggle_play(self):
@@ -205,7 +206,7 @@ class LiveMixin:
             self.pause()
             return
         if self.project['last'] <= self.project['first']:
-            self.live_state.setText('Playback: define First y Last (al menos dos cuadros)')
+            self.live_state.setText(tr('Playback: define First y Last (al menos dos cuadros)'))
             return
         if self.process:
             return
@@ -213,7 +214,7 @@ class LiveMixin:
         self.warm_frames = []
         self.display_times = []
         self.playing = True
-        self.play_button.setText('Pause')
+        self.play_button.setText(tr('Pause'))
         self.play_button.setIcon(icon('pause'))
         self.request_live()
 
@@ -240,22 +241,22 @@ class LiveMixin:
         self.frame.setValue(max(self.project['first'], min(self.project['last'], frame)))
 
     def cache_range(self):
-        if self.process:self.live_state.setText('Espera o cancela la exportacion antes de preparar cache');return
+        if self.process:self.live_state.setText(tr('Espera o cancela la exportacion antes de preparar cache'));return
         self.pause()
         self.live_timer.stop()
         self.warming=False;self.warm_frames=[]
         frames=list(range(self.project['first'], self.project['last'] + 1))
-        if not frames:self.live_state.setText('Cache: el rango First/Last esta invertido');return
+        if not frames:self.live_state.setText(tr('Cache: el rango First/Last esta invertido'));return
         if len(frames) > 1000:
-            self.live_state.setText('Cache range: maximo 1000 cuadros por tanda')
+            self.live_state.setText(tr('Cache range: maximo 1000 cuadros por tanda'))
             self.warm_frames = []
             return
         branches=[('A',self.project.get('viewer'),self.engine)]
         if self.project.get('viewer_b'):branches.append(('B',self.project['viewer_b'],self.engine_b))
         size=max(1,self.project['width']//self.proxy.currentData())*max(1,self.project['height']//self.proxy.currentData())*16*len(frames)
         if any(size>getattr(engine,'budget',512*1024**2) for _,_,engine in branches):
-            self.live_state.setText('Rango excede el presupuesto: aumenta cache o usa un proxy menor.');return
-        if not branches[0][1]:self.live_state.setText('Asigna Viewer A antes de preparar cache');return
+            self.live_state.setText(tr('Rango excede el presupuesto: aumenta cache o usa un proxy menor.'));return
+        if not branches[0][1]:self.live_state.setText(tr('Asigna Viewer A antes de preparar cache'));return
         self.expected_key=self.expected_b=None
         self.warm_frames=[(label,target,frame) for frame in frames for label,target,_ in branches]
         self.warming = True
@@ -276,14 +277,14 @@ class LiveMixin:
                     Path(engine.cached(key)['raw']).touch()
                     self.cache_strip.marks.setdefault(frame,set()).add(branch)
                     continue
-                self.live_state.setText(f'Cache {branch}: frame {frame} / {self.project["last"]}')
+                self.live_state.setText(tr('Cache {0}: frame {1} / {2}').format(branch, frame, self.project["last"]))
                 engine.request(self.project, target, frame, self.proxy.currentData())
                 return
             self.warming = False
             self.engine.prune()
             self.engine_b.prune();self.cache_strip.update()
             self.request_live()
-            self.live_state.setText('Rango cacheado. Play listo.')
+            self.live_state.setText(tr('Rango cacheado. Play listo.'))
         except (ValueError, OSError, KeyError) as exc:
             self.live_error(str(exc))
 

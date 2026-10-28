@@ -6,7 +6,7 @@
   <p><strong>Open-source node-based compositing, powered by Blender.</strong></p>
   <p>A standalone Windows desktop compositor by <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
   <p>
-    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.10.0-orange"></a>
+    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.10.1-orange"></a>
     <a href="LICENSE"><img alt="GPL v3 or later" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue"></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/platform-Windows_x64-0078D4">
     <img alt="Technical beta" src="https://img.shields.io/badge/status-technical_beta-yellow">
@@ -17,18 +17,20 @@
 
 Nukify combines a custom Qt interface with the compositor and 3D tools of **Blender 4.5.14 LTS**. The viewer sits above the vertical node graph, with properties on the right. The installer includes the engine: Python and Blender do not need to be installed separately.
 
-This is a **technical beta** with working workflows and automated tests. It is not presented as a complete Nuke replacement or a production-certified tool. The desktop interface currently uses a mix of Spanish labels and familiar English compositing terms; the language links above switch the documentation, not the application UI.
+This is a **technical beta** with working workflows and automated tests. It is not presented as a complete Nuke replacement or a production-certified tool.
+
+The current source version starts in **English**. Use **Language / Idioma** in the top toolbar to select **English** or **Español**, save, then reopen Nukify. The preference is stored locally, independently of projects. Node identifiers, technical enum values, provider schemas and user content keep their original names. This interface setting is separate from the documentation links above and is **included starting with 0.10.1**. See [interface languages](docs/interface-languages.md) for running and testing the updated source.
 
 ## Download and install
 
 1. Open [Releases](https://github.com/maxsarlijagit/Nukify/releases).
-2. Download **Nukify-Setup-0.10.0.exe** and run it on Windows x64.
+2. Download **Nukify-Setup-0.10.1.exe** and run it on Windows x64.
 3. Launch Nukify and try **Proyecto → Ejemplos → Composición** or **Curvas y roto**.
 4. Open **GENAI** in the main toolbar to configure your fal.ai account.
 
 The installer is not commercially code-signed. Check its SHA256 against `SHA256SUMS.txt` in the same release. Validation was performed on Windows; a full installation test on a second clean PC is still pending.
 
-Sources and notices for the main bundled components are included under `sources/` and `licenses/`. This repository contains Nukify's source; large executables and dependencies are distributed as release assets. Local builds produce `releases/0.10.0/Nukify-Setup-0.10.0.exe`. Check the release page for published downloads.
+Sources and notices for the main bundled components are included under `sources/` and `licenses/`. This repository contains Nukify's source; large executables and dependencies are distributed as release assets. Local builds produce `releases/0.10.1/Nukify-Setup-0.10.1.exe`. Check the release page for published downloads.
 
 ## GENAI Studio · fal.ai provider
 
@@ -50,7 +52,7 @@ The screenshot shows the real application interface. It is not evidence of a pai
 
 **FFmpeg is required for video proxies and sequence extraction.** Configure an existing installation in GENAI → Conexión or put it on PATH. FFmpeg is not bundled or downloaded automatically. Paid inference has not yet been validated against a real account; catalog and schema queries have been checked live.
 
-See the [GENAI guide (Spanish)](docs/genai.md) for setup, recovery, supported inputs and limitations. GENAI is included in **0.10.0**; the earlier **0.9.2 installer does not contain it**.
+See the [GENAI guide (Spanish)](docs/genai.md) for setup, recovery, supported inputs and limitations. GENAI is included in **0.10.1**; the earlier **0.9.2 installer does not contain it**.
 
 ## Features
 

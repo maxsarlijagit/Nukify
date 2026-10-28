@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 import copy
 import json
 from PySide6.QtCore import Qt,QPointF
@@ -27,19 +28,19 @@ class ShapeUI:
             if i is None:return
             self.checkpoint();old=current();new=node['params']['shapes'][i];activate(new);node['params']['shapes'][i]=old
             self.shape_node=None;self.changed();self.properties(node)
-        combo.activated.connect(select);form.addRow('Capas',combo)
+        combo.activated.connect(select);form.addRow(tr('Capas'),combo)
         def add():
             self.checkpoint();old=current();node['params']['shapes'].append(old)
             order=max(s['shape_order'] for s in node['params']['shapes'])+1
             activate(dict(points=[],feather=0.,invert=False,shape_name=f'Shape{order+1}',shape_operation='max',shape_order=order))
             self.shape_node=None;self.changed();self.properties(node)
-        button=QPushButton('Nueva capa Bezier');button.clicked.connect(add);form.addRow(button)
+        button=QPushButton(tr('Nueva capa Bezier'));button.clicked.connect(add);form.addRow(button)
         def remove():
             self.checkpoint()
             if node['params']['shapes']:activate(node['params']['shapes'].pop())
             else:node['params']['points']=[];node.get('animation',{}).pop('points',None)
             self.shape_node=None;self.changed();self.properties(node)
-        button=QPushButton('Quitar capa activa');button.clicked.connect(remove);form.addRow(button)
+        button=QPushButton(tr('Quitar capa activa'));button.clicked.connect(remove);form.addRow(button)
         tree=QTreeWidget();tree.setHeaderLabels(['Jerarquia de roto']);tree.setMaximumHeight(150)
         from roto import validate_groups
         try:
@@ -54,11 +55,11 @@ class ShapeUI:
                 else:tree.addTopLevelItem(item)
             tree.expandAll();form.addRow(tree)
         except ValueError as exc:form.addRow(QLabel(str(exc)))
-        button=QPushButton('Editar grupos / transformaciones');button.clicked.connect(lambda:self.roto_group_dialog(node));form.addRow(button)
+        button=QPushButton(tr('Editar grupos / transformaciones'));button.clicked.connect(lambda:self.roto_group_dialog(node));form.addRow(button)
 
     def roto_group_dialog(self,node):
         from roto import validate_groups,shape_transform
-        dialog=QDialog(self);dialog.setWindowTitle('Grupos de roto');layout=QVBoxLayout(dialog)
+        dialog=QDialog(self);dialog.setWindowTitle(tr('Grupos de roto'));layout=QVBoxLayout(dialog)
         keys=['id','parent','x','y','scale','rotation','opacity','enabled'];table=QTableWidget(0,len(keys));table.setHorizontalHeaderLabels(keys);layout.addWidget(table)
         defaults=dict(id='Group',parent='',x=0,y=0,scale=1,rotation=0,opacity=1,enabled=True)
         def add(group=None):
@@ -66,7 +67,7 @@ class ShapeUI:
             for col,key in enumerate(keys):table.setItem(row,col,QTableWidgetItem(str(group.get(key,defaults[key]))))
         for group in node['params']['groups']:add(group)
         for title,callback in [('Agregar grupo',add),('Eliminar fila',lambda:table.removeRow(table.currentRow()))]:
-            b=QPushButton(title);b.clicked.connect(callback);layout.addWidget(b)
+            b=QPushButton(tr(title));b.clicked.connect(callback);layout.addWidget(b)
         buttons=QDialogButtonBox(QDialogButtonBox.Save|QDialogButtonBox.Cancel);layout.addWidget(buttons);buttons.rejected.connect(dialog.reject)
         def save():
             try:
@@ -88,12 +89,12 @@ class ShapeUI:
             if source:self.preview(source)
         self.shape_node=node;self.shape_key=key;self.shape_drag=None
         self.viewer.canvas.viewport().update()
-        self.statusBar().showMessage('Viewer: click agrega puntos; arrastrar mueve; Shift arrastra tangente; Escape termina. Coordenadas normalizadas.')
+        self.statusBar().showMessage(tr('Viewer: click agrega puntos; arrastrar mueve; Shift arrastra tangente; Escape termina. Coordenadas normalizadas.'))
         if viewer_only:return
         dialog=QDialog(self);dialog.setWindowTitle('Editar '+key);layout=QVBoxLayout(dialog)
-        layout.addWidget(QLabel('Editar puntos en Viewer o editar los datos JSON.\nRoto: [x,y,inX,inY,outX,outY], origen inferior izquierdo.'))
+        layout.addWidget(QLabel(tr('Editar puntos en Viewer o editar los datos JSON.\nRoto: [x,y,inX,inY,outX,outY], origen inferior izquierdo.')))
         text=QPlainTextEdit(json.dumps(parameters(node,self.project['frame'])[key],indent=2));layout.addWidget(text)
-        button=QPushButton('Usar herramientas del Viewer');button.clicked.connect(dialog.reject);layout.addWidget(button)
+        button=QPushButton(tr('Usar herramientas del Viewer'));button.clicked.connect(dialog.reject);layout.addWidget(button)
         buttons=QDialogButtonBox(QDialogButtonBox.Save|QDialogButtonBox.Cancel);layout.addWidget(buttons);buttons.rejected.connect(dialog.reject)
         def save():
             try:

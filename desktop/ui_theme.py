@@ -82,6 +82,8 @@ def icon(name):
         engine=VectorIcon(name);_icons[name]=(engine,QIcon(engine))
     return _icons[name][1]
 def decorate(button,name,tooltip=None,compact=False):
+    from i18n import tr
+    if tooltip: tooltip=tr(tooltip)
     text=button.text();button.setIcon(icon(name));button.setIconSize(QSize(16,16));button.setAccessibleName(tooltip or text);button.setToolTip(tooltip or button.toolTip() or text)
     button.setSizePolicy(QSizePolicy.Maximum,QSizePolicy.Fixed)
     if compact:button.setText('');button.setFixedWidth(30)

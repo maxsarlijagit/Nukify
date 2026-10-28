@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 import copy
 import json
 from PySide6.QtCore import Qt, QPointF
@@ -10,8 +11,8 @@ from registry import NODES, INPUTS
 
 class GraphInteraction:
     def search_nodes(self):
-        dialog=QDialog(self);dialog.setWindowTitle('Crear nodo');layout=QVBoxLayout(dialog)
-        search=QLineEdit();search.setPlaceholderText('Buscar nodo...');items=QListWidget()
+        dialog=QDialog(self);dialog.setWindowTitle(tr('Crear nodo'));layout=QVBoxLayout(dialog)
+        search=QLineEdit();search.setPlaceholderText(tr('Buscar nodo...'));items=QListWidget()
         layout.addWidget(search);layout.addWidget(items)
         def update(text):
             items.clear()
@@ -66,12 +67,12 @@ class GraphInteraction:
             target,socket=item.connection
             def disconnect():
                 self.owner.checkpoint();self.items_by_id[target].data['inputs'].pop(socket,None);self.update_edges();self.owner.changed()
-            menu.addAction('Desconectar',disconnect)
-        menu.addAction('Crear nodo [Tab]',self.search_nodes)
-        menu.addAction('Copiar',self.copy_nodes);menu.addAction('Pegar',self.paste_nodes)
-        menu.addAction('Duplicar',lambda:(self.copy_nodes(),self.paste_nodes()))
-        menu.addAction('Bypass [D]',self.bypass);menu.addAction('Eliminar',self.owner.delete_selected)
-        menu.addAction('Encuadrar',self.fit);menu.exec(event.globalPos())
+            menu.addAction(tr('Desconectar'),disconnect)
+        menu.addAction(tr('Crear nodo [Tab]'),self.search_nodes)
+        menu.addAction(tr('Copiar'),self.copy_nodes);menu.addAction(tr('Pegar'),self.paste_nodes)
+        menu.addAction(tr('Duplicar'),lambda:(self.copy_nodes(),self.paste_nodes()))
+        menu.addAction(tr('Bypass [D]'),self.bypass);menu.addAction(tr('Eliminar'),self.owner.delete_selected)
+        menu.addAction(tr('Encuadrar'),self.fit);menu.exec(event.globalPos())
 
     def mousePressEvent(self,event):
         if event.button()==Qt.MiddleButton:
@@ -115,7 +116,7 @@ class GraphInteraction:
                     target,socket=edge.connection;source=self.items_by_id[target].data['inputs'][socket]
                     if key not in (target,source) and stroke.createStroke(edge.path()).contains(center):
                         self._insert=(key,source,target,socket);edge.setPen(QPen(QColor('#ffc46a'),3))
-                        self.owner.statusBar().showMessage(f'Soltar para insertar {key}: {source} → {target}.{socket}');break
+                        self.owner.statusBar().showMessage(tr('Soltar para insertar {0}: {1} → {2}.{3}').format(key, source, target, socket));break
 
     def mouseReleaseEvent(self,event):
         if event.button()==Qt.MiddleButton and getattr(self,'_pan',None) is not None:

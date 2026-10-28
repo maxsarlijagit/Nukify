@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 from pathlib import Path
 import PyOpenColorIO as ocio
 import numpy as np
@@ -13,9 +14,9 @@ def display_processor(path,display,view):
 
 class ColorUI:
     def color_settings(self):
-        dialog=QDialog(self);dialog.setWindowTitle('Color Management');layout=QFormLayout(dialog)
+        dialog=QDialog(self);dialog.setWindowTitle(tr('Color Management'));layout=QFormLayout(dialog)
         state={'path':self.project.get('ocio') or str(Path(self.project['blender']).parent/'4.5/datafiles/colormanagement/config.ocio')}
-        label=QLabel(state['path']);label.setWordWrap(True);layout.addRow('Config',label)
+        label=QLabel(state['path']);label.setWordWrap(True);layout.addRow(tr('Config'),label)
         display=QComboBox();view=QComboBox()
         def load():
             config=ocio.Config.CreateFromFile(state['path']);config.validate();state['config']=config
@@ -25,17 +26,17 @@ class ColorUI:
             if display.currentText():view.addItems(list(state['config'].getViews(display.currentText())))
         display.currentTextChanged.connect(views)
         def choose():
-            path,_=QFileDialog.getOpenFileName(self,'OCIO config','','OpenColorIO (*.ocio)')
+            path,_=QFileDialog.getOpenFileName(self,tr('OCIO config'),'','OpenColorIO (*.ocio)')
             if path:
                 previous=state['path'];state['path']=path
                 try:load();label.setText(path)
                 except Exception as exc:state['path']=previous;self.error(str(exc))
-        b=QPushButton('Elegir config OCIO');b.clicked.connect(choose);layout.addRow(b)
+        b=QPushButton(tr('Elegir config OCIO'));b.clicked.connect(choose);layout.addRow(b)
         try:load()
         except Exception as exc:self.error(str(exc));return
         display.setCurrentText(self.project.get('display',state['config'].getDefaultDisplay()))
         view.setCurrentText(self.project.get('view','Standard'))
-        layout.addRow('Display',display);layout.addRow('View',view)
+        layout.addRow(tr('Display'),display);layout.addRow(tr('View'),view)
         buttons=QDialogButtonBox(QDialogButtonBox.Save|QDialogButtonBox.Cancel);layout.addRow(buttons);buttons.rejected.connect(dialog.reject)
         def save():
             try:

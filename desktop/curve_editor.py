@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 import copy,json,math
 from PySide6.QtCore import Qt,QPointF
 from PySide6.QtGui import QPainterPath,QPen,QColor
@@ -112,11 +113,11 @@ def add_curve_tools(owner,layout,table,combo,read,plot):
             set_table(table,curve);combo.setCurrentText(curve['interpolation']);plot()
         except (ValueError,KeyError,TypeError,AttributeError) as exc:owner.error(str(exc))
     def change_time():
-        scale,ok=QInputDialog.getDouble(owner,'Retime','Escala de tiempo',1,.001,1000,3)
+        scale,ok=QInputDialog.getDouble(owner,tr('Retime'),tr('Escala de tiempo'),1,.001,1000,3)
         if not ok:return
-        offset,ok=QInputDialog.getInt(owner,'Retime','Desplazamiento en frames',0,-100000,100000)
+        offset,ok=QInputDialog.getInt(owner,tr('Retime'),tr('Desplazamiento en frames'),0,-100000,100000)
         if not ok:return
         try:set_table(table,retime(read(),scale,offset,owner.project['frame']));plot()
         except (ValueError,AttributeError) as exc:owner.error(str(exc))
     for title,callback in [('Copiar claves',copy_keys),('Pegar claves',paste_keys),('Retime',change_time)]:
-        button=QPushButton(title);button.clicked.connect(callback);row.addWidget(button)
+        button=QPushButton(tr(title));button.clicked.connect(callback);row.addWidget(button)

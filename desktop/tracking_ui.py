@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 import copy,ctypes,json,sys,uuid
 from pathlib import Path
 from PySide6.QtCore import QProcess,QProcessEnvironment
@@ -10,8 +11,8 @@ from animation import parameters
 class TrackingUI:
     def tracking_report_dialog(self,node):
         report=node.get('last_tracking_attempt') or node.get('tracking_report')
-        if not report:self.statusBar().showMessage('Todavia no hay un analisis');return
-        dialog=QDialog(self);dialog.setWindowTitle('Tracking: confianza y perdidas');layout=QVBoxLayout(dialog)
+        if not report:self.statusBar().showMessage(tr('Todavia no hay un analisis'));return
+        dialog=QDialog(self);dialog.setWindowTitle(tr('Tracking: confianza y perdidas'));layout=QVBoxLayout(dialog)
         layout.addWidget(QLabel('Analisis completo' if report.get('complete',True) else 'Analisis incompleto: las curvas anteriores se conservaron. Corregi el frame perdido y reanaliza.'))
         rows={int(f):dict(record,status='MANUAL' if record.get('manual') else 'TRACK') for f,record in report.get('records',{}).items()}
         for failure in report.get('failures',[]):rows[failure['frame']]=dict(status='PERDIDO: '+failure['error'])
@@ -77,7 +78,7 @@ class TrackingUI:
             process.waitForStarted(5000)
         finally:
             if frozen:ctypes.windll.kernel32.SetDllDirectoryW(str(self.app_root))
-        self.statusBar().showMessage('Analizando en segundo plano... Diagnostico muestra el progreso.')
+        self.statusBar().showMessage(tr('Analizando en segundo plano... Diagnostico muestra el progreso.'))
 
     def cancel_tracking(self):
         if getattr(self,'task_process',None):self.task_process.kill()
@@ -97,12 +98,12 @@ class TrackingUI:
         def apply(result):
             current=next((n for n in self.project['nodes'] if n['id']==original['id']),None)
             if self.project is not project or current!=original:
-                self.statusBar().showMessage('Resultado conservado en analysis; el nodo cambio durante el tracking.');return
+                self.statusBar().showMessage(tr('Resultado conservado en analysis; el nodo cambio durante el tracking.'));return
             if (result['width'],result['height'])!=(self.project['width'],self.project['height']):
                 self.error('El formato del proyecto debe coincidir con el plate: '+str(result['width'])+' x '+str(result['height']));return
             previous=node.get('tracking_report',{})
             if not result.get('complete',True):
-                self.checkpoint();node['last_tracking_attempt']=result;self.dirty=True;self.statusBar().showMessage('Tracking perdido: curvas anteriores conservadas. Abri Confianza / perdidas para corregir.');return
+                self.checkpoint();node['last_tracking_attempt']=result;self.dirty=True;self.statusBar().showMessage(tr('Tracking perdido: curvas anteriores conservadas. Abri Confianza / perdidas para corregir.'));return
             if previous.get('reference')==result['reference'] and previous.get('path')==result['path']:
                 for key,curve in result['animation'].items():
                     retained=[entry for entry in node.get('animation',{}).get(key,{}).get('keys',[]) if not job['first']<=entry[0]<=job['last']]
@@ -136,7 +137,7 @@ class TrackingUI:
     def inspect_media(self,node):
         path=sequence_path(node['params']['path'],self.project['frame'])
         def show(result):
-            dialog=QDialog(self);dialog.setWindowTitle('Canales y metadata de imagen');layout=QVBoxLayout(dialog)
+            dialog=QDialog(self);dialog.setWindowTitle(tr('Canales y metadata de imagen'));layout=QVBoxLayout(dialog)
             text=QPlainTextEdit(json.dumps(result,indent=2));text.setReadOnly(True);layout.addWidget(text)
             combo=QComboBox();layout.addWidget(combo)
             metadata=result.get('exr',{}).get('metadata',{})
@@ -155,12 +156,12 @@ class TrackingUI:
                 else:
                     layer,name=combo.currentData();self.parameter(node,'layer',layer);self.parameter(node,'matte_id',name)
                 self.properties(node);dialog.accept()
-            button=QPushButton('Usar seleccion');button.clicked.connect(apply);layout.addWidget(button)
+            button=QPushButton(tr('Usar seleccion'));button.clicked.connect(apply);layout.addWidget(button)
             dialog.resize(650,500);dialog.exec()
         self.task_start(dict(task='inspect',path=path),show)
 
     def link_tracking(self,node):
-        dialog=QDialog(self);dialog.setWindowTitle('Enlazar movimiento');layout=QVBoxLayout(dialog);combo=QComboBox()
+        dialog=QDialog(self);dialog.setWindowTitle(tr('Enlazar movimiento'));layout=QVBoxLayout(dialog);combo=QComboBox()
         kinds=('CornerPin',) if node['kind']=='PlanarTracker' else ('Transform','Roto')
         for n in self.project['nodes']:
             if n['kind'] in kinds:combo.addItem(n['id'],n['id'])
@@ -169,4 +170,4 @@ class TrackingUI:
             target=next((n for n in self.project['nodes'] if n['id']==combo.currentData()),None)
             if target:
                 self.checkpoint();target['animation_link']=node['id'];self.changed();dialog.accept()
-        button=QPushButton('Enlazar');button.clicked.connect(link);layout.addWidget(button);dialog.exec()
+        button=QPushButton(tr('Enlazar'));button.clicked.connect(link);layout.addWidget(button);dialog.exec()

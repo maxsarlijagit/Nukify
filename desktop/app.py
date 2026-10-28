@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Nukify desktop: vertical graph, Blender compositor backend."""
+from i18n import tr
 import copy
 import ctypes
 import json
@@ -169,7 +170,7 @@ class Graph(GraphInteraction, QGraphicsView):
     def port_clicked(self, port):
         if port.socket is None:
             self.pending = port.node.data['id']
-            self.owner.statusBar().showMessage(f'{self.pending}: clic en una entrada superior para conectar')
+            self.owner.statusBar().showMessage(tr('{0}: clic en una entrada superior para conectar').format(self.pending))
         elif self.pending:
             try:
                 before=copy.deepcopy(self.owner.project)
@@ -198,10 +199,13 @@ class Graph(GraphInteraction, QGraphicsView):
 class Window(ProductionUI, LiveMixin, QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Nukify 0.10.0 | Compositor Lab')
+        self.setWindowTitle(tr('Nukify 0.10.1 | Compositor Lab'))
         self.setWindowIcon(QIcon(str(ROOT / 'assets' / 'nukify-logo.png')))
         self.resize(1440, 940)
         DATA.mkdir(parents=True, exist_ok=True)
+        from i18n import read_language, set_language, install_qt_translator
+        set_language(read_language(DATA))
+        install_qt_translator(QApplication.instance())
         self.project = demo(ROOT / 'assets')
         self.project['blender'] = engine_path()
         self.project['output'] = str(Path.home() / 'Documents' / 'Nukify Renders')
@@ -217,49 +221,54 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
         logo = QLabel()
         logo.setPixmap(QPixmap(str(ROOT / 'assets' / 'nukify-logo.png')).scaled(42, 42, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         bar.addWidget(logo)
-        brand = QLabel('NUKIFY')
+        brand = QLabel(tr('NUKIFY'))
         brand.setStyleSheet('font-size:15px;font-weight:700;letter-spacing:2px;color:#e0b16b')
         bar.addWidget(brand)
         bar.addStretch()
         for label, callback in [('Demo', self.load_demo), ('Abrir', self.open_project),
                                 ('Guardar', self.save_project), ('Asignar Viewer  [1]', self.preview_selected),
                                 ('Exportar EXR', self.export)]:
-            button = QPushButton(label)
+            button = QPushButton(tr(label))
             button.clicked.connect(callback)
             decorate(button,{'Demo':'image','Abrir':'open','Guardar':'save','Asignar Viewer  [1]':'viewer','Exportar EXR':'export'}[label])
             if label=='Exportar EXR':button.setProperty('primary',True)
             bar.addWidget(button)
         project_menu=QMenu(self)
-        examples_menu=project_menu.addMenu('Ejemplos')
+        examples_menu=project_menu.addMenu(tr('Ejemplos'))
         for example_name in ['Composicion','Chroma y roto','Tracking 2D','Planar','EXR y Cryptomatte','Integracion 3D','Curvas y roto']:
-            examples_menu.addAction(example_name,lambda _,name=example_name:self.load_example(name))
+            examples_menu.addAction(tr(example_name),lambda _,name=example_name:self.load_example(name))
         for name,callback in [('Recuperar autosave',self.recover),('Color management',self.color_settings),('Shortcuts',self.shortcuts_dialog),('Curvas / Dope sheet',self.dope_sheet)]:
-            project_menu.addAction(name,callback)
-        project_button=QPushButton('Proyecto');project_button.setMenu(project_menu);bar.addWidget(project_button)
+            project_menu.addAction(tr(name),callback)
+        project_button=QPushButton(tr('Proyecto'));project_button.setMenu(project_menu);bar.addWidget(project_button)
         decorate(project_button,'tools')
-        genai_button = QPushButton('GENAI')
+        genai_button = QPushButton(tr('GENAI'))
         decorate(genai_button, 'image', 'Generar y editar imágenes / videos con fal.ai')
         genai_button.clicked.connect(self.open_genai)
         bar.addWidget(genai_button)
-        project_menu.addAction('Inspeccionar 3D en Blender',self.inspect_3d)
-        for name,callback in [('Asignar Viewer B [2]',self.preview_b),('Desconectar B',self.clear_b),('Render queue',self.queue_dialog),('Reanudar render',self.resume_render),('Recopilar proyecto y medios',self.collect_project),('Presupuesto cache',self.cache_settings)]:project_menu.addAction(name,callback)
+        project_menu.addAction(tr('Inspeccionar 3D en Blender'),self.inspect_3d)
+        for name,callback in [('Asignar Viewer B [2]',self.preview_b),('Desconectar B',self.clear_b),('Render queue',self.queue_dialog),('Reanudar render',self.resume_render),('Recopilar proyecto y medios',self.collect_project),('Presupuesto cache',self.cache_settings)]:project_menu.addAction(tr(name),callback)
+        language_button = QPushButton(tr('Idioma / Language'))
+        language_button.setObjectName('languageButton')
+        decorate(language_button, 'tools')
+        language_button.clicked.connect(self.language_settings)
+        bar.addWidget(language_button)
         layout.addLayout(bar)
         split = self.workspace_split = QSplitter(Qt.Horizontal)
         left = self.editor_split = QSplitter(Qt.Vertical)
         split.setChildrenCollapsible(False);left.setChildrenCollapsible(False)
         workspace_menu=QMenu(self)
-        for title,mode in [('Composicion','comp'),('Viewer amplio','viewer'),('Nodos amplios','graph')]:workspace_menu.addAction(title,lambda _,m=mode:self.workspace_preset(m))
-        workspace_menu.addSeparator();workspace_menu.addAction('Guardar distribucion',self.save_workspace)
-        workspace=QPushButton('Espacio');workspace.setMenu(workspace_menu);decorate(workspace,'layers');bar.addWidget(workspace)
+        for title,mode in [('Composicion','comp'),('Viewer amplio','viewer'),('Nodos amplios','graph')]:workspace_menu.addAction(tr(title),lambda _,m=mode:self.workspace_preset(m))
+        workspace_menu.addSeparator();workspace_menu.addAction(tr('Guardar distribucion'),self.save_workspace)
+        workspace=QPushButton(tr('Espacio'));workspace.setMenu(workspace_menu);decorate(workspace,'layers');bar.addWidget(workspace)
         viewer_panel = self.viewer_panel = QWidget()
         vl = QVBoxLayout(viewer_panel)
         vl.setContentsMargins(0, 0, 0, 0)
-        self.viewer_label = QLabel('VIEWER  /  sin evaluar     |     Standard / sRGB')
+        self.viewer_label = QLabel(tr('VIEWER  /  sin evaluar     |     Standard / sRGB'))
         vl.addWidget(self.viewer_label)
         self.viewer = FloatViewer()
         vl.addWidget(self.viewer, 1)
         timeline = QHBoxLayout()
-        timeline.addWidget(QLabel('FRAME'))
+        timeline.addWidget(QLabel(tr('FRAME')))
         self.frame = QSpinBox()
         self.frame.setRange(1, 1000000)
         self.frame.setValue(1)
@@ -271,15 +280,15 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
         gl = QVBoxLayout(graph_panel)
         gl.setContentsMargins(0, 0, 0, 0)
         tools = FlowLayout()
-        tools.addWidget(QLabel('NODE GRAPH'))
+        tools.addWidget(QLabel(tr('NODE GRAPH')))
         self.add_menu = QMenu(self)
         for kind in INPUTS:
             self.add_menu.addAction(kind, lambda k=kind: self.add(k))
-        add = QPushButton('+ Nodo  [Tab]')
+        add = QPushButton(tr('+ Nodo  [Tab]'))
         add.setMenu(self.add_menu)
         decorate(add,'plus')
         tools.addWidget(add)
-        fit = QPushButton('Encuadrar  [F]')
+        fit = QPushButton(tr('Encuadrar  [F]'))
         fit.clicked.connect(lambda: self.graph.fit())
         decorate(fit,'fit')
         tools.addWidget(fit)
@@ -296,10 +305,10 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
         split.addWidget(left)
         from PySide6.QtWidgets import QTabWidget
         right = QTabWidget();right.setMinimumWidth(290);right.setMaximumWidth(650)
-        node_panel=QWidget();project_panel=QWidget();right.addTab(node_panel,icon('tools'),'Nodo');right.addTab(project_panel,icon('image'),'Proyecto')
+        node_panel=QWidget();project_panel=QWidget();right.addTab(node_panel,icon('tools'),tr('Nodo'));right.addTab(project_panel,icon('image'),tr('Proyecto'))
         self.property_tabs=right
         node_layout=QVBoxLayout(node_panel);node_layout.setContentsMargins(6,6,6,6)
-        self.property_search=QLineEdit();self.property_search.setPlaceholderText('Buscar parametro...');self.property_search.setClearButtonEnabled(True);self.property_search.setToolTip('Filtrar los controles del nodo seleccionado');node_layout.addWidget(self.property_search)
+        self.property_search=QLineEdit();self.property_search.setPlaceholderText(tr('Buscar parametro...'));self.property_search.setClearButtonEnabled(True);self.property_search.setToolTip(tr('Filtrar los controles del nodo seleccionado'));node_layout.addWidget(self.property_search)
         self.property_search.textChanged.connect(self.filter_properties)
         rl = QVBoxLayout(project_panel)
         rl.setContentsMargins(12, 0, 0, 0)
@@ -307,34 +316,34 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
         self.scroll.setWidgetResizable(True)
         node_layout.addWidget(self.scroll, 1)
         settings = QFormLayout()
-        rl.addWidget(QLabel('PROJECT / FORMAT & RANGE'))
+        rl.addWidget(QLabel(tr('PROJECT / FORMAT & RANGE')))
         self.width_box, self.height_box = QSpinBox(), QSpinBox()
         for key, control in [('width', self.width_box), ('height', self.height_box)]:
             control.setRange(16, 16384)
             control.setValue(self.project[key])
             control.valueChanged.connect(lambda v, k=key: self.setting(k, v))
-            settings.addRow(key.title(), control)
+            settings.addRow(tr(key.title()), control)
         self.first, self.last = QSpinBox(), QSpinBox()
         for key, control in [('first', self.first), ('last', self.last)]:
             control.setRange(1, 1000000)
             control.setValue(self.project[key])
             control.valueChanged.connect(lambda v, k=key: self.setting(k, v))
-            settings.addRow(key.title(), control)
+            settings.addRow(tr(key.title()), control)
         self.out = QLineEdit(self.project['output'])
         self.out.editingFinished.connect(lambda: self.setting('output', self.out.text()))
-        settings.addRow('Output folder', self.out)
+        settings.addRow(tr('Output folder'), self.out)
         rl.addLayout(settings)
         self.log = QPlainTextEdit()
         self.log.setReadOnly(True)
         self.log.setMaximumHeight(140)
-        self.log.setPlaceholderText('Registro de Blender')
+        self.log.setPlaceholderText(tr('Registro de Blender'))
         self.log.hide()
-        diagnostics = QPushButton('Diagnostico')
+        diagnostics = QPushButton(tr('Diagnostico'))
         diagnostics.setCheckable(True)
         diagnostics.toggled.connect(self.log.setVisible)
         rl.addWidget(diagnostics)
         rl.addWidget(self.log)
-        cancel = QPushButton('Cancelar proceso')
+        cancel = QPushButton(tr('Cancelar proceso'))
         cancel.clicked.connect(self.cancel)
         rl.addWidget(cancel)
         rl.addStretch()
@@ -342,6 +351,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
         split.setSizes([1080, 340])
         layout.addWidget(split,1)
         self.setup_production(ROOT, DATA, categories)
+        palette_scroll.setFixedWidth(max(118, palette.sizeHint().width() + palette_scroll.verticalScrollBar().sizeHint().width() + 6))
         categories.addStretch()
         self.graph.rebuild()
         self.properties(None)
@@ -349,11 +359,12 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
         self.frame.setMaximumWidth(92);self.fps.setMaximumWidth(88)
         for b in viewer_panel.findChildren(QPushButton):
             names={'|<':'first','<':'prev','>':'next','>|':'last','Play':'play','Loop':'loop','Cache range':'layers','Live ON':'viewer'}
-            if b.text() in names:decorate(b,names[b.text()],{'|<':'Primer frame','<':'Frame anterior','>':'Frame siguiente','>|':'Ultimo frame'}.get(b.text()),b.text() in ('|<','<','>','>|'))
+            names={tr(k):v for k,v in names.items()}
+            if b.text() in names:decorate(b,names[b.text()],tr({'|<':'Primer frame','<':'Frame anterior','>':'Frame siguiente','>|':'Ultimo frame'}.get(b.text(),b.text())),b.text() in ('|<','<','>','>|'))
         self.viewer_label.setSizePolicy(QSizePolicy.Ignored,QSizePolicy.Fixed)
         self.restore_workspace()
         self.viewer.play_requested.connect(self.toggle_play)
-        self.statusBar().showMessage('Live: edita parametros. 1 asigna el Viewer. Play reproduce; Cache range prepara el rango.')
+        self.statusBar().showMessage(tr('Live: edita parametros. 1 asigna el Viewer. Play reproduce; Cache range prepara el rango.'))
         for shortcut, callback in [('Ctrl+S', self.save_project), ('Ctrl+Shift+S', self.save_as), ('Ctrl+O', self.open_project),
                                    ('Ctrl+Z', self.undo), ('Ctrl+Shift+Z', self.redo)]:
             action = QAction(self)
@@ -361,6 +372,10 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
             action.triggered.connect(callback)
             self.addAction(action)
         QTimer.singleShot(100, self.graph.fit)
+
+    def language_settings(self):
+        from i18n import language_dialog
+        language_dialog(self, DATA)
 
     def workspace_preset(self,mode):
         self.viewer_panel.show();self.graph_panel.show();self.maximized_panel=None
@@ -370,7 +385,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
     def save_workspace(self):
         import base64
         payload={name:base64.b64encode(bytes(split.saveState())).decode() for name,split in [('main',self.workspace_split),('editors',self.editor_split)]}
-        (DATA/'workspace.json').write_text(json.dumps(payload),encoding='utf-8');self.statusBar().showMessage('Distribucion guardada para la proxima apertura',4000)
+        (DATA/'workspace.json').write_text(json.dumps(payload),encoding='utf-8');self.statusBar().showMessage(tr('Distribucion guardada para la proxima apertura'),4000)
 
     def restore_workspace(self):
         import base64
@@ -386,7 +401,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
 
     def changed(self):
         self.dirty = True
-        self.viewer_label.setText('VIEWER  /  cambios pendientes de evaluar     |     Standard / sRGB')
+        self.viewer_label.setText(tr('VIEWER  /  cambios pendientes de evaluar     |     Standard / sRGB'))
         self.invalidate_live()
 
     def setting(self, key, value):
@@ -489,7 +504,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
     def discard_ok(self):
         if not self.dirty:
             return True
-        result = QMessageBox.question(self, 'Proyecto modificado', 'Guardar cambios antes de continuar?',
+        result = QMessageBox.question(self, tr('Proyecto modificado'), tr('Guardar cambios antes de continuar?'),
                                       QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         if result == QMessageBox.Save:
             return self.save_project()
@@ -512,7 +527,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
     def save_project(self):
         path = self.filename
         if not path:
-            path, _ = QFileDialog.getSaveFileName(self, 'Guardar proyecto', 'composition.nukify', 'Nukify (*.nukify)')
+            path, _ = QFileDialog.getSaveFileName(self, tr('Guardar proyecto'), 'composition.nukify', 'Nukify (*.nukify)')
         if not path:
             return False
         try:
@@ -523,7 +538,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
             temp.write_text(json.dumps(document, indent=2), encoding='utf-8')
             temp.replace(target)
             self.filename, self.dirty = path, False
-            self.statusBar().showMessage(f'Guardado: {path}')
+            self.statusBar().showMessage(tr('Guardado: {0}').format(path))
             return True
         except Exception as exc:
             self.error(str(exc))
@@ -532,7 +547,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
     def open_project(self):
         if not self.discard_ok():
             return
-        path, _ = QFileDialog.getOpenFileName(self, 'Abrir proyecto', '', 'Nukify (*.nukify)')
+        path, _ = QFileDialog.getOpenFileName(self, tr('Abrir proyecto'), '', 'Nukify (*.nukify)')
         if not path:
             return
         try:
@@ -609,7 +624,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
             job_path.write_text(json.dumps(job), encoding='utf-8')
             self.running_job = job
             self.log.clear()
-            self.viewer_label.setText(f'VIEWER  /  evaluando {target} con Blender...')
+            self.viewer_label.setText(tr('VIEWER  /  evaluando {0} con Blender...').format(target))
             self.process = QProcess(self)
             environment = QProcessEnvironment.systemEnvironment()
             for key in ('PYTHONHOME', 'PYTHONPATH', 'QT_PLUGIN_PATH', 'QT_QPA_PLATFORM_PLUGIN_PATH'):
@@ -633,7 +648,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
             finally:
                 if frozen_windows:
                     ctypes.windll.kernel32.SetDllDirectoryW(str(ROOT))
-            self.statusBar().showMessage('Blender procesando · CPU · sin servicios externos')
+            self.statusBar().showMessage(tr('Blender procesando · CPU · sin servicios externos'))
         except Exception as exc:
             self.queue_active=False
             self.error(str(exc))
@@ -649,7 +664,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
             self.log.appendPlainText('ERROR: no se pudo iniciar Blender.')
             self.process.deleteLater()
             self.process = None
-            self.viewer_label.setText('VIEWER  /  error al iniciar Blender')
+            self.viewer_label.setText(tr('VIEWER  /  error al iniciar Blender'))
 
     def finished(self, code, status):
         self.read_log()
@@ -666,12 +681,12 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
                 finally:
                     if frozen_windows:ctypes.windll.kernel32.SetDllDirectoryW(str(ROOT))
             self.dirty = True
-            self.viewer_label.setText('VIEWER / exportacion terminada; Live actualiza la vista' if self.live_toggle.isChecked()
-                                      else 'VIEWER / Live OFF · imagen anterior conservada')
-            self.statusBar().showMessage(f"{'EXR exportado' if job['export'] else 'Evaluacion lista'}: {directory}")
+            self.viewer_label.setText(tr('VIEWER / exportacion terminada; Live actualiza la vista') if self.live_toggle.isChecked()
+                                      else tr('VIEWER / Live OFF · imagen anterior conservada'))
+            self.statusBar().showMessage(tr('{0}: {1}').format(tr('EXR exportado') if job['export'] else tr('Evaluacion lista'), directory))
         else:
-            self.viewer_label.setText('VIEWER  /  render fallido o cancelado · revisar registro')
-            self.statusBar().showMessage(f'Proceso sin resultado completo: {directory}')
+            self.viewer_label.setText(tr('VIEWER  /  render fallido o cancelado · revisar registro'))
+            self.statusBar().showMessage(tr('Proceso sin resultado completo: {0}').format(directory))
         self.process.deleteLater()
         self.process = None
         if getattr(self,'queue_active',False):
@@ -695,7 +710,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
             self.process.kill()
 
     def error(self, text):
-        QMessageBox.warning(self, 'Nukify', text)
+        QMessageBox.warning(self, tr('Nukify'), tr(text))
 
     def open_genai(self):
         from genai_ui import GenAIWindow
@@ -723,10 +738,10 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
 
     def closeEvent(self, event):
         if getattr(self, 'genai_window', None) and self.genai_window.busy():
-            QMessageBox.information(self, 'GENAI activo', 'Pausá el seguimiento GENAI y esperá la operación actual antes de cerrar.')
+            QMessageBox.information(self, tr('GENAI activo'), tr('Pausá el seguimiento GENAI y esperá la operación actual antes de cerrar.'))
             event.ignore()
         elif self.process:
-            QMessageBox.information(self, 'Proceso activo', 'Cancela el proceso o espera a que termine antes de cerrar.')
+            QMessageBox.information(self, tr('Proceso activo'), tr('Cancela el proceso o espera a que termine antes de cerrar.'))
             event.ignore()
         elif self.discard_ok():
             self.pause()
@@ -747,6 +762,9 @@ if __name__ == '__main__':
     app.setStyleSheet(STYLE)
     window = Window()
     window.show()
+    if '--language-test' in sys.argv:
+        from language_selftest import run
+        QTimer.singleShot(0, lambda: run(window, app, sys.argv[sys.argv.index('--language-test') + 1]))
     if '--genai-test' in sys.argv:
         from genai_selftest import run
         QTimer.singleShot(0, lambda: run(window, app, sys.argv[sys.argv.index('--genai-test') + 1]))

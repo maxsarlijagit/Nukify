@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 from PySide6.QtCore import Qt,Signal
 from PySide6.QtGui import QPainter,QColor
 from PySide6.QtWidgets import QWidget
@@ -18,4 +19,4 @@ class CacheStrip(QWidget):
         if event.button()==Qt.LeftButton:self.seek.emit(self.frame_at(event.position().x()))
     def mouseMoveEvent(self,event):
         frame=self.frame_at(event.position().x());branches=self.marks.get(frame,set())
-        self.setToolTip(f'Frame {frame}: '+(' / '.join(sorted(branches))+' en cache' if branches else 'sin cache')+' | A dorado, B azul')
+        self.setToolTip(tr('Frame {0}: {1} | A dorado, B azul').format(frame, tr('{0} en cache').format(' / '.join(sorted(branches))) if branches else tr('sin cache')))

@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 import copy
 import json
 from pathlib import Path
@@ -38,7 +39,7 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
             menu=QMenu(self)
             for kind,spec in NODES.items():
                 if spec['category']==category:menu.addAction(kind,lambda k=kind:self.add(k))
-            button=QPushButton(category);button.setMenu(menu);decorate(button,{'Image':'image','Color':'color','Channel':'layers','Merge':'layers','Filter':'filter','Transform':'transform','Time':'loop','Draw':'draw','Keyer':'color','Tracking':'fit','Utilities':'tools','3D':'cube'}.get(category,'nodes'),category+' nodes');tools.addWidget(button)
+            button=QPushButton(tr(category));button.setMenu(menu);decorate(button,{'Image':'image','Color':'color','Channel':'layers','Merge':'layers','Filter':'filter','Transform':'transform','Time':'loop','Draw':'draw','Keyer':'color','Tracking':'fit','Utilities':'tools','3D':'cube'}.get(category,'nodes'),category+' nodes');tools.addWidget(button)
         self.autosave_timer=QTimer(self);self.autosave_timer.setInterval(30000)
         self.autosave_timer.timeout.connect(self.autosave);self.autosave_timer.start()
         # One recovery per process; never overwrite another running session's backup.
@@ -47,9 +48,9 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
         self.viewer.canvas.owner=self
         controls=self.viewer.comparison_tools
         for title,callback in [('Layers / canales EXR',self.viewer_layers),('Intercambiar A / B',self.swap_viewers)]:
-            button=QPushButton(title);button.clicked.connect(callback);controls.addWidget(button)
-            decorate(button,'layers' if title.startswith('Layers') else 'swap');button.setText('Canales EXR' if title.startswith('Layers') else 'A / B')
-            if title.startswith('Layers'):button.setToolTip('Inspeccionar un Read EXR de la rama A. Usar seleccion cambia el pase del Read y afecta la composicion.')
+            button=QPushButton(tr(title));button.clicked.connect(callback);controls.addWidget(button)
+            decorate(button,'layers' if title.startswith('Layers') else 'swap');button.setText(tr('Canales EXR') if title.startswith('Layers') else 'A / B')
+            if title.startswith('Layers'):button.setToolTip(tr('Inspeccionar un Read EXR de la rama A. Usar seleccion cambia el pase del Read y afecta la composicion.'))
         self.load_shortcuts()
         self.context_tools=QWidget();self.context_row=FlowLayout();self.context_tools.setLayout(self.context_row)
         self.viewer.layout().insertWidget(2,self.context_tools);self.context_tools.hide()
@@ -62,7 +63,7 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
         except OSError as exc:self.statusBar().showMessage('Autosave: '+str(exc))
 
     def swap_viewers(self):
-        if not self.project.get('viewer') or not self.project.get('viewer_b'):self.statusBar().showMessage('Asigna A y B con 1 y 2 antes de intercambiar');return
+        if not self.project.get('viewer') or not self.project.get('viewer_b'):self.statusBar().showMessage(tr('Asigna A y B con 1 y 2 antes de intercambiar'));return
         self.checkpoint();self.project['viewer'],self.project['viewer_b']=self.project['viewer_b'],self.project['viewer'];self.changed()
 
     def viewer_layers(self):
@@ -70,13 +71,13 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
         from PySide6.QtWidgets import QInputDialog
         try:
             nodes=[n for n in ordered(self.project,self.project['viewer']) if n['kind']=='Read' and Path(n['params']['path']).suffix.lower()=='.exr']
-            if not nodes:self.statusBar().showMessage('La rama A no contiene un Read EXR');return
-            choice,ok=QInputDialog.getItem(self,'Layers / canales','Read de la rama A',[n['id'] for n in nodes],0,False)
+            if not nodes:self.statusBar().showMessage(tr('La rama A no contiene un Read EXR'));return
+            choice,ok=QInputDialog.getItem(self,tr('Layers / canales'),tr('Read de la rama A'),[n['id'] for n in nodes],0,False)
             if ok:self.inspect_media(next(n for n in nodes if n['id']==choice))
         except (ValueError,OSError,KeyError) as exc:self.error(str(exc))
 
     def recover(self):
-        path,_=QFileDialog.getOpenFileName(self,'Recuperar autosave',str(self.app_data),'Nukify (*.nukify)')
+        path,_=QFileDialog.getOpenFileName(self,tr('Recuperar autosave'),str(self.app_data),'Nukify (*.nukify)')
         if path and self.discard_ok():
             try:
                 self.project=migrate(json.loads(Path(path).read_text(encoding='utf-8')));self.filename=None;self.history=[];self.future=[];self.sync()
@@ -92,10 +93,10 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
         self.context_toolbar(node)
         panel=QWidget();form=QFormLayout(panel)
         form.setRowWrapPolicy(QFormLayout.WrapLongRows);form.setFieldGrowthPolicy(QFormLayout.AllNonFixedFieldsGrow);form.setSpacing(8)
-        if not node:form.addRow(QLabel('Selecciona un nodo para editarlo.'))
+        if not node:form.addRow(QLabel(tr('Selecciona un nodo para editarlo.')))
         else:
             form.addRow(QLabel(node['id']+' / '+node['kind']))
-            pin=QCheckBox('Fijar propiedades');pin.setChecked(getattr(self,'pinned_properties',None)==node['id'])
+            pin=QCheckBox(tr('Fijar propiedades'));pin.setChecked(getattr(self,'pinned_properties',None)==node['id'])
             def toggle_pin(checked):
                 self.pinned_properties=node['id'] if checked else None
                 current=next((n for n in self.project['nodes'] if n['id']==self.selected),None)
@@ -109,7 +110,7 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
             for key,value in values.items():
                 if key in ('shapes','shape_order','groups','manual_points','exclude_polygon','correction_points'):continue
                 if key in ('points','tracks','corners'):
-                    b=QPushButton('Editar en Viewer / datos')
+                    b=QPushButton(tr('Editar en Viewer / datos'))
                     b.clicked.connect(lambda _,n=node,k=key:self.edit_shape(n,k))
                     form.addRow(key,b)
                     if key!='tracks':
@@ -138,42 +139,42 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
                 if node.get('animation_link') and key in ('x','y','scale','rotation','corners'):control.setEnabled(False)
                 if key in node.get('expressions',{}):control.setEnabled(False)
                 row=QWidget();layout=QHBoxLayout(row);layout.setContentsMargins(0,0,0,0);layout.setSpacing(3);layout.addWidget(control)
-                reset=QPushButton('Reset');decorate(reset,'reset','Restaurar valor por defecto y quitar curva y expresion. Undo revierte.',True)
+                reset=QPushButton(tr('Reset'));decorate(reset,'reset','Restaurar valor por defecto y quitar curva y expresion. Undo revierte.',True)
                 reset.setEnabled(not node.get('animation_link'))
                 reset.clicked.connect(lambda _,k=key:self.reset_parameter(node,k));layout.addWidget(reset)
                 if isinstance(value,(int,float)) and not isinstance(value,bool):
-                    expression=QPushButton('fx');expression.setMaximumWidth(28);expression.setToolTip('Expresion matematica o referencia a otro nodo')
+                    expression=QPushButton(tr('fx'));expression.setMaximumWidth(28);expression.setToolTip(tr('Expresion matematica o referencia a otro nodo'))
                     expression.clicked.connect(lambda _,k=key:self.expression_dialog(node,k));layout.addWidget(expression)
-                    keybutton=QPushButton('◆' if key in node.get('animation',{}) else '◇');keybutton.setMaximumWidth(30);keybutton.setToolTip('Curva y keyframes')
+                    keybutton=QPushButton('◆' if key in node.get('animation',{}) else '◇');keybutton.setMaximumWidth(30);keybutton.setToolTip(tr('Curva y keyframes'))
                     decorate(keybutton,'key','Curva y keyframes',True)
                     if key in node.get('animation',{}):keybutton.setStyleSheet('background:#705534;border-color:#b99051;')
                     keybutton.clicked.connect(lambda _,k=key:self.curve_dialog(node,k));layout.addWidget(keybutton)
-                label=QLabel(key.replace('_',' ').capitalize());label.setToolTip(key);form.addRow(label,row)
+                label=QLabel(tr(key.replace('_',' ').capitalize()));label.setToolTip(key);form.addRow(label,row)
                 if key in ('path','tracking_path','preserve_exr','texture_path'):
-                    browse=QPushButton('Elegir imagen / secuencia...')
+                    browse=QPushButton(tr('Elegir imagen / secuencia...'))
                     browse.clicked.connect(lambda _,c=control,k=key:self.browse_media(node,k,c));form.addRow(browse)
             for socket in INPUTS[node['kind']]:
-                combo=QComboBox();combo.addItem('(sin conectar)',None)
+                combo=QComboBox();combo.addItem(tr('(sin conectar)'),None)
                 for n in self.project['nodes']:
                     if n['id']!=node['id'] and n['kind'] not in ('Write','Backdrop') and TYPES.get(n['kind'],'image')==SOCKET_TYPES.get(socket,'image') and (socket!='Mask' or n['kind'] in MASKS):combo.addItem(n['id'],n['id'])
                 combo.setCurrentIndex(max(0,combo.findData(node['inputs'].get(socket))))
                 combo.currentIndexChanged.connect(lambda _,c=combo,s=socket:self.input_changed(node,s,c.currentData()))
                 form.addRow(socket,combo)
             if node['kind'] in ('Tracker2D','PlanarTracker'):
-                b=QPushButton('Quitar correccion de este frame');b.clicked.connect(lambda:self.remove_tracking_correction(node));form.addRow(b)
+                b=QPushButton(tr('Quitar correccion de este frame'));b.clicked.connect(lambda:self.remove_tracking_correction(node));form.addRow(b)
                 for label,callback in [('Confianza / perdidas',lambda:self.tracking_report_dialog(node)),('Corregir puntos en este frame',lambda:self.edit_tracking_correction(node)),('Guardar correccion manual',lambda:self.store_tracking_correction(node)),('Editar zona de exclusion',lambda:self.edit_shape(node,'exclude_polygon',True))]:
-                    b=QPushButton(label);b.clicked.connect(callback);form.addRow(b)
+                    b=QPushButton(tr(label));b.clicked.connect(callback);form.addRow(b)
                 for label,callback in [('Analizar rango',lambda:self.start_tracking(node)),('Cancelar tracking',self.cancel_tracking),('Crear Transform / CornerPin',lambda:self.bake_tracking(node)),('Enlazar a nodo...',lambda:self.link_tracking(node))]:
-                    b=QPushButton(label);b.clicked.connect(callback);form.addRow(b)
+                    b=QPushButton(tr(label));b.clicked.connect(callback);form.addRow(b)
             if node['kind'] in ('Read','Cryptomatte'):
-                b=QPushButton('Inspeccionar EXR / canales');b.clicked.connect(lambda:self.inspect_media(node));form.addRow(b)
+                b=QPushButton(tr('Inspeccionar EXR / canales'));b.clicked.connect(lambda:self.inspect_media(node));form.addRow(b)
             if node.get('animation_link'):
                 form.addRow(QLabel('Enlazado a '+node['animation_link']))
-                unlink=QPushButton('Desenlazar animacion')
+                unlink=QPushButton(tr('Desenlazar animacion'))
                 def detach():
                     self.checkpoint();node.pop('animation_link',None);self.changed();self.properties(node)
                 unlink.clicked.connect(detach);form.addRow(unlink)
-            b=QPushButton('Ver este nodo [1]');b.clicked.connect(lambda:self.preview(node['id']));form.addRow(b)
+            b=QPushButton(tr('Ver este nodo [1]'));b.clicked.connect(lambda:self.preview(node['id']));form.addRow(b)
         old=self.scroll.takeWidget()
         if old:old.deleteLater()
         self.scroll.setWidget(panel)
@@ -189,7 +190,7 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
 
     def expression_dialog(self,node,key):
         from PySide6.QtWidgets import QInputDialog
-        text,ok=QInputDialog.getText(self,'Expresion: '+node['id']+'.'+key,'frame, value, pi, sin/cos/abs/min/max/sqrt/clamp y ref("Nodo", "parametro"). Vacio elimina.',text=node.get('expressions',{}).get(key,''))
+        text,ok=QInputDialog.getText(self,'Expresion: '+node['id']+'.'+key,tr('frame, value, pi, sin/cos/abs/min/max/sqrt/clamp y ref("Nodo", "parametro"). Vacio elimina.'),text=node.get('expressions',{}).get(key,''))
         if not ok:return
         try:
             proposed=copy.deepcopy(self.project);candidate=next(n for n in proposed['nodes'] if n['id']==node['id'])
@@ -200,7 +201,7 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
         except ValueError as exc:self.error(str(exc))
 
     def browse_media(self,node,key,control):
-        path,_=QFileDialog.getOpenFileName(self,'Imagen o primer cuadro','','Images (*.png *.jpg *.jpeg *.exr *.tif *.tiff)')
+        path,_=QFileDialog.getOpenFileName(self,tr('Imagen o primer cuadro'),'','Images (*.png *.jpg *.jpeg *.exr *.tif *.tiff)')
         if path:
             import re
             file=Path(path);match=re.search(r'(\d+)$',file.stem)
@@ -213,15 +214,15 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
         dialog=QDialog(self);dialog.setWindowTitle(node['id']+'.'+key);layout=QVBoxLayout(dialog)
         curve=copy.deepcopy(node.get('animation',{}).get(key,{'interpolation':'linear','keys':[]}))
         combo=QComboBox();combo.addItems(['constant','linear','smooth','bezier']);combo.setCurrentText(curve['interpolation']);layout.addWidget(combo)
-        table=QTableWidget(0,4);table.setHorizontalHeaderLabels(['Frame','Value','In slope','Out slope']);layout.addWidget(table)
+        table=QTableWidget(0,4);table.setHorizontalHeaderLabels([tr(text) for text in ['Frame','Value','In slope','Out slope']]);layout.addWidget(table)
         for entry in curve['keys']:
             row=table.rowCount();table.insertRow(row)
             for col,v in enumerate((entry+[0.,0.])[:4]):table.setItem(row,col,QTableWidgetItem(str(v)))
         def add():
             row=table.rowCount();table.insertRow(row);table.setItem(row,0,QTableWidgetItem(str(self.project['frame'])));table.setItem(row,1,QTableWidgetItem(str(parameters(node,self.project['frame'])[key])))
             table.setItem(row,2,QTableWidgetItem('0'));table.setItem(row,3,QTableWidgetItem('0'))
-        b=QPushButton('Agregar clave en frame actual');b.clicked.connect(add);layout.addWidget(b)
-        delete=QPushButton('Quitar fila seleccionada');delete.clicked.connect(lambda:table.removeRow(table.currentRow()));layout.addWidget(delete)
+        b=QPushButton(tr('Agregar clave en frame actual'));b.clicked.connect(add);layout.addWidget(b)
+        delete=QPushButton(tr('Quitar fila seleccionada'));delete.clicked.connect(lambda:table.removeRow(table.currentRow()));layout.addWidget(delete)
         def read():
             keys=sorted([[float(table.item(r,c).text()) for c in range(4)] for r in range(table.rowCount())])
             if len({k[0] for k in keys})!=len(keys):raise ValueError('Frames duplicados')
@@ -242,8 +243,8 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
         buttons.accepted.connect(save);dialog.resize(500,620);dialog.exec()
 
     def dope_sheet(self):
-        dialog=QDialog(self);dialog.setWindowTitle('Dope sheet');layout=QVBoxLayout(dialog)
-        table=QTableWidget(0,3);table.setHorizontalHeaderLabels(['Nodo','Parametro','Frames']);layout.addWidget(table)
+        dialog=QDialog(self);dialog.setWindowTitle(tr('Dope sheet'));layout=QVBoxLayout(dialog)
+        table=QTableWidget(0,3);table.setHorizontalHeaderLabels([tr(text) for text in ['Nodo','Parametro','Frames']]);layout.addWidget(table)
         entries=[]
         for node in self.project['nodes']:
             for key,curve in node.get('animation',{}).items():
@@ -281,7 +282,7 @@ class ProductionUI(ShapeUI, TrackingUI, ColorUI, ShortcutUI, DeliveryUI):
                 self.checkpoint();set_key(node,key,self.project['frame'],parameters(node,self.project['frame'])[key]);self.changed()
             actions += [('Keyframe',keyframe)]
         for label,callback in actions:
-            button=QPushButton(label);button.clicked.connect(callback);self.context_row.addWidget(button)
+            button=QPushButton(tr(label));button.clicked.connect(callback);self.context_row.addWidget(button)
         self.context_row.addStretch()
 
     def end_shape_tool(self):

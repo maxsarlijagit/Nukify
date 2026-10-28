@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 import json
 from PySide6.QtGui import QKeySequence
 from PySide6.QtWidgets import QDialog,QVBoxLayout,QTableWidget,QTableWidgetItem,QDialogButtonBox,QKeySequenceEdit,QPushButton,QFileDialog
@@ -29,17 +30,17 @@ class ShortcutUI:
         except (ValueError,OSError):pass
 
     def shortcuts_dialog(self):
-        dialog=QDialog(self);dialog.setWindowTitle('Shortcuts del Node Graph');layout=QVBoxLayout(dialog)
-        table=QTableWidget(len(DEFAULTS),2);table.setHorizontalHeaderLabels(['Comando','Atajo']);editors={}
+        dialog=QDialog(self);dialog.setWindowTitle(tr('Shortcuts del Node Graph'));layout=QVBoxLayout(dialog)
+        table=QTableWidget(len(DEFAULTS),2);table.setHorizontalHeaderLabels([tr(text) for text in ['Comando','Atajo']]);editors={}
         for row,key in enumerate(DEFAULTS):
-            item=QTableWidgetItem(key);table.setItem(row,0,item)
+            item=QTableWidgetItem(tr(key));table.setItem(row,0,item)
             editor=QKeySequenceEdit(QKeySequence(self.graph_shortcuts[key]));table.setCellWidget(row,1,editor);editors[key]=editor
         layout.addWidget(table);buttons=QDialogButtonBox(QDialogButtonBox.Save|QDialogButtonBox.Cancel|QDialogButtonBox.RestoreDefaults);layout.addWidget(buttons)
         buttons.rejected.connect(dialog.reject)
         buttons.button(QDialogButtonBox.RestoreDefaults).clicked.connect(lambda:[e.setKeySequence(QKeySequence(DEFAULTS[k])) for k,e in editors.items()])
         def read_editors():return validate_shortcuts({k:e.keySequence().toString() for k,e in editors.items()})
         def import_preset():
-            path,_=QFileDialog.getOpenFileName(self,'Importar shortcuts','','JSON (*.json)')
+            path,_=QFileDialog.getOpenFileName(self,tr('Importar shortcuts'),'','JSON (*.json)')
             if not path:return
             try:
                 preset=json.loads(Path(path).read_text(encoding='utf-8'))
@@ -50,11 +51,11 @@ class ShortcutUI:
             except (ValueError,KeyError,OSError,TypeError) as exc:self.error(str(exc))
         def export_preset():
             try:
-                mapping=read_editors();path,_=QFileDialog.getSaveFileName(self,'Exportar shortcuts','nukify-shortcuts.json','JSON (*.json)')
+                mapping=read_editors();path,_=QFileDialog.getSaveFileName(self,tr('Exportar shortcuts'),'nukify-shortcuts.json','JSON (*.json)')
                 if path:atomic_json(path,{'version':1,'shortcuts':mapping})
             except (ValueError,OSError) as exc:self.error(str(exc))
         for title,callback in [('Importar preset',import_preset),('Exportar preset',export_preset)]:
-            button=QPushButton(title);button.clicked.connect(callback);layout.addWidget(button)
+            button=QPushButton(tr(title));button.clicked.connect(callback);layout.addWidget(button)
         def save():
             try:
                 mapping=read_editors();atomic_json(self.app_data/'shortcuts.json',mapping);self.graph_shortcuts=mapping;dialog.accept()

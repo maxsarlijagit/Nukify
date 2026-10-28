@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """GENAI workspace: model-aware forms, explicit cost review and versioned media."""
+from i18n import tr
 import copy
 import json
 import os
@@ -42,7 +43,7 @@ class GenAIWindow(QDialog):
     def __init__(self, owner, root, data):
         super().__init__(owner)
         self.owner = owner
-        self.setWindowTitle('Nukify · GENAI Studio')
+        self.setWindowTitle(tr('Nukify · GENAI Studio'))
         self.resize(1220, 860)
         self.setMinimumSize(900, 650)
         self.store = JobStore(Path(data) / 'genai')
@@ -56,10 +57,10 @@ class GenAIWindow(QDialog):
         self.preview_timer.setInterval(83)
         self.preview_timer.timeout.connect(self.next_frame)
         layout = QVBoxLayout(self)
-        title = QLabel('GENAI  /  fal.ai')
+        title = QLabel(tr('GENAI  /  fal.ai'))
         title.setStyleSheet('font-size:20px;font-weight:700;color:#e6a34b')
         layout.addWidget(title)
-        subtitle = QLabel('Crear → seguir el proceso → revisar versiones → incorporar a composición')
+        subtitle = QLabel(tr('Crear → seguir el proceso → revisar versiones → incorporar a composición'))
         layout.addWidget(subtitle)
         split = QSplitter(Qt.Horizontal)
         layout.addWidget(split, 1)
@@ -72,47 +73,47 @@ class GenAIWindow(QDialog):
         split.addWidget(left_container)
         self.settings_tabs = QTabWidget(); left_layout.addWidget(self.settings_tabs)
         create = QWidget(); form_layout = QVBoxLayout(create)
-        self.settings_tabs.addTab(create, 'Crear')
+        self.settings_tabs.addTab(create, tr('Crear'))
         connection = QWidget(); connection_form = QFormLayout(connection)
-        self.settings_tabs.addTab(connection, 'Conexión')
+        self.settings_tabs.addTab(connection, tr('Conexión'))
         self.key = QLineEdit(); self.key.setEchoMode(QLineEdit.Password)
-        self.key.setPlaceholderText('Clave de sesión; vacío usa FAL_KEY')
-        self.key.setToolTip('Solo memoria. No se guarda en proyectos, preferencias ni historial.')
-        connection_form.addRow('API key propia', self.key)
-        key_note = QLabel('La clave se usa en esta sesión. Para próximos inicios configurá FAL_KEY en tu entorno.')
+        self.key.setPlaceholderText(tr('Clave de sesión; vacío usa FAL_KEY'))
+        self.key.setToolTip(tr('Solo memoria. No se guarda en proyectos, preferencias ni historial.'))
+        connection_form.addRow(tr('API key propia'), self.key)
+        key_note = QLabel(tr('La clave se usa en esta sesión. Para próximos inicios configurá FAL_KEY en tu entorno.'))
         key_note.setWordWrap(True); connection_form.addRow(key_note)
-        dashboard = QPushButton('Abrir claves de fal.ai'); dashboard.clicked.connect(lambda: QDesktopServices.openUrl(QUrl('https://fal.ai/dashboard/keys')))
+        dashboard = QPushButton(tr('Abrir claves de fal.ai')); dashboard.clicked.connect(lambda: QDesktopServices.openUrl(QUrl('https://fal.ai/dashboard/keys')))
         connection_form.addRow(dashboard)
-        self.ffmpeg = QLineEdit(); self.ffmpeg.setPlaceholderText('FFmpeg en PATH o ruta al ejecutable')
-        connection_form.addRow('FFmpeg', self.ffmpeg)
-        ffchoose = QPushButton('Elegir FFmpeg'); ffchoose.clicked.connect(self.choose_ffmpeg); connection_form.addRow(ffchoose)
-        info = QLabel('Los proxies de video y la importación como secuencia requieren FFmpeg. Los originales se conservan siempre.')
+        self.ffmpeg = QLineEdit(); self.ffmpeg.setPlaceholderText(tr('FFmpeg en PATH o ruta al ejecutable'))
+        connection_form.addRow(tr('FFmpeg'), self.ffmpeg)
+        ffchoose = QPushButton(tr('Elegir FFmpeg')); ffchoose.clicked.connect(self.choose_ffmpeg); connection_form.addRow(ffchoose)
+        info = QLabel(tr('Los proxies de video y la importación como secuencia requieren FFmpeg. Los originales se conservan siempre.'))
         info.setWordWrap(True); connection_form.addRow(info)
         self.category = QComboBox()
-        for key, label in CATEGORIES.items(): self.category.addItem(label, key)
+        for key, label in CATEGORIES.items(): self.category.addItem(tr(label), key)
         form_layout.addWidget(self.category)
         self.model = QComboBox(); self.model.setSizeAdjustPolicy(QComboBox.AdjustToMinimumContentsLengthWithIcon)
         self.model.setMinimumContentsLength(20); form_layout.addWidget(self.model)
-        self.search = QLineEdit(); self.search.setPlaceholderText('Buscar modelos en fal.ai…')
+        self.search = QLineEdit(); self.search.setPlaceholderText(tr('Buscar modelos en fal.ai…'))
         searchrow = QHBoxLayout(); searchrow.addWidget(self.search)
-        self.search_button = QPushButton('Buscar'); searchrow.addWidget(self.search_button)
+        self.search_button = QPushButton(tr('Buscar')); searchrow.addWidget(self.search_button)
         form_layout.addLayout(searchrow)
-        self.model_note = QLabel('Destacados verificados · 28 oct 2026. La búsqueda consulta el catálogo actual.')
+        self.model_note = QLabel(tr('Destacados verificados · 28 oct 2026. La búsqueda consulta el catálogo actual.'))
         self.model_note.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
         self.model_note.setWordWrap(True); form_layout.addWidget(self.model_note)
         modelrow = QHBoxLayout()
-        self.schema_button = QPushButton('Actualizar schema'); modelrow.addWidget(self.schema_button)
-        docs = QPushButton('Ficha del modelo'); docs.clicked.connect(self.open_model_docs); modelrow.addWidget(docs)
+        self.schema_button = QPushButton(tr('Actualizar schema')); modelrow.addWidget(self.schema_button)
+        docs = QPushButton(tr('Ficha del modelo')); docs.clicked.connect(self.open_model_docs); modelrow.addWidget(docs)
         form_layout.addLayout(modelrow)
-        self.asset = QLineEdit('shot-001'); self.asset.setPlaceholderText('Nombre del asset / shot')
-        form_layout.addWidget(QLabel('ASSET / VERSIONES')); form_layout.addWidget(self.asset)
-        self.prompt = QPlainTextEdit(); self.prompt.setPlaceholderText('Describí el resultado y qué debe conservarse…'); self.prompt.setMaximumHeight(100)
+        self.asset = QLineEdit('shot-001'); self.asset.setPlaceholderText(tr('Nombre del asset / shot'))
+        form_layout.addWidget(QLabel(tr('ASSET / VERSIONES'))); form_layout.addWidget(self.asset)
+        self.prompt = QPlainTextEdit(); self.prompt.setPlaceholderText(tr('Describí el resultado y qué debe conservarse…')); self.prompt.setMaximumHeight(100)
         form_layout.addWidget(self.prompt)
         self.fields_host = QWidget(); self.fields = QFormLayout(self.fields_host)
         self.fields.setFieldGrowthPolicy(QFormLayout.AllNonFixedFieldsGrow)
         self.fields.setRowWrapPolicy(QFormLayout.WrapLongRows)
         form_layout.addWidget(self.fields_host)
-        advanced_toggle = QPushButton('Opciones avanzadas'); advanced_toggle.setCheckable(True)
+        advanced_toggle = QPushButton(tr('Opciones avanzadas')); advanced_toggle.setCheckable(True)
         form_layout.addWidget(advanced_toggle)
         self.advanced_host = QWidget(); self.advanced_fields = QFormLayout(self.advanced_host)
         self.advanced_fields.setRowWrapPolicy(QFormLayout.WrapAllRows)
@@ -124,45 +125,45 @@ class GenAIWindow(QDialog):
             for label, size in [('Original', 0), ('Proxy 512', 512), ('Proxy 1024', 1024), ('Proxy 1920', 1920)]:
                 combo.addItem(label, size)
         self.receive_proxy.setCurrentIndex(2)
-        proxies.addRow('Medio a enviar', self.send_proxy); proxies.addRow('Proxy recibido', self.receive_proxy)
+        proxies.addRow(tr('Medio a enviar'), self.send_proxy); proxies.addRow(tr('Proxy recibido'), self.receive_proxy)
         form_layout.addLayout(proxies)
-        note = QLabel('Proxy = máximo del lado largo; no aumenta resolución. El proxy recibido se crea localmente y no reduce el cobro de fal.')
+        note = QLabel(tr('Proxy = máximo del lado largo; no aumenta resolución. El proxy recibido se crea localmente y no reduce el cobro de fal.'))
         note.setWordWrap(True); form_layout.addWidget(note)
         self.units = QDoubleSpinBox(); self.units.setDecimals(3); self.units.setRange(.001, 100000); self.units.setValue(1)
-        self.units.setToolTip('Cantidad de unidades facturables del modelo. Ajustar por duración, resolución y cantidad según su ficha.')
-        unitrow = QFormLayout(); unitrow.addRow('Unidades (manual)', self.units); left_outer.addLayout(unitrow)
-        self.estimate_button = QPushButton('Calcular costo'); decorate(self.estimate_button, 'tools'); left_outer.addWidget(self.estimate_button)
-        self.cost = QLabel('Costo sin calcular'); self.cost.setWordWrap(True); left_outer.addWidget(self.cost)
-        self.generate = QPushButton('Revisar y generar'); self.generate.setProperty('primary', True)
+        self.units.setToolTip(tr('Cantidad de unidades facturables del modelo. Ajustar por duración, resolución y cantidad según su ficha.'))
+        unitrow = QFormLayout(); unitrow.addRow(tr('Unidades (manual)'), self.units); left_outer.addLayout(unitrow)
+        self.estimate_button = QPushButton(tr('Calcular costo')); decorate(self.estimate_button, 'tools'); left_outer.addWidget(self.estimate_button)
+        self.cost = QLabel(tr('Costo sin calcular')); self.cost.setWordWrap(True); left_outer.addWidget(self.cost)
+        self.generate = QPushButton(tr('Revisar y generar')); self.generate.setProperty('primary', True)
         self.generate.setStyleSheet('QPushButton:disabled {background:#393939;border-color:#494949;color:#888888}')
         self.generate.setEnabled(False); left_outer.addWidget(self.generate)
         form_layout.addStretch()
         right = QWidget(); rl = QVBoxLayout(right); split.addWidget(right)
-        rl.addWidget(QLabel('BIBLIOTECA  /  VERSIONES LOCALES'))
+        rl.addWidget(QLabel(tr('BIBLIOTECA  /  VERSIONES LOCALES')))
         self.jobs = QListWidget(); self.jobs.setMaximumHeight(160); rl.addWidget(self.jobs)
         self.outputs = QComboBox(); rl.addWidget(self.outputs)
-        reuse = QPushButton('Reutilizar parámetros de esta versión'); reuse.clicked.connect(self.reuse_selected); rl.addWidget(reuse)
-        self.preview = QLabel('Los resultados aparecerán aquí al completar la generación')
+        reuse = QPushButton(tr('Reutilizar parámetros de esta versión')); reuse.clicked.connect(self.reuse_selected); rl.addWidget(reuse)
+        self.preview = QLabel(tr('Los resultados aparecerán aquí al completar la generación'))
         self.preview.setAlignment(Qt.AlignCenter); self.preview.setWordWrap(True)
         self.preview.setMinimumSize(250, 180); self.preview.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Expanding)
         self.preview.setStyleSheet('background:#202020;border:1px solid #454545;border-radius:6px;color:#a5a5a5')
         rl.addWidget(self.preview, 1)
         actions = QHBoxLayout()
-        self.play = QPushButton('Play proxy'); self.play.clicked.connect(self.toggle_play); actions.addWidget(self.play)
-        self.open_file = QPushButton('Abrir original'); self.open_file.clicked.connect(self.open_original); actions.addWidget(self.open_file)
-        self.import_button = QPushButton('Usar en graph'); self.import_button.clicked.connect(self.import_selected); actions.addWidget(self.import_button)
+        self.play = QPushButton(tr('Play proxy')); self.play.clicked.connect(self.toggle_play); actions.addWidget(self.play)
+        self.open_file = QPushButton(tr('Abrir original')); self.open_file.clicked.connect(self.open_original); actions.addWidget(self.open_file)
+        self.import_button = QPushButton(tr('Usar en graph')); self.import_button.clicked.connect(self.import_selected); actions.addWidget(self.import_button)
         rl.addLayout(actions)
-        prepare_proxy = QPushButton('Preparar proxy local de esta versión')
+        prepare_proxy = QPushButton(tr('Preparar proxy local de esta versión'))
         prepare_proxy.clicked.connect(self.prepare_selected_proxy); rl.addWidget(prepare_proxy)
-        self.details = QLabel('Elegí una versión para ver sus parámetros y estado'); self.details.setWordWrap(True); rl.addWidget(self.details)
+        self.details = QLabel(tr('Elegí una versión para ver sus parámetros y estado')); self.details.setWordWrap(True); rl.addWidget(self.details)
         self.logs = QPlainTextEdit(); self.logs.setReadOnly(True); self.logs.setMaximumHeight(130); rl.addWidget(self.logs)
         self.progress = QProgressBar(); self.progress.setRange(0, 1); self.progress.setValue(0); rl.addWidget(self.progress)
         controls = QHBoxLayout()
-        self.resume_button = QPushButton('Reanudar seguimiento'); self.resume_button.clicked.connect(self.resume_selected); controls.addWidget(self.resume_button)
-        self.stop_button = QPushButton('Pausar seguimiento'); self.stop_button.clicked.connect(self.pause_tracking); controls.addWidget(self.stop_button)
-        self.cancel_button = QPushButton('Cancelar en fal'); self.cancel_button.clicked.connect(self.cancel_selected); controls.addWidget(self.cancel_button)
+        self.resume_button = QPushButton(tr('Reanudar seguimiento')); self.resume_button.clicked.connect(self.resume_selected); controls.addWidget(self.resume_button)
+        self.stop_button = QPushButton(tr('Pausar seguimiento')); self.stop_button.clicked.connect(self.pause_tracking); controls.addWidget(self.stop_button)
+        self.cancel_button = QPushButton(tr('Cancelar en fal')); self.cancel_button.clicked.connect(self.cancel_selected); controls.addWidget(self.cancel_button)
         rl.addLayout(controls)
-        self.status = QLabel('Listo · no se envían medios hasta confirmar una generación'); self.status.setWordWrap(True); layout.addWidget(self.status)
+        self.status = QLabel(tr('Listo · no se envían medios hasta confirmar una generación')); self.status.setWordWrap(True); layout.addWidget(self.status)
         split.setSizes([460, 720])
         self.category.currentIndexChanged.connect(self.populate_models)
         self.model.currentIndexChanged.connect(self.model_changed)
@@ -186,16 +187,16 @@ class GenAIWindow(QDialog):
         return self.task is not None and self.task.isRunning()
 
     def invalidate(self, *args):
-        self.quote = None; self.generate.setEnabled(False); self.cost.setText('Costo sin calcular · parámetros modificados')
+        self.quote = None; self.generate.setEnabled(False); self.cost.setText(tr('Costo sin calcular · parámetros modificados'))
 
     def run_task(self, action, done):
         if self.busy():
-            return self.status.setText('Esperá a que termine la operación actual')
+            return self.status.setText(tr('Esperá a que termine la operación actual'))
         task = Task(action, self); self.task = task
         self.progress.setRange(0, 0)
         for button in (self.generate, self.estimate_button, self.search_button, self.schema_button): button.setEnabled(False)
         task.result.connect(done)
-        task.error.connect(lambda message: self.status.setText(message))
+        task.error.connect(lambda message: self.status.setText(tr(message)))
         task.progress.connect(self.job_progress)
         task.finished.connect(self.task_finished)
         task.start()
@@ -219,10 +220,10 @@ class GenAIWindow(QDialog):
         self.controls = {}
         item = self.model.currentData()
         if not item or not item.get('schema'):
-            self.model_note.setText('Actualizá el schema del modelo antes de generar'); return
+            self.model_note.setText(tr('Actualizá el schema del modelo antes de generar')); return
         document = item['schema']; schema = input_schema(document)
         self.model.setToolTip(item['endpoint_id'])
-        self.model_note.setText(item['endpoint_id'].replace('/', '/ ') + ' · schema de fal')
+        self.model_note.setText(item['endpoint_id'].replace('/', '/ ') + tr(' · schema de fal'))
         common = ['image_url', 'image_urls', 'start_image_url', 'end_image_url', 'video_url', 'video_urls',
                   'resolution', 'quality', 'image_size', 'duration', 'aspect_ratio', 'num_images', 'output_format', 'seed']
         properties = schema.get('properties', {})
@@ -236,7 +237,7 @@ class GenAIWindow(QDialog):
             enum = field.get('enum')
             if enum:
                 control = QComboBox()
-                if not required and default is None: control.addItem('Predeterminado', None)
+                if not required and default is None: control.addItem(tr('Predeterminado'), None)
                 for value in enum: control.addItem(str(value), value)
                 if default is not None: control.setCurrentIndex(max(0, control.findData(default)))
                 control.currentIndexChanged.connect(self.invalidate)
@@ -246,7 +247,7 @@ class GenAIWindow(QDialog):
                 control = QLineEdit()
                 if default is not None:
                     control.setText(json.dumps(default) if field.get('type') in ('array', 'object') else str(default))
-                control.setPlaceholderText('JSON' if field.get('type') in ('array', 'object') else ('Requerido' if required else 'Opcional'))
+                control.setPlaceholderText('JSON' if field.get('type') in ('array', 'object') else (tr('Requerido') if required else tr('Opcional')))
                 control.textChanged.connect(self.invalidate)
             control.setToolTip(raw.get('description', name))
             self.controls[name] = (control, field)
@@ -254,19 +255,19 @@ class GenAIWindow(QDialog):
             label = name.replace('_', ' ').title() + (' *' if required else '')
             if name.endswith(('_url', '_urls')) and isinstance(control, QLineEdit):
                 container = QWidget(); row = QHBoxLayout(container); row.setContentsMargins(0, 0, 0, 0)
-                row.addWidget(control); browse = QPushButton('…'); browse.setMaximumWidth(35)
-                browse.setToolTip('Seleccionar medios locales; se suben solo al confirmar')
+                row.addWidget(control); browse = QPushButton(tr('…')); browse.setMaximumWidth(35)
+                browse.setToolTip(tr('Seleccionar medios locales; se suben solo al confirmar'))
                 browse.clicked.connect(lambda _, n=name: self.choose_media(n)); row.addWidget(browse)
                 target_form.addRow(label, container)
             else: target_form.addRow(label, control)
 
     def choose_media(self, name):
-        paths, _ = QFileDialog.getOpenFileNames(self, 'Medios de entrada', '', 'Medios (*.png *.jpg *.jpeg *.webp *.mp4 *.mov *.mkv *.webm *.avi)')
+        paths, _ = QFileDialog.getOpenFileNames(self, tr('Medios de entrada'), '', 'Medios (*.png *.jpg *.jpeg *.webp *.mp4 *.mov *.mkv *.webm *.avi)')
         if paths:
             self.controls[name][0].setText(json.dumps(['local:' + p for p in paths]) if name.endswith('_urls') else 'local:' + paths[0])
 
     def choose_ffmpeg(self):
-        path, _ = QFileDialog.getOpenFileName(self, 'FFmpeg', '', 'Ejecutable (*.exe)')
+        path, _ = QFileDialog.getOpenFileName(self, tr('FFmpeg'), '', 'Ejecutable (*.exe)')
         if path: self.ffmpeg.setText(path)
 
     def spec(self):
@@ -300,16 +301,15 @@ class GenAIWindow(QDialog):
         try:
             spec = self.spec(); client = self.client()
             if not client.key: raise ValueError('Configurá tu API key en Conexión o FAL_KEY')
-        except (ValueError, OSError) as exc: return self.status.setText(str(exc))
-        self.status.setText('Consultando precio; no se envían medios ni se genera contenido')
+        except (ValueError, OSError) as exc: return self.status.setText(tr(str(exc)))
+        self.status.setText(tr('Consultando precio; no se envían medios ni se genera contenido'))
         def done(quote):
             try:
                 if fingerprint(self.spec()) != fingerprint(spec): return
             except (ValueError, OSError): return
             self.quote = dict(quote, spec_hash=fingerprint(spec), received=time.time())
-            self.cost.setText(f"Estimado: {quote['total_cost']:.4f} {quote['currency']} · {quote['units']:g} × {quote['unit_price']:g} / {quote['unit']}\n"
-                              'Base por unidades manuales. No ajusta calidad/duración automáticamente: revisá la ficha. No es un tope de gasto ni el cobro final.')
-            self.status.setText('Precio consultado. Revisá unidades y parámetros antes de confirmar.')
+            self.cost.setText(tr('Estimado: {0:.4f} {1} · {2:g} × {3:g} / {4}\nBase por unidades manuales. No ajusta calidad/duración automáticamente: revisá la ficha. No es un tope de gasto ni el cobro final.').format(quote['total_cost'], quote['currency'], quote['units'], quote['unit_price'], quote['unit']))
+            self.status.setText(tr('Precio consultado. Revisá unidades y parámetros antes de confirmar.'))
         self.run_task(lambda _: client.estimate(spec['endpoint'], spec['units']), done)
 
     def submit(self):
@@ -318,13 +318,10 @@ class GenAIWindow(QDialog):
             if not self.quote or self.quote['spec_hash'] != fingerprint(spec) or time.time() - self.quote['received'] > 300:
                 raise ValueError('Calculá el costo nuevamente: parámetros cambiados o cotización vencida')
             quote = copy.deepcopy(self.quote); client = self.client()
-        except (ValueError, OSError) as exc: return self.status.setText(str(exc))
-        text = (f"Modelo: {spec['endpoint']}\nEstimado: {quote['total_cost']:.4f} {quote['currency']}\n"
-                f"Base: {quote['units']:g} unidades de {quote['unit']}. Puede variar con calidad/duración.\n"
-                f"Archivos locales a subir: {len(spec['input_signature'])}\nProxy de entrada: {self.send_proxy.currentText()}\n"
-                'Se enviarán el prompt y los medios elegidos a fal.ai usando tu cuenta.\n'
-                'Confirmo que revisé las unidades facturables y autorizo este trabajo pago.')
-        if QMessageBox.question(self, 'Confirmar envío y costo', text, QMessageBox.Yes | QMessageBox.No, QMessageBox.No) != QMessageBox.Yes:
+        except (ValueError, OSError) as exc: return self.status.setText(tr(str(exc)))
+        text = tr('Modelo: {0}\nEstimado: {1:.4f} {2}\nBase: {3:g} unidades de {4}. Puede variar con calidad/duración.\nArchivos locales a subir: {5}\nProxy de entrada: {6}\nSe enviarán el prompt y los medios elegidos a fal.ai usando tu cuenta.\nConfirmo que revisé las unidades facturables y autorizo este trabajo pago.').format(
+            spec['endpoint'], quote['total_cost'], quote['currency'], quote['units'], quote['unit'], len(spec['input_signature']), self.send_proxy.currentText())
+        if QMessageBox.question(self, tr('Confirmar envío y costo'), text, QMessageBox.Yes | QMessageBox.No, QMessageBox.No) != QMessageBox.Yes:
             return
         self.invalidate()
         self.run_task(lambda task: JobRunner(client, self.store, task.progress.emit, task.stop).start(spec, quote), self.job_done)
@@ -347,7 +344,7 @@ class GenAIWindow(QDialog):
                 item = next(m for m in self.models if m['endpoint_id'] == endpoint)
                 self.model.addItem(item.get('name', endpoint), item)
             self.model.blockSignals(False); self.model_changed()
-            self.status.setText(f'{len(found)} modelos encontrados (máximo 30). Trending no garantiza calidad; consultá la ficha.')
+            self.status.setText(tr('{0} modelos encontrados (máximo 30). Trending no garantiza calidad; consultá la ficha.').format(len(found)))
         self.run_task(lambda _: client.search(category, query), done)
 
     def refresh_schema(self):
@@ -363,7 +360,7 @@ class GenAIWindow(QDialog):
             self.populate_models()
             for index in range(self.model.count()):
                 if self.model.itemData(index)['endpoint_id'] == endpoint: self.model.setCurrentIndex(index); break
-            self.model_changed(); self.status.setText('Schema actualizado desde fal.ai')
+            self.model_changed(); self.status.setText(tr('Schema actualizado desde fal.ai'))
         self.run_task(lambda _: client.schema(endpoint), done)
 
     def open_model_docs(self):
@@ -390,7 +387,7 @@ class GenAIWindow(QDialog):
         self.send_proxy.setCurrentIndex(self.send_proxy.findData(spec['send_proxy']))
         self.receive_proxy.setCurrentIndex(self.receive_proxy.findData(spec['receive_proxy']))
         self.units.setValue(spec['units']); self.invalidate()
-        self.status.setText('Parámetros recuperados. Calculá el costo para crear una nueva versión.')
+        self.status.setText(tr('Parámetros recuperados. Calculá el costo para crear una nueva versión.'))
 
     def refresh_jobs(self, selected_id=None):
         old = self.selected_job()
@@ -413,35 +410,34 @@ class GenAIWindow(QDialog):
         if not job: return
         for index, output in enumerate(job.get('outputs', [])):
             self.outputs.addItem(f'Resultado {index + 1} · {Path(output["original"]).name}', output)
-        self.details.setText(f"{job['spec']['endpoint']} · {job['state']}\nRequest: {job.get('remote', {}).get('request_id', 'sin confirmar')}\n"
-                             f"Proyecto: {job['spec'].get('project', '')}\nPrompt: {job['spec']['payload'].get('prompt', '')[:180]}")
+        self.details.setText(tr('{0} · {1}\nRequest: {2}\nProyecto: {3}\nPrompt: {4}').format(job['spec']['endpoint'], job['state'], job.get('remote', {}).get('request_id', 'sin confirmar'), job['spec'].get('project', ''), job['spec']['payload'].get('prompt', '')[:180]))
         self.logs.setPlainText('\n'.join(e['at'][11:19] + '  ' + e['message'] for e in job.get('events', [])[-30:]))
         self.show_output()
 
     def job_progress(self, job):
-        self.status.setText(f"v{job['version']:04d} · {job['state']} · {job['events'][-1]['message']}")
+        self.status.setText(tr('v{0:04d} · {1} · {2}').format(job['version'], job['state'], job['events'][-1]['message']))
         self.refresh_jobs(job['id'])
         if job.get('live_logs'): self.logs.appendPlainText('\n'.join(job['live_logs']))
 
     def job_done(self, job):
-        self.refresh_jobs(job['id']); self.status.setText('Trabajo: ' + job['state'])
+        self.refresh_jobs(job['id']); self.status.setText(tr('Trabajo: ') + job['state'])
 
     def resume_selected(self):
         job = self.selected_job()
-        if not job or not job.get('remote'): return self.status.setText('Sin request ID recuperable')
-        if job['state'] == 'READY': return self.status.setText('Los resultados ya están guardados')
+        if not job or not job.get('remote'): return self.status.setText(tr('Sin request ID recuperable'))
+        if job['state'] == 'READY': return self.status.setText(tr('Los resultados ya están guardados'))
         client = self.client()
         self.run_task(lambda task: JobRunner(client, self.store, task.progress.emit, task.stop).resume(job), self.job_done)
 
     def pause_tracking(self):
         if self.busy():
-            self.task.stop.set(); self.status.setText('Pausando al terminar la operación actual. El trabajo remoto puede continuar y cobrar.')
+            self.task.stop.set(); self.status.setText(tr('Pausando al terminar la operación actual. El trabajo remoto puede continuar y cobrar.'))
 
     def cancel_selected(self):
         job = self.selected_job()
         if not job or not job.get('remote', {}).get('cancel_url'): return
-        if self.busy(): return self.status.setText('Pausá primero el seguimiento y esperá a que termine la operación actual')
-        if QMessageBox.question(self, 'Cancelar en fal', 'Solicitar cancelación remota. Si ya está ejecutándose puede no cancelarse y generar cargos.',
+        if self.busy(): return self.status.setText(tr('Pausá primero el seguimiento y esperá a que termine la operación actual'))
+        if QMessageBox.question(self, tr('Cancelar en fal'), tr('Solicitar cancelación remota. Si ya está ejecutándose puede no cancelarse y generar cargos.'),
                                 QMessageBox.Yes | QMessageBox.No, QMessageBox.No) != QMessageBox.Yes: return
         def done(result):
             job['events'].append(dict(at=now(), message='Cancelación solicitada. Reanudar seguimiento para confirmar el estado.'))
@@ -453,14 +449,14 @@ class GenAIWindow(QDialog):
         self.preview_timer.stop(); self.frames = []
         output = self.outputs.currentData()
         if not output:
-            self.preview.clear(); self.preview.setText('Sin resultados descargados para esta versión'); return
+            self.preview.clear(); self.preview.setText(tr('Sin resultados descargados para esta versión')); return
         if output.get('preview'):
             self.frames = sorted(Path(output['preview']['first_file']).parent.glob('frame_*.jpg'))
             self.play_index = 0
             if self.frames: return self.show_image(self.frames[0])
         path = output.get('proxy') or output['original']
         if Path(path).suffix.lower() in VIDEO:
-            self.preview.clear(); self.preview.setText('Video guardado. Abrí el original o configurá FFmpeg para preparar una secuencia.'); return
+            self.preview.clear(); self.preview.setText(tr('Video guardado. Abrí el original o configurá FFmpeg para preparar una secuencia.')); return
         self.show_image(path)
 
     def show_image(self, path):
@@ -485,9 +481,9 @@ class GenAIWindow(QDialog):
         project = self.owner.project
         def done(result):
             if self.owner.project is not project:
-                return self.status.setText('Cambió el proyecto; volvé a elegir Usar en graph')
+                return self.status.setText(tr('Cambió el proyecto; volvé a elegir Usar en graph'))
             self.owner.import_genai_result(result['path'], job, output, result.get('frames'))
-            self.status.setText('Nodo Read agregado al proyecto; original conservado')
+            self.status.setText(tr('Nodo Read agregado al proyecto; original conservado'))
         if Path(original).suffix.lower() in VIDEO:
             directory = Path(original).parent / (Path(original).stem + '_frames')
             ffmpeg = self.ffmpeg.text().strip()
@@ -514,5 +510,5 @@ class GenAIWindow(QDialog):
     def closeEvent(self, event):
         self.preview_timer.stop()
         if self.busy():
-            self.status.setText('Pausá el seguimiento y esperá la operación actual antes de cerrar.'); event.ignore()
+            self.status.setText(tr('Pausá el seguimiento y esperá la operación actual antes de cerrar.')); event.ignore()
         else: event.accept()

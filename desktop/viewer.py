@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from i18n import tr
 """Float Viewer controls are display-only; they never alter the Blender graph."""
 import numpy as np
 from collections import OrderedDict
@@ -168,18 +169,18 @@ class FloatViewer(QWidget):
         toolbar = FlowLayout()
         self.channels = QComboBox()
         self.channels.addItems(['RGB', 'R', 'G', 'B', 'A', 'Y', 'Matte'])
-        self.channels.setToolTip('Canales RGBA / luminancia / overlay de matte')
-        toolbar.addWidget(QLabel('rgba'))
+        self.channels.setToolTip(tr('Canales RGBA / luminancia / overlay de matte'))
+        toolbar.addWidget(QLabel(tr('rgba')))
         toolbar.addWidget(self.channels)
         self.transform = QComboBox()
         self.transform.addItems(['sRGB', 'Linear', 'OCIO'])
-        self.transform.setToolTip('Transformacion de visualizacion; no modifica Write')
+        self.transform.setToolTip(tr('Transformacion de visualizacion; no modifica Write'))
         toolbar.addWidget(self.transform)
         self.exposure = QDoubleSpinBox()
         self.exposure.setRange(-20, 20)
         self.exposure.setSingleStep(.25)
         self.exposure.setPrefix('Exp ')
-        self.exposure.setToolTip('Exposicion del Viewer en stops; independiente de la composicion')
+        self.exposure.setToolTip(tr('Exposicion del Viewer en stops; independiente de la composicion'))
         toolbar.addWidget(self.exposure)
         self.gamma = QDoubleSpinBox()
         self.gamma.setRange(.1, 5)
@@ -187,21 +188,21 @@ class FloatViewer(QWidget):
         self.gamma.setSingleStep(.1)
         self.gamma.setPrefix('Gamma ')
         toolbar.addWidget(self.gamma)
-        self.checker = QPushButton('Checker')
+        self.checker = QPushButton(tr('Checker'))
         self.checker.setCheckable(True)
         self.checker.setChecked(True)
         toolbar.addWidget(self.checker)
-        fit, actual = QPushButton('Fit'), QPushButton('1:1')
+        fit, actual = QPushButton(tr('Fit')), QPushButton(tr('1:1'))
         toolbar.addWidget(fit)
         toolbar.addWidget(actual)
-        self.zoom = QLabel('100%')
+        self.zoom = QLabel(tr('100%'))
         toolbar.addWidget(self.zoom)
         toolbar.addStretch()
         layout.addLayout(toolbar)
         comparison = FlowLayout()
         self.comparison_tools=comparison
-        capture = QPushButton('Capturar B')
-        capture.setToolTip('Congela el cuadro actual como referencia B')
+        capture = QPushButton(tr('Capturar B'))
+        capture.setToolTip(tr('Congela el cuadro actual como referencia B'))
         capture.clicked.connect(self.capture)
         comparison.addWidget(capture)
         self.compare = QComboBox()
@@ -211,17 +212,17 @@ class FloatViewer(QWidget):
         self.wipe.setRange(0, 100)
         self.wipe.setValue(50)
         self.wipe.setMaximumWidth(140)
-        self.wipe.setToolTip('Posicion del wipe A/B')
+        self.wipe.setToolTip(tr('Posicion del wipe A/B'))
         comparison.addWidget(self.wipe)
-        self.reference_label = QLabel('B: sin captura')
+        self.reference_label = QLabel(tr('B: sin captura'))
         from PySide6.QtWidgets import QSizePolicy
         self.reference_label.setSizePolicy(QSizePolicy.Ignored,QSizePolicy.Fixed)
         comparison.addWidget(self.reference_label)
-        self.sample_size=QComboBox();self.sample_size.addItems(['Pixel','3 x 3','9 x 9']);self.sample_size.setToolTip('Promedio de muestras scene-linear, antes del display')
+        self.sample_size=QComboBox();self.sample_size.addItems(['Pixel','3 x 3','9 x 9']);self.sample_size.setToolTip(tr('Promedio de muestras scene-linear, antes del display'))
         comparison.addWidget(self.sample_size)
-        self.overlays=QPushButton('Formato');self.overlays.setCheckable(True);self.overlays.setToolTip('Limite de formato y margen del 5%; no representa dataWindow EXR');comparison.addWidget(self.overlays)
+        self.overlays=QPushButton(tr('Formato'));self.overlays.setCheckable(True);self.overlays.setToolTip(tr('Limite de formato y margen del 5%; no representa dataWindow EXR'));comparison.addWidget(self.overlays)
         comparison.addStretch()
-        reset = QPushButton('Reset view')
+        reset = QPushButton(tr('Reset view'))
         reset.clicked.connect(self.reset)
         for button,name in [(capture,'layers'),(fit,'fit'),(actual,'viewer'),(reset,'reset'),(self.checker,'image'),(self.overlays,'fit')]:decorate(button,name)
         comparison.addWidget(reset)
@@ -233,7 +234,7 @@ class FloatViewer(QWidget):
         self.canvas.channel.connect(lambda c: self.channels.setCurrentText('RGB' if self.channels.currentText() == c else c))
         self.canvas.play.connect(self.play_requested)
         self.canvas.zoomed.connect(self.zoom.setText)
-        self.probe = QLabel('RGBA float · zoom con rueda · boton medio para pan')
+        self.probe = QLabel(tr('RGBA float · zoom con rueda · boton medio para pan'))
         self.canvas.sample.connect(self.probe.setText)
         self.probe.setSizePolicy(QSizePolicy.Ignored,QSizePolicy.Fixed)
         self.canvas.sample.connect(self.probe.setToolTip)
@@ -264,7 +265,7 @@ class FloatViewer(QWidget):
     def capture(self):
         if self.source is not None:
             self.reference = self.source.copy()
-            self.reference_label.setText(f"B: frame {self.current_info['frame']} (snapshot)")
+            self.reference_label.setText(tr('B: frame {0} (snapshot)').format(self.current_info['frame']))
             self.refresh()
 
     def reset(self):
@@ -279,7 +280,7 @@ class FloatViewer(QWidget):
         if self.source is None:
             return
         if self.transform.currentText() == 'OCIO' and getattr(self, 'ocio_processor', None) is None:
-            self.probe.setText('Configura OCIO desde Color management'); return
+            self.probe.setText(tr('Configura OCIO desde Color management')); return
         data = self.source
         if self.reference is not None and self.reference.shape == data.shape:
             mode = self.compare.currentText()
@@ -293,7 +294,7 @@ class FloatViewer(QWidget):
                 cut = int(data.shape[1] * self.wipe.value() / 100)
                 data[:, :cut] = self.reference[:, :cut]
         elif self.compare.currentText() != 'A':
-            self.reference_label.setText('Capturar B con el mismo formato/proxy')
+            self.reference_label.setText(tr('Capturar B con el mismo formato/proxy'))
         cache_key = (self.current_info['raw'], self.channels.currentText(), self.exposure.value(),
                      self.gamma.value(), self.transform.currentText(), self.checker.isChecked())
         use_cache = self.compare.currentText() == 'A'

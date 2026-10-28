@@ -6,7 +6,7 @@
   <p><strong>Composición nodal open source, con Blender como motor.</strong></p>
   <p>Un compositor de escritorio independiente para Windows, creado por <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
   <p>
-    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.10.0-orange"></a>
+    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.10.1-orange"></a>
     <a href="LICENSE"><img alt="License GPL v3 or later" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue"></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/platform-Windows_x64-0078D4">
     <img alt="Technical beta" src="https://img.shields.io/badge/status-technical_beta-yellow">
@@ -19,10 +19,12 @@ Nukify combina una interfaz propia en Qt con el compositor y las herramientas 3D
 
 Es una **beta técnica** con workflows funcionales y pruebas automatizadas. No se presenta como sustituto completo de Nuke ni como herramienta ya certificada para producción.
 
+La versión actual del código inicia en **inglés**. Desde **Language / Idioma** en la barra superior podés elegir **English** o **Español**, guardar y volver a abrir Nukify. La preferencia se guarda localmente, por separado de los proyectos. Los identificadores de nodos, valores técnicos, schemas del proveedor y contenidos del usuario conservan sus nombres originales. Esta configuración es independiente de los enlaces de documentación y **está incluida desde la versión 0.10.1**. Consultá [idiomas de la interfaz](docs/interface-languages.md) para ejecutar y probar el código actualizado.
+
 ## Descargar e instalar
 
 1. Abrí [Releases](https://github.com/maxsarlijagit/Nukify/releases).
-2. Descargá **Nukify-Setup-0.10.0.exe** y ejecutalo en Windows x64.
+2. Descargá **Nukify-Setup-0.10.1.exe** y ejecutalo en Windows x64.
 3. Iniciá Nukify y probá **Proyecto → Ejemplos → Composición** o **Curvas y roto**.
 
 El instalador no tiene firma comercial de código. Verificá su SHA256 con el archivo `SHA256SUMS.txt` publicado en la misma release. La validación se realizó en Windows; falta una prueba completa en una segunda PC limpia.
@@ -79,13 +81,13 @@ cd Nukify
 
 Seguí [BUILDING.md](BUILDING.md) para preparar las ruedas del worker, configurar Blender, ejecutar pruebas y compilar el instalador. El build público se realiza limpio y registra el commit fuente y los hashes de la aplicación y del motor.
 
-## GENAI Studio (0.10.0)
+## GENAI Studio (0.10.1)
 
 El botón **GENAI** abre un espacio de generación y edición de imágenes/videos con **[fal.ai](https://fal.ai) como proveedor de inferencia** y tu propia API key: controles por modelo, catálogo destacado y búsqueda, seguimiento de cola, originales/proxies, biblioteca versionada e importación como nodos `Read`. La clave se mantiene en memoria o se toma de `FAL_KEY`.
 
 Incluye Nano Banana 2.1/Pro, GPT Image 2, MiniMax H3 Max y Kling 4/O3 Pro. El costo se consulta por **unidades facturables manuales**; los ajustes de calidad/duración deben revisarse en la ficha del modelo. Cada envío requiere confirmar medios y costo. FFmpeg es necesario para proxies y secuencias de video.
 
-Consultá la [guía GENAI](docs/genai.md) para configuración, alcance y límites. **La compilación 0.10.0 incluye esta función; el instalador 0.9.2 anterior no la incluye.** El build local genera `releases/0.10.0/Nukify-Setup-0.10.0.exe`; verificá en Releases qué instaladores están publicados. La inferencia paga aún no fue validada contra una cuenta real.
+Consultá la [guía GENAI](docs/genai.md) para configuración, alcance y límites. **La compilación 0.10.1 incluye esta función; el instalador 0.9.2 anterior no la incluye.** El build local genera `releases/0.10.1/Nukify-Setup-0.10.1.exe`; verificá en Releases qué instaladores están publicados. La inferencia paga aún no fue validada contra una cuenta real.
 
 ![GENAI Studio: modelos, parámetros y biblioteca de versiones](docs/images/genai.png)
 
