@@ -8,7 +8,7 @@ renders/
 build/
 dist/
 validation/
-releases/
+/releases/
 .tools/
 sources/
 desktop/vendor/
