@@ -77,6 +77,16 @@ cd Nukify
 
 Seguí [BUILDING.md](BUILDING.md) para preparar las ruedas del worker, configurar Blender, ejecutar pruebas y compilar el instalador. El build público se realiza limpio y registra el commit fuente y los hashes de la aplicación y del motor.
 
+## GENAI Studio (código de desarrollo)
+
+El botón **GENAI** abre un espacio de generación y edición de imágenes/videos con tu propia API key de **fal.ai**: controles por modelo, catálogo destacado y búsqueda, seguimiento de cola, originales/proxies, biblioteca versionada e importación como nodos `Read`. La clave se mantiene en memoria o se toma de `FAL_KEY`.
+
+Incluye Nano Banana 2.1/Pro, GPT Image 2, MiniMax H3 Max y Kling 4/O3 Pro. El costo se consulta por **unidades facturables manuales**; los ajustes de calidad/duración deben revisarse en la ficha del modelo. Cada envío requiere confirmar medios y costo. FFmpeg es necesario para proxies y secuencias de video.
+
+Consultá la [guía GENAI](docs/genai.md) para configuración, alcance y límites. **Esta función está en el código actualizado; el instalador 0.9.2 anterior no la incluye.** La inferencia paga aún no fue validada contra una cuenta real.
+
+![GENAI Studio: modelos, parámetros y biblioteca de versiones](docs/images/genai.png)
+
 ## Colaborar con agentes
 
 Podés contribuir con asistencia de un agente de programación. La carpeta **[/agents](agents/README.md)** reúne instrucciones compartidas, responsabilidades, criterios de validación y una plantilla de tarea y entrega.
@@ -95,6 +105,7 @@ Pendientes: validación con planos reales y artistas, uso prolongado HD/4K, camb
 ## Documentación y contribuciones
 
 - [Compilar y desarrollar](BUILDING.md)
+- [GENAI: imágenes, videos, proxies y versiones](docs/genai.md)
 - [Contribuir](CONTRIBUTING.md)
 - [Trabajar con agentes](agents/README.md)
 - [Primera contribución agéntica](agents/FIRST_AGENTIC_CONTRIBUTION.md)

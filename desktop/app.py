@@ -237,6 +237,10 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
             project_menu.addAction(name,callback)
         project_button=QPushButton('Proyecto');project_button.setMenu(project_menu);bar.addWidget(project_button)
         decorate(project_button,'tools')
+        genai_button = QPushButton('GENAI')
+        decorate(genai_button, 'image', 'Generar y editar imágenes / videos con fal.ai')
+        genai_button.clicked.connect(self.open_genai)
+        bar.addWidget(genai_button)
         project_menu.addAction('Inspeccionar 3D en Blender',self.inspect_3d)
         for name,callback in [('Asignar Viewer B [2]',self.preview_b),('Desconectar B',self.clear_b),('Render queue',self.queue_dialog),('Reanudar render',self.resume_render),('Recopilar proyecto y medios',self.collect_project),('Presupuesto cache',self.cache_settings)]:project_menu.addAction(name,callback)
         layout.addLayout(bar)
@@ -693,8 +697,35 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
     def error(self, text):
         QMessageBox.warning(self, 'Nukify', text)
 
+    def open_genai(self):
+        from genai_ui import GenAIWindow
+        if not getattr(self, 'genai_window', None):
+            self.genai_window = GenAIWindow(self, ROOT, DATA)
+        self.genai_window.show()
+        self.genai_window.raise_()
+        self.genai_window.activateWindow()
+
+    def import_genai_result(self, path, job, output, frames=None):
+        self.checkpoint()
+        position = self.graph.mapToScene(self.graph.viewport().rect().center())
+        node = new_node(self.project, 'Read', position.x(), position.y())
+        node['params']['path'] = path
+        node['genai'] = {'job_id': job['id'], 'version': job['version'],
+                         'endpoint': job['spec']['endpoint'], 'original': output['original'],
+                         'sha256': output['sha256'], 'frames': frames}
+        self.project['viewer'] = node['id']
+        if frames:
+            self.project['first'], self.project['last'], self.project['frame'] = 1, frames, 1
+            self.first.setValue(1); self.last.setValue(frames); self.frame.setValue(1)
+        self.graph.rebuild()
+        self.graph.items_by_id[node['id']].setSelected(True)
+        self.changed()
+
     def closeEvent(self, event):
-        if self.process:
+        if getattr(self, 'genai_window', None) and self.genai_window.busy():
+            QMessageBox.information(self, 'GENAI activo', 'Pausá el seguimiento GENAI y esperá la operación actual antes de cerrar.')
+            event.ignore()
+        elif self.process:
             QMessageBox.information(self, 'Proceso activo', 'Cancela el proceso o espera a que termine antes de cerrar.')
             event.ignore()
         elif self.discard_ok():
