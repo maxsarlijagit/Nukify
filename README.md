@@ -77,6 +77,12 @@ cd Nukify
 
 Seguí [BUILDING.md](BUILDING.md) para preparar las ruedas del worker, configurar Blender, ejecutar pruebas y compilar el instalador. El build público se realiza limpio y registra el commit fuente y los hashes de la aplicación y del motor.
 
+## Colaborar con agentes
+
+Podés contribuir con asistencia de un agente de programación. La carpeta **[/agents](agents/README.md)** reúne instrucciones compartidas, responsabilidades, criterios de validación y una plantilla de tarea y entrega.
+
+Empezá por la [guía First Agentic Contribution](agents/FIRST_AGENTIC_CONTRIBUTION.md): elegir una tarea pequeña, preparar tu fork, darle un encargo concreto al agente, revisar la evidencia y enviar un PR. El archivo [AGENTS.md](AGENTS.md) sirve como punto de entrada para herramientas compatibles; si tu herramienta no lo carga automáticamente, pedile que lo lea.
+
 ## Validación y límites
 
 - 46 pruebas locales de lógica e interacción Qt en la preparación de esta versión.
@@ -90,6 +96,8 @@ Pendientes: validación con planos reales y artistas, uso prolongado HD/4K, camb
 
 - [Compilar y desarrollar](BUILDING.md)
 - [Contribuir](CONTRIBUTING.md)
+- [Trabajar con agentes](agents/README.md)
+- [Primera contribución agéntica](agents/FIRST_AGENTIC_CONTRIBUTION.md)
 - [Sistema de interfaz](docs/design-system.md)
 - [Roadmap original](docs/roadmap-produccion.md)
 - [Estado incremental S15–S17](docs/sprints-0.8.md)
