@@ -1,0 +1,20 @@
+name: Tests
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  unit:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install UI and worker dependencies
+        run: |
+          python -m pip install -r requirements-build.txt
+          python -m pip install --target desktop/vendor --only-binary=:all: --platform win_amd64 --python-version 311 --implementation cp --abi cp311 --no-deps -r requirements-worker.txt
+      - name: Unit and Qt interaction tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest discover -s tests -p 'test_*.py'
