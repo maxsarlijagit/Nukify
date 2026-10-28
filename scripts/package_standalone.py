@@ -14,11 +14,13 @@ engine=Path(args.blender_dir).resolve()
 assert (dest / 'Nukify.exe').is_file()
 assert hashlib.sha256((engine / 'blender.exe').read_bytes()).hexdigest() == config['blender_exe_sha256'],'Blender build does not match release configuration'
 shutil.copytree(engine, dest / 'engine', dirs_exist_ok=True)
-for name in ['LICENSE', 'THIRD_PARTY.md','AUTHORS.md','README.md','BUILDING.md','CONTRIBUTING.md','AGENTS.md']:
+for name in ['LICENSE', 'THIRD_PARTY.md','AUTHORS.md','README.md','README.es.md','BUILDING.md','CONTRIBUTING.md','AGENTS.md']:
     shutil.copy2(root / name, dest / name)
 shutil.copy2(root / 'docs/desktop-0.9.md', dest / 'LEEME.md')
 shutil.copytree(root / 'docs', dest / 'docs', dirs_exist_ok=True)
 shutil.copytree(root / 'agents', dest / 'agents', dirs_exist_ok=True)
+(dest / 'assets').mkdir(exist_ok=True)
+shutil.copy2(root / 'assets/nukify-logo.png', dest / 'assets/nukify-logo.png')
 sources = dest / 'sources'
 sources.mkdir(exist_ok=True)
 for url in config['source_urls']:shutil.copy2(root/'sources'/url.rsplit('/',1)[1],sources)

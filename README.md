@@ -1,123 +1,137 @@
-﻿<div align="center">
+**English | [Espa?ol](README.es.md)**
+
+<div align="center">
   <img src="assets/nukify-logo.png" width="96" alt="Nukify logo">
   <h1>Nukify</h1>
-  <p><strong>Composición nodal open source, con Blender como motor.</strong></p>
-  <p>Un compositor de escritorio independiente para Windows, creado por <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
+  <p><strong>Open-source node-based compositing, powered by Blender.</strong></p>
+  <p>A standalone Windows desktop compositor by <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
   <p>
-    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.9.2-orange"></a>
-    <a href="LICENSE"><img alt="License GPL v3 or later" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue"></a>
+    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.10.0-orange"></a>
+    <a href="LICENSE"><img alt="GPL v3 or later" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue"></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/platform-Windows_x64-0078D4">
     <img alt="Technical beta" src="https://img.shields.io/badge/status-technical_beta-yellow">
   </p>
 </div>
 
-![Nukify: viewer, propiedades y grafo nodal](docs/images/compositing.png)
+![Nukify: viewer, properties and vertical node graph](docs/images/compositing.png)
 
-Nukify combina una interfaz propia en Qt con el compositor y las herramientas 3D de **Blender 4.5.14 LTS**. El viewer está arriba, los nodos se conectan verticalmente y las propiedades quedan a la derecha. El instalador incluye el motor: no necesitás instalar Python ni Blender por separado para usar la aplicación.
+Nukify combines a custom Qt interface with the compositor and 3D tools of **Blender 4.5.14 LTS**. The viewer sits above the vertical node graph, with properties on the right. The installer includes the engine: Python and Blender do not need to be installed separately.
 
-Es una **beta técnica** con workflows funcionales y pruebas automatizadas. No se presenta como sustituto completo de Nuke ni como herramienta ya certificada para producción.
+This is a **technical beta** with working workflows and automated tests. It is not presented as a complete Nuke replacement or a production-certified tool. The desktop interface currently uses a mix of Spanish labels and familiar English compositing terms; the language links above switch the documentation, not the application UI.
 
-## Descargar e instalar
+## Download and install
 
-1. Abrí [Releases](https://github.com/maxsarlijagit/Nukify/releases).
-2. Descargá **Nukify-Setup-0.9.2.exe** y ejecutalo en Windows x64.
-3. Iniciá Nukify y probá **Proyecto → Ejemplos → Composición** o **Curvas y roto**.
+1. Open [Releases](https://github.com/maxsarlijagit/Nukify/releases).
+2. Download **Nukify-Setup-0.10.0.exe** and run it on Windows x64.
+3. Launch Nukify and try **Proyecto ? Ejemplos ? Composici?n** or **Curvas y roto**.
+4. Open **GENAI** in the main toolbar to configure your fal.ai account.
 
-El instalador no tiene firma comercial de código. Verificá su SHA256 con el archivo `SHA256SUMS.txt` publicado en la misma release. La validación se realizó en Windows; falta una prueba completa en una segunda PC limpia.
+The installer is not commercially code-signed. Check its SHA256 against `SHA256SUMS.txt` in the same release. Validation was performed on Windows; a full installation test on a second clean PC is still pending.
 
-La distribución incluye fuentes y avisos de los componentes principales dentro de `sources/` y `licenses/`. El repositorio contiene el código propio; los ejecutables y dependencias grandes se distribuyen como assets de la release.
+Sources and notices for the main bundled components are included under `sources/` and `licenses/`. This repository contains Nukify's source; large executables and dependencies are distributed as release assets. Local builds produce `releases/0.10.0/Nukify-Setup-0.10.0.exe`. Check the release page for published downloads.
 
-## Qué incluye
+## GENAI Studio ? fal.ai provider
 
-| Área | Funciones disponibles |
+**[fal.ai](https://fal.ai) is the inference provider for GENAI Studio.** Bring your own API key and billing account. The key stays in memory for the session or is read from `FAL_KEY`; it is not stored in composition projects or job history.
+
+![Actual GENAI Studio interface: model settings and version library](docs/images/genai.png)
+
+The screenshot shows the real application interface. It is not evidence of a paid generation.
+
+- **Generate and edit images and videos**, including image-to-video workflows.
+- **Model-specific controls:** resolution, quality, duration, format, output count, seed and reference inputs, where supported by the model.
+- **11 featured endpoints:** Nano Banana 2.1/Pro, GPT Image 2, MiniMax H3 Max and Kling 4/O3 Pro. Search fal's current catalog and refresh model schemas from the UI. The featured selection is not an objective quality ranking.
+- **Process tracking:** preparation, upload, queue, execution, download and local proxy creation, with resumable tracking by request ID.
+- **Versioned media library:** retain originals, hashes, parameters and revisions; reuse a version's settings to create a new revision.
+- **Send and receive proxies:** select a maximum long edge of 512, 1024 or 1920 pixels. Received proxies are created locally after downloading the original.
+- **Use in the graph:** import a result as a `Read` node; videos are converted into PNG sequences. Video preview uses local frames at 12 fps without audio; open the original in the system player for full playback.
+
+**Costs are estimates based on manually entered billing units.** Nukify queries fal's unit-price and estimation APIs, but does not automatically apply every resolution, duration, audio, token or quality multiplier. Check the model's pricing page and adjust the units before confirming. The estimate is neither the final charge nor a provider-enforced spending cap. Each submission asks you to confirm the media transfer and paid job.
+
+**FFmpeg is required for video proxies and sequence extraction.** Configure an existing installation in GENAI ? Conexi?n or put it on PATH. FFmpeg is not bundled or downloaded automatically. Paid inference has not yet been validated against a real account; catalog and schema queries have been checked live.
+
+See the [GENAI guide (Spanish)](docs/genai.md) for setup, recovery, supported inputs and limitations. GENAI is included in **0.10.0**; the earlier **0.9.2 installer does not contain it**.
+
+## Features
+
+| Area | Available features |
 | --- | --- |
-| Interfaz | Tema compacto, iconos vectoriales, inspector con búsqueda, pestañas Nodo/Proyecto, presets de distribución y barras adaptables. |
-| Graph | Conexiones verticales, categorías, búsqueda de nodos, selección múltiple, copiar/pegar, bypass, undo/redo y shortcuts configurables. |
-| Viewer | Actualización automática, comparación A/B, wipe/difference, exposición y gamma de display, muestreo de píxeles, OCIO y cache por cuadro. |
-| Secuencias | Timeline, playback y precarga A/B. La reproducción fluida depende del cache y del costo del grafo. |
-| Composición | Nodos de color, filtros, máscaras, merge, transformaciones, tiempo, keying, canales, lectura y escritura. |
-| Animación | Keyframes, curvas Bézier, tangentes, retiming y expresiones matemáticas acotadas con referencias entre nodos. |
-| Roto | Formas Bézier, grupos jerárquicos, opacidad, transformaciones y motion blur muestreado de máscaras. |
-| Tracking | Tracking 2D y planar, correcciones manuales por frame, exclusión de zonas e informes de pérdida/confianza. |
-| 3D | Camera, Card, Geometry, Light, Scene, Project3D y RenderLayers. |
-| Entrega | EXR/Cryptomatte, cola de renders reanudable y recopilación de proyecto/medios. |
+| Interface | Compact theme, vector icons, searchable inspector, node/project tabs, workspace presets and adaptive toolbars. |
+| Node graph | Vertical connections, categories, node search, multi-selection, copy/paste, bypass, undo/redo and configurable shortcuts. |
+| Viewer | Automatic updates, A/B comparison, wipe/difference, display exposure/gamma, pixel sampling, OCIO and frame caching. |
+| Sequences | Timeline, playback and A/B prefetch. Smooth playback depends on cache availability and graph cost. |
+| Compositing | Color, filters, masks, merge, transforms, time, keying, channels, reading and writing. |
+| Animation | Keyframes, B?zier curves, tangents, retiming and restricted mathematical expressions with node references. |
+| Roto | B?zier shapes, hierarchical groups, opacity, transforms and sampled mask motion blur. |
+| Tracking | 2D and planar tracking, per-frame manual corrections, exclusion areas and loss/confidence reports. |
+| 3D | Camera, Card, Geometry, Light, Scene, Project3D and RenderLayers. |
+| Delivery | EXR/Cryptomatte, resumable render queue and project/media collection. |
+| GENAI | fal.ai image/video generation and editing, process tracking, cost estimates, proxies and versioned results. |
 
-## Capturas
+## Screenshots
 
-Las imágenes son **capturas de la aplicación real** ejecutando fixtures sintéticos incluidos en el proyecto, no mockups ni planos de clientes.
+These are **actual application screenshots**. Compositing examples use synthetic fixtures included in the project, not client footage.
 
-### Roto, grupos y composición
+![Roto groups and compositing](docs/images/roto.png)
 
-![Roto y jerarquía de formas](docs/images/roto.png)
+![Keyframe and tangent editor](docs/images/curve-editor.png)
 
-### Editor de curvas
+## First steps
 
-![Editor de claves y tangentes](docs/images/curve-editor.png)
+- **Tab:** search for and create a node.
+- **1 / 2:** assign the selected node to viewer A / B.
+- **F:** frame the graph; use the wheel to zoom and the middle mouse button to pan.
+- **Space** over the graph: maximize/restore the editor.
+- **Espacio ? Composici?n / Viewer amplio / Nodos amplios:** change the workspace layout.
+- **Live ON:** update the viewer when parameters change. **Cache range:** prepare frames for playback.
+- **fx** in properties edits expressions; the **diamond** opens animation controls.
 
-## Primeros pasos
+Customize shortcuts under Proyecto ? Shortcuts. See the [interface guide](docs/desktop-0.9.md) and [compositing, roto and tracking guide](docs/desktop-0.8.md), currently in Spanish.
 
-- **Tab**: buscar y crear un nodo en el graph.
-- **1 / 2**: asignar el nodo seleccionado al viewer A / B.
-- **F**: encuadrar; rueda para zoom y botón medio para pan.
-- **Espacio** sobre el graph: maximizar/restaurar ese editor.
-- **Espacio → Composición / Viewer amplio / Nodos amplios** en la barra superior: cambiar distribución.
-- **Live ON**: actualizar el viewer al cambiar parámetros. **Cache range**: preparar cuadros para playback.
-- En propiedades, **fx** edita expresiones y el **rombo** abre controles de animación.
+## Development and builds
 
-Los atajos se pueden ajustar desde Proyecto → Shortcuts. Consultá la [guía de interfaz](docs/desktop-0.9.md) y la [guía de composición, roto y tracking](docs/desktop-0.8.md).
-
-## Desarrollo y compilación
-
-El entorno de desarrollo usa Python 3.12, PySide6 y Blender 4.5.14 LTS. Las dependencias están fijadas en `requirements-build.txt` y `requirements-worker.txt`.
+Development uses Python 3.12, PySide6 and Blender 4.5.14 LTS. Dependencies are pinned in `requirements-build.txt` and `requirements-worker.txt`.
 
 ```powershell
 git clone https://github.com/maxsarlijagit/Nukify.git
 cd Nukify
 ```
 
-Seguí [BUILDING.md](BUILDING.md) para preparar las ruedas del worker, configurar Blender, ejecutar pruebas y compilar el instalador. El build público se realiza limpio y registra el commit fuente y los hashes de la aplicación y del motor.
+Follow [BUILDING.md](BUILDING.md) to prepare worker dependencies, configure Blender, run tests and compile the installer. Builds record the source commit and application/engine hashes.
 
-## GENAI Studio (0.10.0)
+## Agent-assisted contributions
 
-El botón **GENAI** abre un espacio de generación y edición de imágenes/videos con tu propia API key de **fal.ai**: controles por modelo, catálogo destacado y búsqueda, seguimiento de cola, originales/proxies, biblioteca versionada e importación como nodos `Read`. La clave se mantiene en memoria o se toma de `FAL_KEY`.
+The **[/agents](agents/README.md)** folder contains shared instructions, responsibilities, validation criteria and a task/delivery template. Start with [First Agentic Contribution](agents/FIRST_AGENTIC_CONTRIBUTION.md): choose a small task, prepare your fork, give the agent a concrete assignment, review the evidence and open a PR.
 
-Incluye Nano Banana 2.1/Pro, GPT Image 2, MiniMax H3 Max y Kling 4/O3 Pro. El costo se consulta por **unidades facturables manuales**; los ajustes de calidad/duración deben revisarse en la ficha del modelo. Cada envío requiere confirmar medios y costo. FFmpeg es necesario para proxies y secuencias de video.
+[AGENTS.md](AGENTS.md) is the entry point for compatible tools. Ask other tools to read it explicitly. These contributor guides are currently in Spanish.
 
-Consultá la [guía GENAI](docs/genai.md) para configuración, alcance y límites. **La compilación 0.10.0 incluye esta función; el instalador 0.9.2 anterior no la incluye.** El build local genera `releases/0.10.0/Nukify-Setup-0.10.0.exe`; verificá en Releases qué instaladores están publicados. La inferencia paga aún no fue validada contra una cuenta real.
+## Validation and limitations
 
-![GENAI Studio: modelos, parámetros y biblioteca de versiones](docs/images/genai.png)
+- 67 local logic and Qt interaction tests passed with Blender configured.
+- Packaged checks cover offline GENAI, expressions/roto, A/B caching, render queue/media and compositing/tracking/EXR regression.
+- GENAI UI reviewed at 1024/1440 px and 150% scaling; the compositor also has earlier 1280 px checks.
+- A synthetic 48-frame video was converted to proxies and imported as a sequence. Two frames were rendered in Blender with a maximum 8-bit pixel difference of 1 against the input PNGs.
+- Release-specific results are in `VALIDATION.json` alongside the installer. CI unit tests are distinct from Blender-backed or installed-binary checks.
 
-## Colaborar con agentes
+Still pending: real-shot/artist acceptance, extended HD/4K use, physical monitor/DPI changes, a second clean PC, intermediate-node caching, ROI, automatic occlusion recovery and paid GENAI inference. Planar tracking is not a 3D camera solve. Roto motion blur is not general image motion blur. Pausing GENAI tracking does not stop a remote charge; cancellation is subject to the provider's job state.
 
-Podés contribuir con asistencia de un agente de programación. La carpeta **[/agents](agents/README.md)** reúne instrucciones compartidas, responsabilidades, criterios de validación y una plantilla de tarea y entrega.
+## Documentation and contributions
 
-Empezá por la [guía First Agentic Contribution](agents/FIRST_AGENTIC_CONTRIBUTION.md): elegir una tarea pequeña, preparar tu fork, darle un encargo concreto al agente, revisar la evidencia y enviar un PR. El archivo [AGENTS.md](AGENTS.md) sirve como punto de entrada para herramientas compatibles; si tu herramienta no lo carga automáticamente, pedile que lo lea.
+- [Spanish README](README.es.md)
+- [Build and development guide](BUILDING.md)
+- [GENAI guide](docs/genai.md)
+- [Contributing](CONTRIBUTING.md)
+- [Agent collaboration](agents/README.md)
+- [Design system](docs/design-system.md)
+- [Original roadmap](docs/roadmap-produccion.md)
+- [S15?S17 progress](docs/sprints-0.8.md)
+- [Release notes: English and Spanish](docs/releases/README.md)
+- [Report an issue](https://github.com/maxsarlijagit/Nukify/issues)
 
-## Validación y límites
+## Author and license
 
-- 46 pruebas locales de lógica e interacción Qt en la preparación de esta versión.
-- Cuatro suites del ejecutable: expresiones/roto, cache A/B, render/cola/medios y regresión de composición/tracking/EXR.
-- UI revisada a 1440, 1280 y 1024 px de ancho, con escalado Qt del 100% y 150%.
-- Los resultados del binario publicado están en `VALIDATION.json` junto al instalador. CI ejecuta pruebas unitarias; las comprobaciones que necesitan Blender no equivalen a ese job de CI.
+**Max Sarlija** ? [@maxsarlijagit](https://github.com/maxsarlijagit)
 
-Pendientes: validación con planos reales y artistas, uso prolongado HD/4K, cambios físicos entre monitores/DPI, segunda PC limpia, cache de nodos intermedios, ROI y recuperación automática de oclusiones. El tracking planar no es un camera solve 3D. El motion blur de roto no es motion blur general de todas las imágenes.
+Copyright ? 2026 Max Sarlija and contributors. Nukify's own code is licensed under **GPL-3.0-or-later**. See [LICENSE](LICENSE), [AUTHORS.md](AUTHORS.md) and [THIRD_PARTY.md](THIRD_PARTY.md).
 
-## Documentación y contribuciones
-
-- [Compilar y desarrollar](BUILDING.md)
-- [GENAI: imágenes, videos, proxies y versiones](docs/genai.md)
-- [Contribuir](CONTRIBUTING.md)
-- [Trabajar con agentes](agents/README.md)
-- [Primera contribución agéntica](agents/FIRST_AGENTIC_CONTRIBUTION.md)
-- [Sistema de interfaz](docs/design-system.md)
-- [Roadmap original](docs/roadmap-produccion.md)
-- [Estado incremental S15–S17](docs/sprints-0.8.md)
-- [Reportar un problema](https://github.com/maxsarlijagit/Nukify/issues)
-
-## Autor y licencia
-
-**Max Sarlija** · [@maxsarlijagit](https://github.com/maxsarlijagit)
-
-Copyright © 2026 Max Sarlija y colaboradores. Código propio bajo **GPL-3.0-or-later**. Ver [LICENSE](LICENSE), [AUTHORS.md](AUTHORS.md) y [THIRD_PARTY.md](THIRD_PARTY.md).
-
-Nukify es independiente y no está afiliado a Blender Foundation ni a Foundry. Las marcas Blender y Nuke pertenecen a sus titulares. Las bibliotecas externas conservan sus licencias y avisos originales.
+Nukify is independent and is not affiliated with Blender Foundation, Foundry or fal.ai. Blender and Nuke are trademarks of their respective owners. External libraries retain their original licenses and notices. Use of fal.ai models is governed by the provider's terms; the app's open-source license does not license model weights or provider services.
