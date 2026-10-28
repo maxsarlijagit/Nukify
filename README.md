@@ -1,4 +1,4 @@
-**English | [Espa?ol](README.es.md)**
+**English | [Español](README.es.md)**
 
 <div align="center">
   <img src="assets/nukify-logo.png" width="96" alt="Nukify logo">
@@ -23,14 +23,14 @@ This is a **technical beta** with working workflows and automated tests. It is n
 
 1. Open [Releases](https://github.com/maxsarlijagit/Nukify/releases).
 2. Download **Nukify-Setup-0.10.0.exe** and run it on Windows x64.
-3. Launch Nukify and try **Proyecto ? Ejemplos ? Composici?n** or **Curvas y roto**.
+3. Launch Nukify and try **Proyecto → Ejemplos → Composición** or **Curvas y roto**.
 4. Open **GENAI** in the main toolbar to configure your fal.ai account.
 
 The installer is not commercially code-signed. Check its SHA256 against `SHA256SUMS.txt` in the same release. Validation was performed on Windows; a full installation test on a second clean PC is still pending.
 
 Sources and notices for the main bundled components are included under `sources/` and `licenses/`. This repository contains Nukify's source; large executables and dependencies are distributed as release assets. Local builds produce `releases/0.10.0/Nukify-Setup-0.10.0.exe`. Check the release page for published downloads.
 
-## GENAI Studio ? fal.ai provider
+## GENAI Studio · fal.ai provider
 
 **[fal.ai](https://fal.ai) is the inference provider for GENAI Studio.** Bring your own API key and billing account. The key stays in memory for the session or is read from `FAL_KEY`; it is not stored in composition projects or job history.
 
@@ -48,7 +48,7 @@ The screenshot shows the real application interface. It is not evidence of a pai
 
 **Costs are estimates based on manually entered billing units.** Nukify queries fal's unit-price and estimation APIs, but does not automatically apply every resolution, duration, audio, token or quality multiplier. Check the model's pricing page and adjust the units before confirming. The estimate is neither the final charge nor a provider-enforced spending cap. Each submission asks you to confirm the media transfer and paid job.
 
-**FFmpeg is required for video proxies and sequence extraction.** Configure an existing installation in GENAI ? Conexi?n or put it on PATH. FFmpeg is not bundled or downloaded automatically. Paid inference has not yet been validated against a real account; catalog and schema queries have been checked live.
+**FFmpeg is required for video proxies and sequence extraction.** Configure an existing installation in GENAI → Conexión or put it on PATH. FFmpeg is not bundled or downloaded automatically. Paid inference has not yet been validated against a real account; catalog and schema queries have been checked live.
 
 See the [GENAI guide (Spanish)](docs/genai.md) for setup, recovery, supported inputs and limitations. GENAI is included in **0.10.0**; the earlier **0.9.2 installer does not contain it**.
 
@@ -61,8 +61,8 @@ See the [GENAI guide (Spanish)](docs/genai.md) for setup, recovery, supported in
 | Viewer | Automatic updates, A/B comparison, wipe/difference, display exposure/gamma, pixel sampling, OCIO and frame caching. |
 | Sequences | Timeline, playback and A/B prefetch. Smooth playback depends on cache availability and graph cost. |
 | Compositing | Color, filters, masks, merge, transforms, time, keying, channels, reading and writing. |
-| Animation | Keyframes, B?zier curves, tangents, retiming and restricted mathematical expressions with node references. |
-| Roto | B?zier shapes, hierarchical groups, opacity, transforms and sampled mask motion blur. |
+| Animation | Keyframes, Bézier curves, tangents, retiming and restricted mathematical expressions with node references. |
+| Roto | Bézier shapes, hierarchical groups, opacity, transforms and sampled mask motion blur. |
 | Tracking | 2D and planar tracking, per-frame manual corrections, exclusion areas and loss/confidence reports. |
 | 3D | Camera, Card, Geometry, Light, Scene, Project3D and RenderLayers. |
 | Delivery | EXR/Cryptomatte, resumable render queue and project/media collection. |
@@ -82,11 +82,11 @@ These are **actual application screenshots**. Compositing examples use synthetic
 - **1 / 2:** assign the selected node to viewer A / B.
 - **F:** frame the graph; use the wheel to zoom and the middle mouse button to pan.
 - **Space** over the graph: maximize/restore the editor.
-- **Espacio ? Composici?n / Viewer amplio / Nodos amplios:** change the workspace layout.
+- **Espacio → Composición / Viewer amplio / Nodos amplios:** change the workspace layout.
 - **Live ON:** update the viewer when parameters change. **Cache range:** prepare frames for playback.
 - **fx** in properties edits expressions; the **diamond** opens animation controls.
 
-Customize shortcuts under Proyecto ? Shortcuts. See the [interface guide](docs/desktop-0.9.md) and [compositing, roto and tracking guide](docs/desktop-0.8.md), currently in Spanish.
+Customize shortcuts under Proyecto → Shortcuts. See the [interface guide](docs/desktop-0.9.md) and [compositing, roto and tracking guide](docs/desktop-0.8.md), currently in Spanish.
 
 ## Development and builds
 
@@ -124,14 +124,14 @@ Still pending: real-shot/artist acceptance, extended HD/4K use, physical monitor
 - [Agent collaboration](agents/README.md)
 - [Design system](docs/design-system.md)
 - [Original roadmap](docs/roadmap-produccion.md)
-- [S15?S17 progress](docs/sprints-0.8.md)
+- [S15–S17 progress](docs/sprints-0.8.md)
 - [Release notes: English and Spanish](docs/releases/README.md)
 - [Report an issue](https://github.com/maxsarlijagit/Nukify/issues)
 
 ## Author and license
 
-**Max Sarlija** ? [@maxsarlijagit](https://github.com/maxsarlijagit)
+**Max Sarlija** · [@maxsarlijagit](https://github.com/maxsarlijagit)
 
-Copyright ? 2026 Max Sarlija and contributors. Nukify's own code is licensed under **GPL-3.0-or-later**. See [LICENSE](LICENSE), [AUTHORS.md](AUTHORS.md) and [THIRD_PARTY.md](THIRD_PARTY.md).
+Copyright © 2026 Max Sarlija and contributors. Nukify's own code is licensed under **GPL-3.0-or-later**. See [LICENSE](LICENSE), [AUTHORS.md](AUTHORS.md) and [THIRD_PARTY.md](THIRD_PARTY.md).
 
 Nukify is independent and is not affiliated with Blender Foundation, Foundry or fal.ai. Blender and Nuke are trademarks of their respective owners. External libraries retain their original licenses and notices. Use of fal.ai models is governed by the provider's terms; the app's open-source license does not license model weights or provider services.

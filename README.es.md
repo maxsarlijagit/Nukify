@@ -1,6 +1,6 @@
-**[English](README.md) | Espa?ol**
+**[English](README.md) | Español**
 
-﻿<div align="center">
+<div align="center">
   <img src="assets/nukify-logo.png" width="96" alt="Nukify logo">
   <h1>Nukify</h1>
   <p><strong>Composición nodal open source, con Blender como motor.</strong></p>
@@ -97,8 +97,8 @@ Empezá por la [guía First Agentic Contribution](agents/FIRST_AGENTIC_CONTRIBUT
 
 ## Validación y límites
 
-- 46 pruebas locales de lógica e interacción Qt en la preparación de esta versión.
-- Cuatro suites del ejecutable: expresiones/roto, cache A/B, render/cola/medios y regresión de composición/tracking/EXR.
+- 67 pruebas locales de lógica e interacción Qt en la preparación de esta versión.
+- Cinco suites del ejecutable: GENAI local sin red, expresiones/roto, cache A/B, render/cola/medios y regresión de composición/tracking/EXR.
 - UI revisada a 1440, 1280 y 1024 px de ancho, con escalado Qt del 100% y 150%.
 - Los resultados del binario publicado están en `VALIDATION.json` junto al instalador. CI ejecuta pruebas unitarias; las comprobaciones que necesitan Blender no equivalen a ese job de CI.
 
