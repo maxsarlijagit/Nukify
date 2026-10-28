@@ -198,7 +198,7 @@ class Graph(GraphInteraction, QGraphicsView):
 class Window(ProductionUI, LiveMixin, QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Nukify 0.9.2 | Compositor Lab')
+        self.setWindowTitle('Nukify 0.10.0 | Compositor Lab')
         self.setWindowIcon(QIcon(str(ROOT / 'assets' / 'nukify-logo.png')))
         self.resize(1440, 940)
         DATA.mkdir(parents=True, exist_ok=True)
@@ -747,6 +747,9 @@ if __name__ == '__main__':
     app.setStyleSheet(STYLE)
     window = Window()
     window.show()
+    if '--genai-test' in sys.argv:
+        from genai_selftest import run
+        QTimer.singleShot(0, lambda: run(window, app, sys.argv[sys.argv.index('--genai-test') + 1]))
     if '--self-test' in sys.argv:
         from selftest import run
         run(window, app, sys.argv[sys.argv.index('--self-test')+1])

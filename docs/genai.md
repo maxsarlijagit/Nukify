@@ -1,6 +1,6 @@
 # GENAI Studio · fal.ai
 
-Sección experimental disponible desde el botón **GENAI** de la barra principal al ejecutar el código actualizado. El instalador 0.9.2 publicado antes de esta función no la incluye.
+Sección experimental disponible desde el botón **GENAI** de la barra principal en Nukify **0.10.0**. El instalador 0.9.2 publicado antes de esta función no la incluye. La compilación local está en `releases/0.10.0/Nukify-Setup-0.10.0.exe` cuando se ejecuta el build; consultá Releases para comprobar qué versiones están publicadas.
 
 ## Flujos disponibles
 

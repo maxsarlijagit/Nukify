@@ -47,11 +47,11 @@ El comando permite ejecutar este script local en ese proceso de PowerShell, sin 
 
 Los archivos salen en `releases/<version>/`. Mantener el directorio portable completo. No alcanza con copiar únicamente `Nukify.exe`.
 
-Validar el ejecutable con `--advanced-test`, `--workflow-test`, `--sprints-test` y `--self-test`, cada uno seguido de una ruta JSON absoluta. Ejemplo:
+Validar el ejecutable con `--advanced-test`, `--workflow-test`, `--sprints-test`, `--self-test` y `--genai-test`, cada uno seguido de una ruta JSON absoluta. La prueba GENAI es local, con un fixture sintético y red bloqueada; no valida inferencia paga. Ejemplo:
 
 ```powershell
 $env:QT_QPA_PLATFORM='offscreen'
-& .\releases\0.9.2\Nukify\Nukify.exe --self-test "$PWD/validation/regression.json"
+& .\releases\0.10.0\Nukify\Nukify.exe --self-test "$PWD/validation/regression.json"
 ```
 
 Las DLL de Qt/PySide son dinámicas y están en `_internal/`. Los archivos de fuente incluidos permiten modificar/recompilar esos componentes; Nukify no impone verificaciones criptográficas sobre reemplazos de Qt. Consultar los README de cada archivo upstream para sus toolchains y opciones de compilación.
