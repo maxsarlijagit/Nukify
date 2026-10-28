@@ -254,7 +254,7 @@ Atajos|Shortcuts
 Cola de render|Render queue
 Reproducir proxy|Play proxy
 Imagen a video|Image to video
-Trabajo: |Job: 
+Trabajo:\u0020|Job:\u0020
 Actualizando {0}...|Updating {0}...
 Modelo: {0}\nEstimado: {1:.4f} {2}\nBase: {3:g} unidades de {4}. Puede variar con calidad/duración.\nArchivos locales a subir: {5}\nProxy de entrada: {6}\nSe enviarán el prompt y los medios elegidos a fal.ai usando tu cuenta.\nConfirmo que revisé las unidades facturables y autorizo este trabajo pago.|Model: {0}\nEstimate: {1:.4f} {2}\nBasis: {3:g} units of {4}. May vary with quality/duration.\nLocal files to upload: {5}\nInput proxy: {6}\nThe prompt and selected media will be sent to fal.ai using your account.\nI confirm that I reviewed the billable units and authorize this paid job.
 Cargá el schema del modelo|Load the model schema
@@ -354,4 +354,4 @@ No se pudo iniciar el motor de analisis|Could not start the analysis engine
 Defini tracking_path o conecta un Read directo para analizar.|Set tracking_path or connect a direct Read to analyze.
 Primero analiza el rango.|Analyze the range first.
 '''.strip().splitlines()]
-PAIRS = [(a.replace(r'\u007c', '|').replace(r'\n', '\n'), b.replace(r'\u007c', '|').replace(r'\n', '\n')) for a, b in PAIRS]
+PAIRS = [(a.replace(r'\u007c', '|').replace(r'\n', '\n').replace(r'\u0020', ' '), b.replace(r'\u007c', '|').replace(r'\n', '\n').replace(r'\u0020', ' ')) for a, b in PAIRS]
