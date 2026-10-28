@@ -1,8 +1,9 @@
 param(
     [Parameter(Mandatory=$true)][string]$BlenderDirectory,
-    [string]$InnoCompiler = "$PSScriptRoot/.tools/inno/ISCC.exe"
+    [string]$InnoCompiler = ''
 )
 $ErrorActionPreference = 'Stop'
+if (-not $InnoCompiler) { $InnoCompiler = Join-Path $PSScriptRoot '.tools/inno/ISCC.exe' }
 Push-Location $PSScriptRoot
 try {
     $version = (Get-Content packaging/release.json -Raw | ConvertFrom-Json).version

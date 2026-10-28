@@ -40,10 +40,10 @@ La prueba OCIO requiere el config de Blender. Las pruebas de UI se ejecutan offs
 ```powershell
 New-Item -ItemType Directory -Force validation | Out-Null
 # Commitear los archivos de fuente antes de compilar: el paquete registra el commit.
-.\Build-Nukify.ps1 -BlenderDirectory $blenderDirectory -InnoCompiler 'C:/Program Files (x86)/Inno Setup 6/ISCC.exe'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Build-Nukify.ps1 -BlenderDirectory $blenderDirectory -InnoCompiler 'C:/Program Files (x86)/Inno Setup 6/ISCC.exe'
 ```
 
-El script hace un build limpio, descarga fuentes originales de Blender/Qt/PySide, copia avisos, incluye un ZIP del código propio y genera el instalador. `packaging/release.json` fija versión y SHA256 del Blender probado; una compilación diferente se rechaza explícitamente.
+El comando permite ejecutar este script local en ese proceso de PowerShell, sin modificar la política persistente del sistema. El script hace un build limpio, descarga fuentes originales de Blender/Qt/PySide, copia avisos, incluye un ZIP del código propio y genera el instalador. `packaging/release.json` fija versión y SHA256 del Blender probado; una compilación diferente se rechaza explícitamente.
 
 Los archivos salen en `releases/<version>/`. Mantener el directorio portable completo. No alcanza con copiar únicamente `Nukify.exe`.
 
