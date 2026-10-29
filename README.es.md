@@ -58,6 +58,14 @@ Las imágenes son **capturas de la aplicación real** ejecutando fixtures sinté
 
 ![Editor de claves y tangentes](docs/images/curve-editor.png)
 
+## Neon Horizon · proyecto demo
+
+![Neon Horizon · composición real de Nukify](examples/neon-horizon/preview.png)
+
+Probá una **composición cinematográfica de 22 nodos en 1920 × 804**, con dos originales generados con GPT: personaje cyberpunk sobre chroma y ciudad futurista panorámica. Incluye key/despill, ajuste de luz, sombras de contacto, merge, balance y grano. No requiere API key.
+
+**[Abrir la demo y sus instrucciones](examples/neon-horizon/README.es.md)** · [English](examples/neon-horizon/README.md). Cloná el repositorio o descargá su ZIP para obtener proyecto **y** medios. Es una demo de imagen fija; sus límites están documentados en la guía.
+
 ## Primeros pasos
 
 - **Tab**: buscar y crear un nodo en el graph.

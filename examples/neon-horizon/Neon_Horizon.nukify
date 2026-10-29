@@ -1,0 +1,819 @@
+{
+  "version": 2,
+  "nodes": [
+    {
+      "id": "City_Plate",
+      "kind": "Read",
+      "x": -450,
+      "y": -400,
+      "params": {
+        "path": "media/city_plate.png",
+        "colorspace": "sRGB",
+        "alpha": "Auto",
+        "layer": "Image"
+      },
+      "inputs": {}
+    },
+    {
+      "id": "City_1920x804",
+      "kind": "Reformat",
+      "x": -450,
+      "y": -300,
+      "params": {
+        "width": 1920,
+        "height": 804
+      },
+      "inputs": {
+        "Image": "City_Plate"
+      }
+    },
+    {
+      "id": "City_Density",
+      "kind": "Grade",
+      "x": -450,
+      "y": -200,
+      "params": {
+        "blackpoint": 0.0,
+        "whitepoint": 1.0,
+        "lift": 0.0,
+        "gain": 0.95,
+        "multiply": 1.0,
+        "offset": 0.0,
+        "gamma": 1.0,
+        "gain_r": 1.0,
+        "gain_g": 1.0,
+        "gain_b": 1.02,
+        "offset_r": 0.0,
+        "offset_g": 0.0,
+        "offset_b": 0.0,
+        "gamma_r": 1.0,
+        "gamma_g": 1.0,
+        "gamma_b": 1.0
+      },
+      "inputs": {
+        "Image": "City_1920x804"
+      }
+    },
+    {
+      "id": "Hero_GreenScreen",
+      "kind": "Read",
+      "x": 100,
+      "y": -400,
+      "params": {
+        "path": "media/hero_chroma.png",
+        "colorspace": "sRGB",
+        "alpha": "Auto",
+        "layer": "Image"
+      },
+      "inputs": {}
+    },
+    {
+      "id": "Hero_1920x804",
+      "kind": "Reformat",
+      "x": 100,
+      "y": -300,
+      "params": {
+        "width": 1920,
+        "height": 804
+      },
+      "inputs": {
+        "Image": "Hero_GreenScreen"
+      }
+    },
+    {
+      "id": "Green_Key",
+      "kind": "ChromaKey",
+      "x": 100,
+      "y": -200,
+      "params": {
+        "r": 0.0,
+        "g": 1.0,
+        "b": 0.0,
+        "screen_balance": 0.5,
+        "despill": 1.0,
+        "clip_black": 0.03,
+        "clip_white": 0.94,
+        "blur_pre": 0,
+        "blur_post": 1,
+        "dilate_distance": -1,
+        "feather_distance": 0,
+        "edge_kernel_radius": 3,
+        "edge_kernel_tolerance": 0.1,
+        "despill_balance": 0.5,
+        "output": "Image"
+      },
+      "inputs": {
+        "Image": "Hero_1920x804"
+      }
+    },
+    {
+      "id": "Matte_Check",
+      "kind": "AlphaMask",
+      "x": 420,
+      "y": -100,
+      "params": {},
+      "inputs": {
+        "Image": "Green_Key"
+      }
+    },
+    {
+      "id": "Unpremult_Edges",
+      "kind": "Unpremult",
+      "x": 100,
+      "y": -100,
+      "params": {},
+      "inputs": {
+        "Image": "Green_Key"
+      }
+    },
+    {
+      "id": "Hero_Light_Match",
+      "kind": "Grade",
+      "x": 100,
+      "y": 0,
+      "params": {
+        "blackpoint": 0.0,
+        "whitepoint": 1.0,
+        "lift": 0.0,
+        "gain": 0.88,
+        "multiply": 1.0,
+        "offset": 0.0,
+        "gamma": 1.0,
+        "gain_r": 0.97,
+        "gain_g": 0.99,
+        "gain_b": 1.06,
+        "offset_r": 0.0,
+        "offset_g": 0.0,
+        "offset_b": 0.0,
+        "gamma_r": 1.0,
+        "gamma_g": 1.0,
+        "gamma_b": 1.0
+      },
+      "inputs": {
+        "Image": "Unpremult_Edges"
+      }
+    },
+    {
+      "id": "Hero_Saturation",
+      "kind": "ColorCorrect",
+      "x": 100,
+      "y": 100,
+      "params": {
+        "saturation": 0.9,
+        "contrast": 1.0,
+        "gamma": 1.0,
+        "gain": 1.0,
+        "lift": 0.0,
+        "shadows_saturation": 1.0,
+        "shadows_contrast": 1.0,
+        "shadows_gamma": 1.0,
+        "shadows_gain": 1.0,
+        "shadows_lift": 0.0,
+        "midtones_saturation": 1.0,
+        "midtones_contrast": 1.0,
+        "midtones_gamma": 1.0,
+        "midtones_gain": 1.0,
+        "midtones_lift": 0.0,
+        "highlights_saturation": 1.0,
+        "highlights_contrast": 1.0,
+        "highlights_gamma": 1.0,
+        "highlights_gain": 1.0,
+        "highlights_lift": 0.0
+      },
+      "inputs": {
+        "Image": "Hero_Light_Match"
+      },
+      "disabled": true
+    },
+    {
+      "id": "Premult_Edges",
+      "kind": "Premult",
+      "x": 100,
+      "y": 200,
+      "params": {},
+      "inputs": {
+        "Image": "Hero_Saturation"
+      }
+    },
+    {
+      "id": "Hero_Placement",
+      "kind": "Transform",
+      "x": 100,
+      "y": 300,
+      "params": {
+        "x": -86,
+        "y": -40,
+        "scale": 0.74,
+        "rotation": 0.0,
+        "pivot_x": 0.5,
+        "pivot_y": 0.5
+      },
+      "inputs": {
+        "Image": "Premult_Edges"
+      }
+    },
+    {
+      "id": "Contact_Shadow_Mask",
+      "kind": "Roto",
+      "x": -180,
+      "y": -80,
+      "params": {
+        "points": [
+          [
+            0.32899999999999996,
+            0.151
+          ],
+          [
+            0.3287262355639619,
+            0.1520442095377604
+          ],
+          [
+            0.32790962644125016,
+            0.15307055236082015
+          ],
+          [
+            0.3265641450403612,
+            0.15406146745892071
+          ],
+          [
+            0.32471281292110205,
+            0.155
+          ],
+          [
+            0.3223873068893195,
+            0.15587009143206976
+          ],
+          [
+            0.3196274169979695,
+            0.15665685424949238
+          ],
+          [
+            0.31648036572827903,
+            0.15734682672232989
+          ],
+          [
+            0.313,
+            0.1579282032302755
+          ],
+          [
+            0.30924586983568286,
+            0.1583910362600903
+          ],
+          [
+            0.30528220944328066,
+            0.15872740661031254
+          ],
+          [
+            0.3011768381510416,
+            0.15893155889099048
+          ],
+          [
+            0.297,
+            0.159
+          ],
+          [
+            0.29282316184895835,
+            0.15893155889099048
+          ],
+          [
+            0.2887177905567193,
+            0.15872740661031254
+          ],
+          [
+            0.2847541301643171,
+            0.1583910362600903
+          ],
+          [
+            0.28099999999999997,
+            0.1579282032302755
+          ],
+          [
+            0.27751963427172094,
+            0.15734682672232989
+          ],
+          [
+            0.2743725830020305,
+            0.15665685424949238
+          ],
+          [
+            0.2716126931106805,
+            0.15587009143206976
+          ],
+          [
+            0.2692871870788979,
+            0.155
+          ],
+          [
+            0.2674358549596388,
+            0.15406146745892071
+          ],
+          [
+            0.2660903735587498,
+            0.15307055236082015
+          ],
+          [
+            0.26527376443603806,
+            0.1520442095377604
+          ],
+          [
+            0.265,
+            0.151
+          ],
+          [
+            0.26527376443603806,
+            0.14995579046223959
+          ],
+          [
+            0.2660903735587498,
+            0.14892944763917984
+          ],
+          [
+            0.2674358549596388,
+            0.14793853254107928
+          ],
+          [
+            0.2692871870788979,
+            0.147
+          ],
+          [
+            0.2716126931106805,
+            0.14612990856793023
+          ],
+          [
+            0.27437258300203043,
+            0.1453431457505076
+          ],
+          [
+            0.27751963427172094,
+            0.1446531732776701
+          ],
+          [
+            0.28099999999999997,
+            0.14407179676972448
+          ],
+          [
+            0.2847541301643171,
+            0.1436089637399097
+          ],
+          [
+            0.2887177905567193,
+            0.14327259338968745
+          ],
+          [
+            0.29282316184895835,
+            0.14306844110900951
+          ],
+          [
+            0.297,
+            0.143
+          ],
+          [
+            0.3011768381510416,
+            0.14306844110900951
+          ],
+          [
+            0.30528220944328066,
+            0.14327259338968745
+          ],
+          [
+            0.30924586983568286,
+            0.1436089637399097
+          ],
+          [
+            0.313,
+            0.14407179676972448
+          ],
+          [
+            0.31648036572827903,
+            0.1446531732776701
+          ],
+          [
+            0.3196274169979695,
+            0.1453431457505076
+          ],
+          [
+            0.3223873068893195,
+            0.14612990856793023
+          ],
+          [
+            0.324712812921102,
+            0.147
+          ],
+          [
+            0.3265641450403612,
+            0.14793853254107928
+          ],
+          [
+            0.32790962644125016,
+            0.1489294476391798
+          ],
+          [
+            0.3287262355639619,
+            0.14995579046223959
+          ]
+        ],
+        "feather": 5.0,
+        "invert": false,
+        "shape_name": "Shape1",
+        "shape_operation": "max",
+        "shape_order": 0,
+        "shapes": [],
+        "x": 0.0,
+        "y": 0.0,
+        "scale": 1.0,
+        "rotation": 0.0,
+        "groups": [],
+        "shape_group": "",
+        "shape_enabled": true,
+        "shape_opacity": 1.0,
+        "shape_x": 0.0,
+        "shape_y": 0.0,
+        "shape_scale": 1.0,
+        "shape_rotation": 0.0,
+        "motion_samples": 1,
+        "shutter": 0.5
+      },
+      "inputs": {}
+    },
+    {
+      "id": "Shadow_Color",
+      "kind": "Constant",
+      "x": -450,
+      "y": -80,
+      "params": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.55
+      },
+      "inputs": {}
+    },
+    {
+      "id": "Contact_Shadow",
+      "kind": "Merge",
+      "x": -450,
+      "y": 150,
+      "params": {
+        "mix": 1.0,
+        "operation": "over"
+      },
+      "inputs": {
+        "B": "City_Density",
+        "A": "Shadow_Color",
+        "Mask": "Boot_Contact_Masks"
+      }
+    },
+    {
+      "id": "Hero_Over_City",
+      "kind": "Merge",
+      "x": -80,
+      "y": 450,
+      "params": {
+        "mix": 1.0,
+        "operation": "over"
+      },
+      "inputs": {
+        "B": "Contact_Shadow",
+        "A": "Hero_Placement"
+      }
+    },
+    {
+      "id": "Film_Contrast",
+      "kind": "ColorCorrect",
+      "x": -80,
+      "y": 550,
+      "params": {
+        "saturation": 0.96,
+        "contrast": 1.025,
+        "gamma": 1.0,
+        "gain": 1.0,
+        "lift": 0.0,
+        "shadows_saturation": 1.0,
+        "shadows_contrast": 1.0,
+        "shadows_gamma": 1.0,
+        "shadows_gain": 1.0,
+        "shadows_lift": 0.0,
+        "midtones_saturation": 1.0,
+        "midtones_contrast": 1.0,
+        "midtones_gamma": 1.0,
+        "midtones_gain": 1.0,
+        "midtones_lift": 0.0,
+        "highlights_saturation": 1.0,
+        "highlights_contrast": 1.0,
+        "highlights_gamma": 1.0,
+        "highlights_gain": 0.97,
+        "highlights_lift": 0.0
+      },
+      "inputs": {
+        "Image": "Hero_Over_City"
+      },
+      "disabled": true
+    },
+    {
+      "id": "Final_Film_Balance",
+      "kind": "Grade",
+      "x": -80,
+      "y": 650,
+      "params": {
+        "blackpoint": 0.0,
+        "whitepoint": 1.0,
+        "lift": 0.0,
+        "gain": 1.0,
+        "multiply": 1.0,
+        "offset": 0.0,
+        "gamma": 1.0,
+        "gain_r": 1.015,
+        "gain_g": 1.0,
+        "gain_b": 0.985,
+        "offset_r": 0.0,
+        "offset_g": 0.0,
+        "offset_b": 0.0,
+        "gamma_r": 1.0,
+        "gamma_g": 1.0,
+        "gamma_b": 1.0
+      },
+      "inputs": {
+        "Image": "Film_Contrast"
+      }
+    },
+    {
+      "id": "Fine_Film_Grain",
+      "kind": "Grain",
+      "x": -80,
+      "y": 750,
+      "params": {
+        "amount": 0.00045,
+        "seed": 42
+      },
+      "inputs": {
+        "Image": "Final_Film_Balance"
+      }
+    },
+    {
+      "id": "Final_Output",
+      "kind": "Write",
+      "x": -80,
+      "y": 850,
+      "params": {
+        "preserve_exr": "",
+        "output_layer": ""
+      },
+      "inputs": {
+        "Image": "Fine_Film_Grain"
+      }
+    },
+    {
+      "id": "Right_Boot_Shadow",
+      "kind": "Roto",
+      "x": -700,
+      "y": -80,
+      "params": {
+        "points": [
+          [
+            0.385,
+            0.116
+          ],
+          [
+            0.3848460075047286,
+            0.11704420953776042
+          ],
+          [
+            0.3843866648732032,
+            0.11807055236082017
+          ],
+          [
+            0.38362983158520314,
+            0.11906146745892073
+          ],
+          [
+            0.3825884572681199,
+            0.12000000000000001
+          ],
+          [
+            0.38128036012524225,
+            0.12087009143206977
+          ],
+          [
+            0.37972792206135786,
+            0.12165685424949238
+          ],
+          [
+            0.377957705722157,
+            0.12234682672232988
+          ],
+          [
+            0.376,
+            0.12292820323027552
+          ],
+          [
+            0.3738883017825716,
+            0.1233910362600903
+          ],
+          [
+            0.37165874281184536,
+            0.12372740661031255
+          ],
+          [
+            0.36934947145996094,
+            0.12393155889099049
+          ],
+          [
+            0.367,
+            0.124
+          ],
+          [
+            0.36465052854003904,
+            0.12393155889099049
+          ],
+          [
+            0.36234125718815463,
+            0.12372740661031255
+          ],
+          [
+            0.3601116982174284,
+            0.1233910362600903
+          ],
+          [
+            0.358,
+            0.12292820323027552
+          ],
+          [
+            0.356042294277843,
+            0.12234682672232988
+          ],
+          [
+            0.3542720779386421,
+            0.12165685424949238
+          ],
+          [
+            0.35271963987475774,
+            0.12087009143206977
+          ],
+          [
+            0.3514115427318801,
+            0.12000000000000001
+          ],
+          [
+            0.35037016841479685,
+            0.11906146745892073
+          ],
+          [
+            0.34961333512679676,
+            0.11807055236082017
+          ],
+          [
+            0.3491539924952714,
+            0.11704420953776042
+          ],
+          [
+            0.349,
+            0.116
+          ],
+          [
+            0.3491539924952714,
+            0.1149557904622396
+          ],
+          [
+            0.34961333512679676,
+            0.11392944763917984
+          ],
+          [
+            0.35037016841479685,
+            0.11293853254107929
+          ],
+          [
+            0.3514115427318801,
+            0.112
+          ],
+          [
+            0.35271963987475774,
+            0.11112990856793024
+          ],
+          [
+            0.3542720779386421,
+            0.11034314575050763
+          ],
+          [
+            0.356042294277843,
+            0.10965317327767013
+          ],
+          [
+            0.358,
+            0.1090717967697245
+          ],
+          [
+            0.3601116982174284,
+            0.1086089637399097
+          ],
+          [
+            0.36234125718815463,
+            0.10827259338968746
+          ],
+          [
+            0.36465052854003904,
+            0.10806844110900952
+          ],
+          [
+            0.367,
+            0.10800000000000001
+          ],
+          [
+            0.36934947145996094,
+            0.10806844110900952
+          ],
+          [
+            0.37165874281184536,
+            0.10827259338968746
+          ],
+          [
+            0.3738883017825716,
+            0.1086089637399097
+          ],
+          [
+            0.376,
+            0.10907179676972449
+          ],
+          [
+            0.3779577057221569,
+            0.10965317327767012
+          ],
+          [
+            0.37972792206135786,
+            0.11034314575050762
+          ],
+          [
+            0.38128036012524225,
+            0.11112990856793024
+          ],
+          [
+            0.3825884572681199,
+            0.112
+          ],
+          [
+            0.38362983158520314,
+            0.11293853254107929
+          ],
+          [
+            0.3843866648732032,
+            0.11392944763917984
+          ],
+          [
+            0.3848460075047286,
+            0.1149557904622396
+          ]
+        ],
+        "feather": 5.0,
+        "invert": false,
+        "shape_name": "Shape1",
+        "shape_operation": "max",
+        "shape_order": 0,
+        "shapes": [],
+        "x": 0.0,
+        "y": 0.0,
+        "scale": 1.0,
+        "rotation": 0.0,
+        "groups": [],
+        "shape_group": "",
+        "shape_enabled": true,
+        "shape_opacity": 1.0,
+        "shape_x": 0.0,
+        "shape_y": 0.0,
+        "shape_scale": 1.0,
+        "shape_rotation": 0.0,
+        "motion_samples": 1,
+        "shutter": 0.5
+      },
+      "inputs": {}
+    },
+    {
+      "id": "Boot_Contact_Masks",
+      "kind": "MaskCombine",
+      "x": -180,
+      "y": 40,
+      "params": {
+        "operation": "max"
+      },
+      "inputs": {
+        "A": "Contact_Shadow_Mask",
+        "B": "Right_Boot_Shadow"
+      }
+    }
+  ],
+  "viewer": "Fine_Film_Grain",
+  "width": 1920,
+  "height": 804,
+  "frame": 1,
+  "first": 1,
+  "last": 1,
+  "output": "",
+  "blender": "",
+  "ocio": "",
+  "viewer_b": "City_Density",
+  "demo": {
+    "title": "NEON HORIZON",
+    "author": "Max Sarlija",
+    "source": "Two GPT generated images; composited in Nukify with Blender",
+    "format": "1920x804 panoramic still",
+    "note": "Independent AI-generated VFX demonstration; no studio affiliation or production certification."
+  }
+}

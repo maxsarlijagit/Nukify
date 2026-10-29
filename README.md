@@ -78,6 +78,14 @@ These are **actual application screenshots**. Compositing examples use synthetic
 
 ![Keyframe and tangent editor](docs/images/curve-editor.png)
 
+## Neon Horizon · demo project
+
+![Neon Horizon · actual Nukify composite](examples/neon-horizon/preview.png)
+
+Try a **22-node, 1920 × 804 cinematic composition** with two GPT-generated source images: a cyberpunk character on chroma and a futuristic panoramic city. Explore key/despill, light matching, contact shadows, merge, film balance and grain. No API key is required.
+
+**[Open the demo and instructions](examples/neon-horizon/README.md)** · [Español](examples/neon-horizon/README.es.md). Clone the repository or download its ZIP to get the project **and** media. This is a single-frame demo; limitations are documented in its guide.
+
 ## First steps
 
 - **Tab:** search for and create a node.

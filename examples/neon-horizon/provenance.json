@@ -1,0 +1,16 @@
+{
+  "title": "NEON HORIZON",
+  "author": "Max Sarlija",
+  "provider": "GPT image generation built into Codex",
+  "generation_count": 2,
+  "fal_requests": 0,
+  "composition": "Nukify 0.10.1 / bundled Blender 4.5.14",
+  "resolution": [
+    1920,
+    804
+  ],
+  "media": {
+    "city_plate.png": "246f38a411e92de08d17cbf9d5845b16fe0e9fbc5c2ead4f5a969dfc51bf4efc",
+    "hero_chroma.png": "3c2c69da180662d334b419290c5986abecaa0767b436ffdd2231b7551797da89"
+  }
+}
