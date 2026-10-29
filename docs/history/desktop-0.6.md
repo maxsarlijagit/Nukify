@@ -80,4 +80,4 @@ Son tiempos de evaluación del fixture, no fps de playback ni rendimiento de un 
 
 Pendiente de aceptación: tres planos reales (chroma, reemplazo de pantalla, CG),
 revisión de artista, memoria sostenida en planos largos y QA en Windows limpio.
-Las funciones previas y sus límites se detallan en docs/desktop-0.5.md del código fuente.
+Las funciones previas y sus límites se detallan en docs/history/desktop-0.5.md del código fuente.

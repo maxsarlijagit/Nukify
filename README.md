@@ -19,7 +19,7 @@ Nukify combines a custom Qt interface with the compositor and 3D tools of **Blen
 
 This is a **technical beta** with working workflows and automated tests. It is not presented as a complete Nuke replacement or a production-certified tool.
 
-The current source version starts in **English**. Use **Language / Idioma** in the top toolbar to select **English** or **Español**, save, then reopen Nukify. The preference is stored locally, independently of projects. Node identifiers, technical enum values, provider schemas and user content keep their original names. This interface setting is separate from the documentation links above and is **included starting with 0.10.1**. See [interface languages](docs/interface-languages.md) for running and testing the updated source.
+The current source version starts in **English**. Use **Language / Idioma** in the top toolbar to select **English** or **Español**, save, then reopen Nukify. The preference is stored locally, independently of projects. Node identifiers, technical enum values, provider schemas and user content keep their original names. This interface setting is separate from the documentation links above and is **included starting with 0.10.1**. See [interface languages](docs/guides/interface-languages.md) for running and testing the updated source.
 
 ## Download and install
 
@@ -52,7 +52,7 @@ The screenshot shows the real application interface. It is not evidence of a pai
 
 **FFmpeg is required for video proxies and sequence extraction.** Configure an existing installation in GENAI → Conexión or put it on PATH. FFmpeg is not bundled or downloaded automatically. Paid inference has not yet been validated against a real account; catalog and schema queries have been checked live.
 
-See the [GENAI guide (Spanish)](docs/genai.md) for setup, recovery, supported inputs and limitations. GENAI is included in **0.10.1**; the earlier **0.9.2 installer does not contain it**.
+See the [GENAI guide (Spanish)](docs/guides/genai.md) for setup, recovery, supported inputs and limitations. GENAI is included in **0.10.1**; the earlier **0.9.2 installer does not contain it**.
 
 ## Features
 
@@ -96,7 +96,7 @@ Try a **22-node, 1920 × 804 cinematic composition** with two GPT-generated sour
 - **Live ON:** update the viewer when parameters change. **Cache range:** prepare frames for playback.
 - **fx** in properties edits expressions; the **diamond** opens animation controls.
 
-Customize shortcuts under Proyecto → Shortcuts. See the [interface guide](docs/desktop-0.9.md) and [compositing, roto and tracking guide](docs/desktop-0.8.md), currently in Spanish.
+Customize shortcuts under Proyecto → Shortcuts. See the [interface guide](docs/guides/desktop-0.9.md) and [compositing, roto and tracking guide](docs/guides/desktop-0.8.md), currently in Spanish.
 
 ## Development and builds
 
@@ -127,14 +127,16 @@ Still pending: real-shot/artist acceptance, extended HD/4K use, physical monitor
 
 ## Documentation and contributions
 
+- [Documentation index](docs/README.md) · [Repository structure](docs/structure.md) · [Demo projects](examples/README.md)
+
 - [Spanish README](README.es.md)
 - [Build and development guide](BUILDING.md)
-- [GENAI guide](docs/genai.md)
+- [GENAI guide](docs/guides/genai.md)
 - [Contributing](CONTRIBUTING.md)
 - [Agent collaboration](agents/README.md)
-- [Design system](docs/design-system.md)
-- [Original roadmap](docs/roadmap-produccion.md)
-- [S15–S17 progress](docs/sprints-0.8.md)
+- [Design system](docs/development/design-system.md)
+- [Original roadmap](docs/planning/roadmap-produccion.md)
+- [S15–S17 progress](docs/planning/sprints-0.8.md)
 - [Release notes: English and Spanish](docs/releases/README.md)
 - [Report an issue](https://github.com/maxsarlijagit/Nukify/issues)
 

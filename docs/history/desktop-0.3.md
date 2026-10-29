@@ -48,7 +48,7 @@ Exportar detiene el motor interactivo y ejecuta la exportación completa sin apl
 
 ## Identidad
 
-Logo original en `assets/nukify-logo.png`: un nodo naranja sonriente con conectores turquesa, generado con la herramienta integrada de imágenes. Se utiliza en la cabecera, la ventana y el icono del ejecutable. El prompt está en `docs/logo-prompt.md`.
+Logo original en `assets/nukify-logo.png`: un nodo naranja sonriente con conectores turquesa, generado con la herramienta integrada de imágenes. Se utiliza en la cabecera, la ventana y el icono del ejecutable. El prompt está en `docs/development/logo-prompt.md`.
 
 ## Build y pruebas
 

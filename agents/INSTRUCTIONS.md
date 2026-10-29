@@ -28,7 +28,7 @@
 - Ejecutá Blender en un proceso de trabajo independiente. No dependas de una sesión interactiva abierta ni cierres aplicaciones del usuario para hacer pruebas.
 - Preservá compatibilidad de proyectos guardados. Si un cambio necesita migración, documentala y comprobá la carga de un proyecto anterior.
 - En nodos, revisá entradas, tipos, conexiones, valores por defecto y errores; no confundas que un nodo aparezca en el catálogo con que su render funcione.
-- En UI, seguí [el sistema de diseño](../docs/design-system.md): claridad de estados, tooltips, atajos y escalabilidad. Revisá foco y conflictos de teclado.
+- En UI, seguí [el sistema de diseño](../docs/development/design-system.md): claridad de estados, tooltips, atajos y escalabilidad. Revisá foco y conflictos de teclado.
 - Mantené las operaciones costosas fuera de la interacción de UI y verificá invalidación de cache cuando cambien parámetros o medios.
 - Usá fixtures propios o redistribuibles. Conservá autoría, GPL-3.0-or-later y avisos de dependencias. No subas medios de clientes, secretos ni archivos `.env`.
 - Evitá refactors ajenos al problema. Cambios de dependencias, builds públicos y releases requieren estar dentro del encargo.

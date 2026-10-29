@@ -16,7 +16,7 @@ assert hashlib.sha256((engine / 'blender.exe').read_bytes()).hexdigest() == conf
 shutil.copytree(engine, dest / 'engine', dirs_exist_ok=True)
 for name in ['LICENSE', 'THIRD_PARTY.md','AUTHORS.md','README.md','README.es.md','BUILDING.md','CONTRIBUTING.md','AGENTS.md']:
     shutil.copy2(root / name, dest / name)
-shutil.copy2(root / 'docs/desktop-0.9.md', dest / 'LEEME.md')
+shutil.copy2(root / 'docs/guides/desktop-0.9.md', dest / 'LEEME.md')
 shutil.copytree(root / 'docs', dest / 'docs', dirs_exist_ok=True)
 shutil.copytree(root / 'agents', dest / 'agents', dirs_exist_ok=True)
 (dest / 'assets').mkdir(exist_ok=True)

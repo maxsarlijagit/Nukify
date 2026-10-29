@@ -19,7 +19,7 @@ Nukify combina una interfaz propia en Qt con el compositor y las herramientas 3D
 
 Es una **beta técnica** con workflows funcionales y pruebas automatizadas. No se presenta como sustituto completo de Nuke ni como herramienta ya certificada para producción.
 
-La versión actual del código inicia en **inglés**. Desde **Language / Idioma** en la barra superior podés elegir **English** o **Español**, guardar y volver a abrir Nukify. La preferencia se guarda localmente, por separado de los proyectos. Los identificadores de nodos, valores técnicos, schemas del proveedor y contenidos del usuario conservan sus nombres originales. Esta configuración es independiente de los enlaces de documentación y **está incluida desde la versión 0.10.1**. Consultá [idiomas de la interfaz](docs/interface-languages.md) para ejecutar y probar el código actualizado.
+La versión actual del código inicia en **inglés**. Desde **Language / Idioma** en la barra superior podés elegir **English** o **Español**, guardar y volver a abrir Nukify. La preferencia se guarda localmente, por separado de los proyectos. Los identificadores de nodos, valores técnicos, schemas del proveedor y contenidos del usuario conservan sus nombres originales. Esta configuración es independiente de los enlaces de documentación y **está incluida desde la versión 0.10.1**. Consultá [idiomas de la interfaz](docs/guides/interface-languages.md) para ejecutar y probar el código actualizado.
 
 ## Descargar e instalar
 
@@ -76,7 +76,7 @@ Probá una **composición cinematográfica de 22 nodos en 1920 × 804**, con dos
 - **Live ON**: actualizar el viewer al cambiar parámetros. **Cache range**: preparar cuadros para playback.
 - En propiedades, **fx** edita expresiones y el **rombo** abre controles de animación.
 
-Los atajos se pueden ajustar desde Proyecto → Shortcuts. Consultá la [guía de interfaz](docs/desktop-0.9.md) y la [guía de composición, roto y tracking](docs/desktop-0.8.md).
+Los atajos se pueden ajustar desde Proyecto → Shortcuts. Consultá la [guía de interfaz](docs/guides/desktop-0.9.md) y la [guía de composición, roto y tracking](docs/guides/desktop-0.8.md).
 
 ## Desarrollo y compilación
 
@@ -95,7 +95,7 @@ El botón **GENAI** abre un espacio de generación y edición de imágenes/video
 
 Incluye Nano Banana 2.1/Pro, GPT Image 2, MiniMax H3 Max y Kling 4/O3 Pro. El costo se consulta por **unidades facturables manuales**; los ajustes de calidad/duración deben revisarse en la ficha del modelo. Cada envío requiere confirmar medios y costo. FFmpeg es necesario para proxies y secuencias de video.
 
-Consultá la [guía GENAI](docs/genai.md) para configuración, alcance y límites. **La compilación 0.10.1 incluye esta función; el instalador 0.9.2 anterior no la incluye.** El build local genera `releases/0.10.1/Nukify-Setup-0.10.1.exe`; verificá en Releases qué instaladores están publicados. La inferencia paga aún no fue validada contra una cuenta real.
+Consultá la [guía GENAI](docs/guides/genai.md) para configuración, alcance y límites. **La compilación 0.10.1 incluye esta función; el instalador 0.9.2 anterior no la incluye.** El build local genera `releases/0.10.1/Nukify-Setup-0.10.1.exe`; verificá en Releases qué instaladores están publicados. La inferencia paga aún no fue validada contra una cuenta real.
 
 ![GENAI Studio: modelos, parámetros y biblioteca de versiones](docs/images/genai.png)
 
@@ -116,15 +116,17 @@ Pendientes: validación con planos reales y artistas, uso prolongado HD/4K, camb
 
 ## Documentación y contribuciones
 
+- [Índice de documentación](docs/README.md) · [Estructura del repositorio](docs/structure.md) · [Proyectos demo](examples/README.md)
+
 - [Compilar y desarrollar](BUILDING.md)
 - [Notas de versión en inglés y español](docs/releases/README.md)
-- [GENAI: imágenes, videos, proxies y versiones](docs/genai.md)
+- [GENAI: imágenes, videos, proxies y versiones](docs/guides/genai.md)
 - [Contribuir](CONTRIBUTING.md)
 - [Trabajar con agentes](agents/README.md)
 - [Primera contribución agéntica](agents/FIRST_AGENTIC_CONTRIBUTION.md)
-- [Sistema de interfaz](docs/design-system.md)
-- [Roadmap original](docs/roadmap-produccion.md)
-- [Estado incremental S15–S17](docs/sprints-0.8.md)
+- [Sistema de interfaz](docs/development/design-system.md)
+- [Roadmap original](docs/planning/roadmap-produccion.md)
+- [Estado incremental S15–S17](docs/planning/sprints-0.8.md)
 - [Reportar un problema](https://github.com/maxsarlijagit/Nukify/issues)
 
 ## Autor y licencia

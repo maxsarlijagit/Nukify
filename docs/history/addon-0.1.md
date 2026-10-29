@@ -51,6 +51,6 @@ Validado en Blender 4.5.14 LTS: registro y desregistro, creación de los nueve t
 
 ## Diseño y siguientes entregas
 
-Ver [arquitectura y alcance](docs/architecture.md).
+Ver [arquitectura y alcance](architecture.md).
 
 Código original de este repositorio bajo GPL-3.0-or-later (declaración SPDX). Antes de distribuir un paquete público, incluir el texto completo de la licencia y los avisos de las dependencias que se empaqueten. No se incluye Blender ni código, recursos gráficos o marcas de Foundry/Nuke.

@@ -66,4 +66,4 @@ enviar renders adicionales. Se repiten los flujos de 0.5 y 0.6 sobre el ejecutab
 
 La validación de interacción con artistas, sesiones prolongadas, EXR de producción
 y otra máquina limpia sigue pendiente. No están cerrados todos los criterios del
-roadmap S12–S14. Funciones previas: docs/desktop-0.5.md y docs/desktop-0.6.md.
+roadmap S12–S14. Funciones previas: docs/history/desktop-0.5.md y docs/history/desktop-0.6.md.

@@ -8,7 +8,7 @@ The preference lives in `%LOCALAPPDATA%/Nukify/preferences.json` as `"language":
 
 Translation covers application controls, menus, viewer tools, inspector labels, composition/tracking/curve dialogs and GENAI controls. Technical node names, socket identifiers, enum values, provider model names and schemas, backend/provider logs, paths, prompts and project data remain in their original form. Language changes do not alter saved projects or shortcut preset keys. Native Windows file pickers follow Windows language settings.
 
-This feature is included in the **0.10.1 installer**. After setting up the environment described in [BUILDING](../BUILDING.md), launch the updated interface from the repository root:
+This feature is included in the **0.10.1 installer**. After setting up the environment described in [BUILDING](../../BUILDING.md), launch the updated interface from the repository root:
 
 ```powershell
 .\.buildenv\Scripts\python.exe desktop/app.py
@@ -24,7 +24,7 @@ La preferencia se guarda en `%LOCALAPPDATA%/Nukify/preferences.json`, con `"lang
 
 Se traducen controles, menús, herramientas del viewer, etiquetas del inspector, diálogos de composición/tracking/curvas y controles GENAI. Los nombres técnicos de nodos, sockets, valores de opciones técnicas, modelos y schemas del proveedor, registros del motor/proveedor, rutas, prompts y datos de proyectos conservan su forma original. El idioma no modifica proyectos ni claves de presets de atajos. Los selectores nativos de archivos respetan el idioma de Windows.
 
-La función está incluida en el **instalador 0.10.1**. Prepará el entorno siguiendo [BUILDING](../BUILDING.md) y ejecutá el comando de arriba desde la raíz del repositorio.
+La función está incluida en el **instalador 0.10.1**. Prepará el entorno siguiendo [BUILDING](../../BUILDING.md) y ejecutá el comando de arriba desde la raíz del repositorio.
 
 Para contribuir, usá `tr(...)` de `desktop/i18n.py` y agregá el par español/inglés a `desktop/translations.py`. Aplicá las variables de formato después de traducir. No traduzcas claves de proyectos ni contenido editable.
 
