@@ -22,11 +22,42 @@ def inspect(path):
                 metadata={k:str(v) for k,v in header.items() if k!='channels'})
 
 
+def layer_channels(channels,layer):
+    """Resolve RGB aliases without mixing components from unrelated passes."""
+    aliases=(('R','r','red'),('G','g','green'),('B','b','blue'),('A','a','alpha'))
+    def rgba(prefix):
+        return [next((prefix+c for c in names if prefix+c in channels),None) for names in aliases]
+    if layer in channels:
+        return [layer]*3+[None]
+    if layer in ('Image','rgba','RGBA'):
+        names=rgba('')
+        if all(names[:3]):return names
+        layers=sorted({name.rsplit('.',1)[0] for name in channels if '.' in name})
+        candidates={name:rgba(name+'.') for name in layers}
+        candidates={name:names for name,names in candidates.items() if all(names[:3])}
+        # Prefer conventional beauty names; never choose Basecolor alphabetically.
+        for preferred in ('image','rgba','combined','beauty','source'):
+            matches=[name for name in candidates if name.rsplit('.',1)[-1].lower()==preferred]
+            if len(matches)==1:
+                names=candidates[matches[0]]
+                break
+            if len(matches)>1:break
+        else:
+            if len(candidates)==1:names=next(iter(candidates.values()))
+        if not all(names[:3]):
+            raise ValueError('EXR: seleccionar una capa RGB en Read.layer; disponibles: '+', '.join(candidates))
+        if names[3] is None:
+            names[3]=rgba('')[3] or next((name for name in ('Alpha.A','Alpha.alpha','Alpha.red','Alpha.R') if name in channels),None)
+        return names
+    names=rgba(layer+'.')
+    if not all(names[:3]):
+        raise ValueError('Canal/capa no disponible: '+layer+'; '+', '.join(channels))
+    return names
+
+
 def read_layer(path,layer):
     file=load(path);channels=file.channels();header=file.header()
-    if layer in ('Image','rgba','RGBA'):names=list('RGBA')
-    elif layer in channels:names=[layer]*3+['1']
-    else:names=[layer+'.'+c for c in 'RGBA']
+    names=layer_channels(channels,layer)
     shape=next(iter(channels.values())).pixels.shape
     values=[]
     for i,name in enumerate(names):

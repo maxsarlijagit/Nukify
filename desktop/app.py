@@ -199,7 +199,8 @@ class Graph(GraphInteraction, QGraphicsView):
 class Window(ProductionUI, LiveMixin, QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle(tr('Nukify 0.10.1 | Compositor Lab'))
+        from updates import installed_version
+        self.setWindowTitle('Nukify ' + (installed_version() or '?') + ' | Compositor Lab')
         self.setWindowIcon(QIcon(str(ROOT / 'assets' / 'nukify-logo.png')))
         self.resize(1440, 940)
         DATA.mkdir(parents=True, exist_ok=True)
@@ -372,6 +373,8 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
             action.triggered.connect(callback)
             self.addAction(action)
         QTimer.singleShot(100, self.graph.fit)
+        from update_ui import UpdateController
+        self.updates = UpdateController(self, DATA, project_menu)
 
     def language_settings(self):
         from i18n import language_dialog
@@ -744,6 +747,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
             QMessageBox.information(self, tr('Proceso activo'), tr('Cancela el proceso o espera a que termine antes de cerrar.'))
             event.ignore()
         elif self.discard_ok():
+            self.updates.stop()
             self.pause()
             self.live_timer.stop()
             self.engine.stop();self.engine_b.stop()
@@ -762,9 +766,14 @@ if __name__ == '__main__':
     app.setStyleSheet(STYLE)
     window = Window()
     window.show()
+    if not any(arg.endswith('-test') for arg in sys.argv[1:]):
+        window.updates.start()
     if '--language-test' in sys.argv:
         from language_selftest import run
         QTimer.singleShot(0, lambda: run(window, app, sys.argv[sys.argv.index('--language-test') + 1]))
+    if '--updates-test' in sys.argv:
+        from update_selftest import run
+        QTimer.singleShot(0, lambda: run(window, app, sys.argv[sys.argv.index('--updates-test') + 1]))
     if '--genai-test' in sys.argv:
         from genai_selftest import run
         QTimer.singleShot(0, lambda: run(window, app, sys.argv[sys.argv.index('--genai-test') + 1]))

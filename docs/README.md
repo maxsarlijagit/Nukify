@@ -10,6 +10,7 @@
 ## User guides / Guías de uso
 
 - [Interface languages / Idiomas](guides/interface-languages.md)
+- [Updates / Actualizaciones](guides/updates.md)
 - [GENAI Studio and fal.ai / GENAI y fal.ai](guides/genai.md)
 - [Interface and shortcuts / Interfaz y atajos](guides/desktop-0.9.md)
 - [Compositing, roto and tracking / Composición, roto y tracking](guides/desktop-0.8.md)

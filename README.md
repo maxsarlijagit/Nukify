@@ -6,7 +6,7 @@
   <p><strong>Open-source node-based compositing, powered by Blender.</strong></p>
   <p>A standalone Windows desktop compositor by <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
   <p>
-    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.10.1-orange"></a>
+    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.11.0-orange"></a>
     <a href="LICENSE"><img alt="GPL v3 or later" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue"></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/platform-Windows_x64-0078D4">
     <img alt="Technical beta" src="https://img.shields.io/badge/status-technical_beta-yellow">
@@ -24,13 +24,13 @@ The current source version starts in **English**. Use **Language / Idioma** in t
 ## Download and install
 
 1. Open [Releases](https://github.com/maxsarlijagit/Nukify/releases).
-2. Download **Nukify-Setup-0.10.1.exe** and run it on Windows x64.
+2. Download **Nukify-Setup-0.11.0.exe** and run it on Windows x64.
 3. Launch Nukify and try **Proyecto → Ejemplos → Composición** or **Curvas y roto**.
 4. Open **GENAI** in the main toolbar to configure your fal.ai account.
 
 The installer is not commercially code-signed. Check its SHA256 against `SHA256SUMS.txt` in the same release. Validation was performed on Windows; a full installation test on a second clean PC is still pending.
 
-Sources and notices for the main bundled components are included under `sources/` and `licenses/`. This repository contains Nukify's source; large executables and dependencies are distributed as release assets. Local builds produce `releases/0.10.1/Nukify-Setup-0.10.1.exe`. Check the release page for published downloads.
+Sources and notices for the main bundled components are included under `sources/` and `licenses/`. This repository contains Nukify's source; large executables and dependencies are distributed as release assets. Local builds produce `releases/0.11.0/Nukify-Setup-0.11.0.exe`. Check the release page for published downloads.
 
 ## GENAI Studio · fal.ai provider
 
@@ -147,3 +147,7 @@ Still pending: real-shot/artist acceptance, extended HD/4K use, physical monitor
 Copyright © 2026 Max Sarlija and contributors. Nukify's own code is licensed under **GPL-3.0-or-later**. See [LICENSE](LICENSE), [AUTHORS.md](AUTHORS.md) and [THIRD_PARTY.md](THIRD_PARTY.md).
 
 Nukify is independent and is not affiliated with Blender Foundation, Foundry or fal.ai. Blender and Nuke are trademarks of their respective owners. External libraries retain their original licenses and notices. Use of fal.ai models is governed by the provider's terms; the app's open-source license does not license model weights or provider services.
+
+## 0.11.0: updates / actualizaciones
+
+[Changelog](docs/releases/v0.11.0.md) ? [Update guide / Gu?a de actualizaciones](docs/guides/updates.md).

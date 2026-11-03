@@ -6,7 +6,7 @@
   <p><strong>Composición nodal open source, con Blender como motor.</strong></p>
   <p>Un compositor de escritorio independiente para Windows, creado por <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
   <p>
-    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.10.1-orange"></a>
+    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.11.0-orange"></a>
     <a href="LICENSE"><img alt="License GPL v3 or later" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue"></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/platform-Windows_x64-0078D4">
     <img alt="Technical beta" src="https://img.shields.io/badge/status-technical_beta-yellow">
@@ -24,7 +24,7 @@ La versión actual del código inicia en **inglés**. Desde **Language / Idioma*
 ## Descargar e instalar
 
 1. Abrí [Releases](https://github.com/maxsarlijagit/Nukify/releases).
-2. Descargá **Nukify-Setup-0.10.1.exe** y ejecutalo en Windows x64.
+2. Descargá **Nukify-Setup-0.11.0.exe** y ejecutalo en Windows x64.
 3. Iniciá Nukify y probá **Proyecto → Ejemplos → Composición** o **Curvas y roto**.
 
 El instalador no tiene firma comercial de código. Verificá su SHA256 con el archivo `SHA256SUMS.txt` publicado en la misma release. La validación se realizó en Windows; falta una prueba completa en una segunda PC limpia.
@@ -95,7 +95,7 @@ El botón **GENAI** abre un espacio de generación y edición de imágenes/video
 
 Incluye Nano Banana 2.1/Pro, GPT Image 2, MiniMax H3 Max y Kling 4/O3 Pro. El costo se consulta por **unidades facturables manuales**; los ajustes de calidad/duración deben revisarse en la ficha del modelo. Cada envío requiere confirmar medios y costo. FFmpeg es necesario para proxies y secuencias de video.
 
-Consultá la [guía GENAI](docs/guides/genai.md) para configuración, alcance y límites. **La compilación 0.10.1 incluye esta función; el instalador 0.9.2 anterior no la incluye.** El build local genera `releases/0.10.1/Nukify-Setup-0.10.1.exe`; verificá en Releases qué instaladores están publicados. La inferencia paga aún no fue validada contra una cuenta real.
+Consultá la [guía GENAI](docs/guides/genai.md) para configuración, alcance y límites. **La compilación 0.10.1 incluye esta función; el instalador 0.9.2 anterior no la incluye.** El build local genera `releases/0.11.0/Nukify-Setup-0.11.0.exe`; verificá en Releases qué instaladores están publicados. La inferencia paga aún no fue validada contra una cuenta real.
 
 ![GENAI Studio: modelos, parámetros y biblioteca de versiones](docs/images/genai.png)
 
@@ -136,3 +136,7 @@ Pendientes: validación con planos reales y artistas, uso prolongado HD/4K, camb
 Copyright © 2026 Max Sarlija y colaboradores. Código propio bajo **GPL-3.0-or-later**. Ver [LICENSE](LICENSE), [AUTHORS.md](AUTHORS.md) y [THIRD_PARTY.md](THIRD_PARTY.md).
 
 Nukify es independiente y no está afiliado a Blender Foundation ni a Foundry. Las marcas Blender y Nuke pertenecen a sus titulares. Las bibliotecas externas conservan sus licencias y avisos originales.
+
+## 0.11.0: updates / actualizaciones
+
+[Changelog](docs/releases/v0.11.0.md) ? [Update guide / Gu?a de actualizaciones](docs/guides/updates.md).

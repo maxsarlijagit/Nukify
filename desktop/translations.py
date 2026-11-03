@@ -353,5 +353,26 @@ Hay un analisis activo. Espera o cancela.|Analysis is active. Wait or cancel it.
 No se pudo iniciar el motor de analisis|Could not start the analysis engine
 Defini tracking_path o conecta un Read directo para analizar.|Set tracking_path or connect a direct Read to analyze.
 Primero analiza el rango.|Analyze the range first.
+Actualizaciones|Updates
+Actualización de Nukify|Nukify update
+Buscar actualizaciones|Check for updates
+Buscar automáticamente|Check automatically
+Incluir versiones beta|Include beta releases
+Esta versión no incluye notas de cambios.|This release has no changelog.
+Descargá la actualización y guardá tu proyecto antes de instalar.|Download the update and save your project before installing.
+Ver en GitHub|View on GitHub
+Omitir esta versión|Skip this version
+Más tarde|Later
+Descargar actualización|Download update
+Instalar y cerrar Nukify|Install and close Nukify
+Descarga verificada. Al instalar se comprobarán los cambios sin guardar.|Download verified. Installation will check for unsaved changes.
+Descargando actualización…|Downloading update…
+Buscando actualizaciones…|Checking for updates…
+No se pudieron guardar las preferencias de actualización.|Update preferences could not be saved.
+No se pudo identificar la versión instalada.|Could not identify the installed version.
+No hay una actualización compatible disponible en este canal.|No compatible update is available on this channel.
+No se pudo descargar la actualización:|Could not download the update:
+No se pudo consultar GitHub:|Could not contact GitHub:
+No se pudo iniciar el instalador:|Could not start the installer:
 '''.strip().splitlines()]
 PAIRS = [(a.replace(r'\u007c', '|').replace(r'\n', '\n').replace(r'\u0020', ' '), b.replace(r'\u007c', '|').replace(r'\n', '\n').replace(r'\u0020', ' ')) for a, b in PAIRS]
