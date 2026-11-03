@@ -29,7 +29,7 @@ def run(window, app, output):
         dialog = window.updates.dialog
         assert 'Changelog fixture' in dialog.notes.toPlainText()
         assert dialog.primary.isEnabled()
-        dialog.grab().save(str(Path(output).with_suffix('.png'))
+        dialog.grab().save(str(Path(output).with_suffix('.png')))
         dialog.reject()
         assert window.updates.cancelled.is_set()
         report.update(passed=True, version=current, frozen=bool(getattr(sys, 'frozen', False)),
