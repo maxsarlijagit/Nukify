@@ -4,9 +4,9 @@
   <img src="assets/nukify-logo.png" width="96" alt="Nukify logo">
   <h1>Nukify</h1>
   <p><strong>Composición nodal open source, con Blender como motor.</strong></p>
-  <p>Un compositor de escritorio independiente para Windows, creado por <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
+  <p>Un compositor de escritorio independiente para Windows y macOS, creado por <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
   <p>
-    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.11.0-orange"></a>
+    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.11.2-orange"></a>
     <a href="LICENSE"><img alt="License GPL v3 or later" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue"></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/platform-Windows_x64-0078D4">
     <img alt="Technical beta" src="https://img.shields.io/badge/status-technical_beta-yellow">
@@ -140,3 +140,11 @@ Nukify es independiente y no está afiliado a Blender Foundation ni a Foundry. L
 ## 0.11.0: updates / actualizaciones
 
 [Changelog](docs/releases/v0.11.0.md) ? [Update guide / Gu?a de actualizaciones](docs/guides/updates.md).
+
+## macOS · Apple Silicon
+
+Descargá **Nukify-0.11.2-macOS-arm64.dmg** desde [Releases](https://github.com/maxsarlijagit/Nukify/releases), abrilo y arrastrá **Nukify.app** a **Aplicaciones**. El ZIP contiene la misma aplicación para instalación manual. Requiere **macOS 14 o posterior y Apple Silicon**; no se distribuye una compilación Intel. Blender y los entornos Python vienen incluidos dentro de la aplicación.
+
+La beta tiene firma ad-hoc; **no tiene firma Developer ID ni notarización de Apple**. Verificá `SHA256SUMS-macOS-arm64.txt`. Si macOS bloquea el primer inicio, intentá abrirla y luego usá **Configuración del Sistema → Privacidad y seguridad → Abrir de todos modos**, únicamente si confiás en la descarga. No desactives Gatekeeper globalmente. El actualizador abre el DMG: cerrá Nukify y reemplazá la aplicación arrastrándola nuevamente a Aplicaciones.
+
+Fuentes y avisos: `Nukify.app/Contents/Resources/`. Consultá [BUILDING.md](BUILDING.md) para compilar y validar. Queda pendiente instalar en otra Mac limpia; no se afirma compatibilidad Intel.

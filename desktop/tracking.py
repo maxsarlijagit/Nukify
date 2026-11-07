@@ -3,7 +3,7 @@
 import os
 import sys
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).parent/'vendor'))
+sys.path.insert(0,str(Path(__file__).resolve().parent/'vendor'))
 os.environ.setdefault('OPENCV_IO_ENABLE_OPENEXR','1')
 import cv2
 import numpy as np

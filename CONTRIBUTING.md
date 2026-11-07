@@ -2,7 +2,7 @@
 
 Si trabajás con un agente de programación, leé las [instrucciones de colaboración](agents/README.md) y la [guía para tu primera contribución agéntica](agents/FIRST_AGENTIC_CONTRIBUTION.md). Usá la [plantilla de tarea](agents/TASK_TEMPLATE.md) para definir alcance, aceptación y evidencia.
 
-Gracias por contribuir. Esta versión es una beta técnica para Windows x64.
+Gracias por contribuir. Esta versión es una beta técnica para Windows x64 y macOS Apple Silicon.
 
 1. Abrí un issue que describa el problema o la propuesta. Para errores, indicá versión, pasos, resultado esperado, formato y un proyecto mínimo sin medios privados.
 2. Prepará el entorno con [BUILDING.md](BUILDING.md), creá una rama y mantené los cambios acotados.

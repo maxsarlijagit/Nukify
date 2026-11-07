@@ -1,8 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Explicit single-part, flat EXR contract. Never silently drop extra parts."""
 import sys
+sys.dont_write_bytecode = True  # Preserve the signed macOS bundle.
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).parent/'vendor'))
+sys.path.insert(0,str(Path(__file__).resolve().parent/'vendor'))
 import OpenEXR
 import numpy as np
 

@@ -2,6 +2,7 @@
 """GitHub releases and verified downloads. No Qt, credentials or Blender imports."""
 import hashlib
 import json
+import platform
 import re
 import sys
 import time
@@ -55,6 +56,12 @@ def fetch_releases():
     return data
 
 
+def installer_name(version):
+    if sys.platform == "darwin":
+        return f"Nukify-{version}-macOS-{platform.machine()}.dmg"
+    return f"Nukify-Setup-{version}.exe"
+
+
 def select_release(releases, current, include_beta=True):
     current_key = version_key(current)
     candidates = []
@@ -68,7 +75,7 @@ def select_release(releases, current, include_beta=True):
             if not official_url(release.get('html_url', ''), RELEASES + '/tag/'):
                 continue
             version = release['tag_name'].removeprefix('v')
-            name = f'Nukify-Setup-{version}.exe'
+            name = installer_name(version)
             asset = next((a for a in release.get('assets', []) if a.get('name') == name and a.get('state') == 'uploaded'), None)
             if not asset or not official_url(asset.get('browser_download_url', ''), RELEASES + '/download/' + release['tag_name'] + '/'):
                 continue

@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-import sys,json,traceback
+import sys
+sys.dont_write_bytecode = True  # Preserve the signed macOS bundle.
+import json,traceback
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).parent))
 job=json.loads(Path(sys.argv[sys.argv.index('--')+1]).read_text(encoding='utf-8'))

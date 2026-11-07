@@ -15,7 +15,7 @@ def validate_shortcuts(mapping):
     reserved={'Ctrl+S','Ctrl+Shift+S','Ctrl+O','Ctrl+Z','Ctrl+Shift+Z','Esc'}
     for key,value in merged.items():
         if not isinstance(value,str):raise ValueError('Cada atajo debe ser texto')
-        seq=QKeySequence(value);normalized=seq.toString()
+        seq=QKeySequence(value,QKeySequence.PortableText);normalized=seq.toString(QKeySequence.PortableText)
         if value and (not normalized or seq.isEmpty() or seq.count()!=1 or seq[0].key()==0 or normalized in reserved):raise ValueError('Atajo invalido o reservado: '+value)
         result[key]=normalized
     used=[v for v in result.values() if v]
@@ -34,11 +34,11 @@ class ShortcutUI:
         table=QTableWidget(len(DEFAULTS),2);table.setHorizontalHeaderLabels([tr(text) for text in ['Comando','Atajo']]);editors={}
         for row,key in enumerate(DEFAULTS):
             item=QTableWidgetItem(tr(key));table.setItem(row,0,item)
-            editor=QKeySequenceEdit(QKeySequence(self.graph_shortcuts[key]));table.setCellWidget(row,1,editor);editors[key]=editor
+            editor=QKeySequenceEdit(QKeySequence(self.graph_shortcuts[key],QKeySequence.PortableText));table.setCellWidget(row,1,editor);editors[key]=editor
         layout.addWidget(table);buttons=QDialogButtonBox(QDialogButtonBox.Save|QDialogButtonBox.Cancel|QDialogButtonBox.RestoreDefaults);layout.addWidget(buttons)
         buttons.rejected.connect(dialog.reject)
-        buttons.button(QDialogButtonBox.RestoreDefaults).clicked.connect(lambda:[e.setKeySequence(QKeySequence(DEFAULTS[k])) for k,e in editors.items()])
-        def read_editors():return validate_shortcuts({k:e.keySequence().toString() for k,e in editors.items()})
+        buttons.button(QDialogButtonBox.RestoreDefaults).clicked.connect(lambda:[e.setKeySequence(QKeySequence(DEFAULTS[k],QKeySequence.PortableText)) for k,e in editors.items()])
+        def read_editors():return validate_shortcuts({k:e.keySequence().toString(QKeySequence.PortableText) for k,e in editors.items()})
         def import_preset():
             path,_=QFileDialog.getOpenFileName(self,tr('Importar shortcuts'),'','JSON (*.json)')
             if not path:return

@@ -4,11 +4,12 @@
   <img src="assets/nukify-logo.png" width="96" alt="Nukify logo">
   <h1>Nukify</h1>
   <p><strong>Open-source node-based compositing, powered by Blender.</strong></p>
-  <p>A standalone Windows desktop compositor by <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
+  <p>A standalone Windows and macOS desktop compositor by <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
   <p>
-    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.11.0-orange"></a>
+    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.11.2-orange"></a>
     <a href="LICENSE"><img alt="GPL v3 or later" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue"></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/platform-Windows_x64-0078D4">
+    <img alt="macOS Apple Silicon" src="https://img.shields.io/badge/platform-macOS_Apple_Silicon-black">
     <img alt="Technical beta" src="https://img.shields.io/badge/status-technical_beta-yellow">
   </p>
 </div>
@@ -31,6 +32,14 @@ The current source version starts in **English**. Use **Language / Idioma** in t
 The installer is not commercially code-signed. Check its SHA256 against `SHA256SUMS.txt` in the same release. Validation was performed on Windows; a full installation test on a second clean PC is still pending.
 
 Sources and notices for the main bundled components are included under `sources/` and `licenses/`. This repository contains Nukify's source; large executables and dependencies are distributed as release assets. Local builds produce `releases/0.11.0/Nukify-Setup-0.11.0.exe`. Check the release page for published downloads.
+
+### macOS (Apple Silicon)
+
+Download **Nukify-0.11.2-macOS-arm64.dmg** from [Releases](https://github.com/maxsarlijagit/Nukify/releases), open it and drag **Nukify.app** onto **Applications**. The ZIP contains the same application for manual installation. Keep the complete `.app`: Blender and both Python environments are included. Requires **macOS 14 or later and an Apple Silicon Mac**; Intel builds are not provided.
+
+This beta is **ad-hoc signed, without Developer ID signing or Apple notarization**. Verify the download against `SHA256SUMS-macOS-arm64.txt`. macOS may block the first launch: after attempting to open Nukify, use **System Settings → Privacy & Security → Open Anyway** if you trust this release. Do not disable Gatekeeper system-wide. The updater opens the DMG; quit Nukify and drag the new application to Applications to replace it.
+
+Build instructions and validation commands are in [BUILDING.md](BUILDING.md). Sources and license notices are inside `Nukify.app/Contents/Resources/`. macOS validation does not establish Intel compatibility or installation on a second clean Mac.
 
 ## GENAI Studio · fal.ai provider
 

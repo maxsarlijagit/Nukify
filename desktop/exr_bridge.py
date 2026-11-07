@@ -3,11 +3,11 @@
 import json,os,subprocess,sys,tempfile
 from pathlib import Path
 import numpy as np
+from runtime import worker_python
 
 
 def call(task,**kwargs):
-    python=Path(sys.executable)
-    if python.name.lower()!='python.exe':python=python.parent/'4.5/python/bin/python.exe'
+    python=worker_python()
     if not python.is_file():raise ValueError('No se encuentra el Python incluido para EXR')
     with tempfile.TemporaryDirectory(prefix='nukify-exr-') as directory:
         root=Path(directory);job=dict(task=task,result=str(root/'result.json'),pixels=str(root/'pixels.npy'),**kwargs)

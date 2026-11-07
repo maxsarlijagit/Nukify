@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 from i18n import tr
+from runtime import ocio_path
 from pathlib import Path
 import PyOpenColorIO as ocio
 import numpy as np
@@ -15,7 +16,7 @@ def display_processor(path,display,view):
 class ColorUI:
     def color_settings(self):
         dialog=QDialog(self);dialog.setWindowTitle(tr('Color Management'));layout=QFormLayout(dialog)
-        state={'path':self.project.get('ocio') or str(Path(self.project['blender']).parent/'4.5/datafiles/colormanagement/config.ocio')}
+        state={'path':self.project.get('ocio') or str(ocio_path(self.project['blender']))}
         label=QLabel(state['path']);label.setWordWrap(True);layout.addRow(tr('Config'),label)
         display=QComboBox();view=QComboBox()
         def load():

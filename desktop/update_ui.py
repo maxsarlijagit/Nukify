@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Nonblocking update checks; installer execution always requires a user click."""
 import queue
+import sys
 import subprocess
 import threading
 import time
@@ -201,7 +202,7 @@ class UpdateController(QObject):
         try:
             # closeEvent preserves the existing save/cancel and active-job guards.
             if self.window.close():
-                subprocess.Popen([self.installer, '/NORESTART'], close_fds=True)
+                subprocess.Popen(['open', self.installer] if sys.platform == 'darwin' else [self.installer, '/NORESTART'], close_fds=True)
                 app.quit()
         except OSError as exc:
             self.closed = False

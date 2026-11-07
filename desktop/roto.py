@@ -57,7 +57,7 @@ def transform_points(points,transform,w,h):
     return result
 
 def raster(p,w,h,frame):
-    sys.path.insert(0,str(Path(__file__).parent/'vendor'));import cv2
+    sys.path.insert(0,str(Path(__file__).resolve().parent/'vendor'));import cv2
     mask=np.zeros((h,w),np.float32);ss=2
     for original in sorted(list(p.get('shapes',[]))+[p],key=lambda s:s.get('shape_order',0)):
         # Active shape has already been evaluated by parameters(); inactive layers carry curves.

@@ -3,7 +3,7 @@
 import json
 import sys
 from pathlib import Path
-from updates import installed_version, select_release, RELEASES
+from updates import installed_version, select_release, RELEASES, installer_name
 
 
 def run(window, app, output):
@@ -18,9 +18,9 @@ def run(window, app, output):
         tag = 'v99.0.0'
         fixture = dict(tag_name=tag, name='Update QA', body='Changelog fixture: update checks and EXR layers.',
             draft=False, prerelease=True, published_at='2026-11-03T00:00:00Z',
-            html_url=RELEASES + '/tag/' + tag, assets=[dict(name='Nukify-Setup-99.0.0.exe',
+            html_url=RELEASES + '/tag/' + tag, assets=[dict(name=installer_name('99.0.0'),
             state='uploaded', size=100, digest='sha256:' + 'a' * 64,
-            browser_download_url=RELEASES + '/download/' + tag + '/Nukify-Setup-99.0.0.exe')])
+            browser_download_url=RELEASES + '/download/' + tag + '/' + installer_name('99.0.0'))])
         release = select_release([fixture], current)
         assert release['version'] == '99.0.0'
         assert select_release([fixture], current, False) is None
