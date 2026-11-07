@@ -86,7 +86,7 @@ Ejecutar las cinco suites del binario y la prueba de actualizaciones, cada una c
 
 ```sh
 QT_QPA_PLATFORM=offscreen releases/0.11.1/macOS-arm64/Nukify.app/Contents/MacOS/Nukify --self-test "$PWD/validation/mac-self-test.json"
-# Repetir con --advanced-test, --workflow-test, --sprints-test, --genai-test y --update-test.
+# Repetir con --advanced-test, --workflow-test, --sprints-test, --genai-test y --updates-test.
 codesign --verify --deep --strict releases/0.11.1/macOS-arm64/Nukify.app
 hdiutil verify releases/0.11.1/macOS-arm64/Nukify-0.11.1-macOS-arm64.dmg
 ```
