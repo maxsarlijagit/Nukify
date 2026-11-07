@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Executed by Blender's Python, never by the UI interpreter."""
-import json
 import sys
+sys.dont_write_bytecode = True  # Preserve the signed macOS bundle.
+import json
 import time
 import traceback
 from pathlib import Path
