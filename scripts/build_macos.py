@@ -47,11 +47,15 @@ def main():
     output = ROOT / 'releases' / version / 'macOS-arm64'
     output.mkdir(parents=True, exist_ok=True)
     run(sys.executable, ROOT / 'scripts/fetch_sources.py', cwd=ROOT)
+    desktop_data = ROOT / 'build/macos-data/desktop'
+    if desktop_data.exists():
+        shutil.rmtree(desktop_data)
+    shutil.copytree(ROOT / 'desktop', desktop_data, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
     run(sys.executable, '-m', 'PyInstaller', '--clean', '--noconfirm', '--windowed',
         '--onedir', '--name', 'Nukify', '--distpath', output,
         '--icon', ROOT / 'assets/nukify-logo.png', '--paths', ROOT / 'desktop',
         '--osx-bundle-identifier', 'com.maxsarlija.nukify', '--target-arch', 'arm64',
-        '--collect-all', 'PyOpenColorIO', '--add-data', f'{ROOT / "desktop"}:desktop',
+        '--collect-all', 'PyOpenColorIO', '--add-data', f'{desktop_data}:desktop',
         '--add-data', f'{ROOT / "assets"}:assets', ROOT / 'desktop/app.py', cwd=ROOT)
     app = output / 'Nukify.app'
     resources = app / 'Contents/Resources'

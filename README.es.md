@@ -4,9 +4,9 @@
   <img src="assets/nukify-logo.png" width="96" alt="Nukify logo">
   <h1>Nukify</h1>
   <p><strong>Composición nodal open source, con Blender como motor.</strong></p>
-  <p>Un compositor de escritorio independiente para Windows, creado por <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
+  <p>Un compositor de escritorio independiente para Windows y macOS, creado por <a href="https://github.com/maxsarlijagit">Max Sarlija</a>.</p>
   <p>
-    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.11.0-orange"></a>
+    <a href="https://github.com/maxsarlijagit/Nukify/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.11.2-orange"></a>
     <a href="LICENSE"><img alt="License GPL v3 or later" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue"></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/platform-Windows_x64-0078D4">
     <img alt="Technical beta" src="https://img.shields.io/badge/status-technical_beta-yellow">
