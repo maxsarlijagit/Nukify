@@ -113,6 +113,8 @@ class Graph(GraphInteraction, QGraphicsView):
         self.setRenderHint(QPainter.Antialiasing)
         self.setBackgroundBrush(QColor('#181c22'))
         self.setDragMode(QGraphicsView.RubberBandDrag)
+        self.setAcceptDrops(True)
+        self.setToolTip(tr('Arrastrá imágenes o secuencias aquí para crear nodos Read.'))
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
         self.scene().selectionChanged.connect(self.selection)
         self.setMinimumHeight(150)

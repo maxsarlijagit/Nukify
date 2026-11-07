@@ -5,6 +5,9 @@ Keep format placeholders identical. Technical node names and enum values are
 intentionally stable across languages for interchange and existing workflows.
 """
 PAIRS = [tuple(line.split('|', 1)) for line in r'''
+Arrastrá imágenes o secuencias aquí para crear nodos Read.|Drop images or sequences here to create Read nodes.
+Importar material…|Import media…
+Nodos Read creados: {0}|Read nodes created: {0}
 Ejemplos|Examples
 Proyecto|Project
 Inspeccionar 3D en Blender|Inspect 3D in Blender

@@ -7,9 +7,55 @@ from PySide6.QtGui import QPainterPath, QPen, QColor, QKeySequence, QPainterPath
 from PySide6.QtWidgets import QApplication, QMenu, QDialog, QVBoxLayout, QLineEdit, QListWidget, QDialogButtonBox
 from model import new_node, connect
 from registry import NODES, INPUTS
+from pathlib import Path
+from PySide6.QtWidgets import QFileDialog
+from media_import import IMAGE_EXTENSIONS, FILE_FILTER, read_paths
 
 
 class GraphInteraction:
+    def media_urls(self, mime):
+        return [url.toLocalFile() for url in mime.urls()
+                if url.isLocalFile() and Path(url.toLocalFile()).suffix.lower() in IMAGE_EXTENSIONS]
+
+    def dragEnterEvent(self, event):
+        if self.media_urls(event.mimeData()):
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):
+        self.dragEnterEvent(event)
+
+    def dropEvent(self, event):
+        if self.import_media(self.media_urls(event.mimeData()), self.mapToScene(event.position().toPoint())):
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+
+    def choose_media(self, position):
+        paths, _ = QFileDialog.getOpenFileNames(self, tr('Importar material…'), '', FILE_FILTER)
+        self.import_media(paths, position)
+
+    def import_media(self, paths, position):
+        paths = read_paths(paths)
+        if not paths:
+            return False
+        self.owner.checkpoint()
+        created = []
+        for index, path in enumerate(paths):
+            node = new_node(self.owner.project, 'Read', position.x() + (index % 4) * 180,
+                            position.y() + (index // 4) * 100)
+            node['params']['path'] = path
+            created.append(node)
+        self.rebuild()
+        for node in created:
+            self.items_by_id[node['id']].setSelected(True)
+        self.owner.changed()
+        self.owner.statusBar().showMessage(tr('Nodos Read creados: {0}').format(len(created)), 5000)
+        return True
+
     def search_nodes(self):
         dialog=QDialog(self);dialog.setWindowTitle(tr('Crear nodo'));layout=QVBoxLayout(dialog)
         search=QLineEdit();search.setPlaceholderText(tr('Buscar nodo...'));items=QListWidget()
@@ -69,6 +115,8 @@ class GraphInteraction:
                 self.owner.checkpoint();self.items_by_id[target].data['inputs'].pop(socket,None);self.update_edges();self.owner.changed()
             menu.addAction(tr('Desconectar'),disconnect)
         menu.addAction(tr('Crear nodo [Tab]'),self.search_nodes)
+        position = self.mapToScene(event.pos())
+        menu.addAction(tr('Importar material…'), lambda: self.choose_media(position))
         menu.addAction(tr('Copiar'),self.copy_nodes);menu.addAction(tr('Pegar'),self.paste_nodes)
         menu.addAction(tr('Duplicar'),lambda:(self.copy_nodes(),self.paste_nodes()))
         menu.addAction(tr('Bypass [D]'),self.bypass);menu.addAction(tr('Eliminar'),self.owner.delete_selected)
