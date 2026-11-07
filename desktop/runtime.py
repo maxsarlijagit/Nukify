@@ -6,6 +6,13 @@ from pathlib import Path
 import sys
 
 
+# Blender's scripts run from the signed bundle. Bytecode caches would alter
+# sealed resources after the first launch and invalidate the application seal.
+if sys.platform == 'darwin' and getattr(sys, 'frozen', False):
+    sys.dont_write_bytecode = True
+    os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
+
 def engine_path():
     if getattr(sys, 'frozen', False):
         base = Path(sys.executable).resolve().parent
