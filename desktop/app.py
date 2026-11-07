@@ -369,7 +369,7 @@ class Window(ProductionUI, LiveMixin, QMainWindow):
         for shortcut, callback in [('Ctrl+S', self.save_project), ('Ctrl+Shift+S', self.save_as), ('Ctrl+O', self.open_project),
                                    ('Ctrl+Z', self.undo), ('Ctrl+Shift+Z', self.redo)]:
             action = QAction(self)
-            action.setShortcut(QKeySequence(shortcut))
+            action.setShortcut(QKeySequence(shortcut,QKeySequence.PortableText))
             action.triggered.connect(callback)
             self.addAction(action)
         QTimer.singleShot(100, self.graph.fit)

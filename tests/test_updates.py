@@ -14,7 +14,7 @@ import updates
 
 def release(version='0.11.0', beta=False, content=b'installer fixture'):
     tag = 'v' + version
-    name = f'Nukify-Setup-{version}.exe'
+    name = updates.installer_name(version)
     return dict(tag_name=tag, name='Nukify ' + version, body='## Changes\n- EXR fixes\n- Update checks',
                 prerelease=beta, draft=False, published_at='2026-11-03T00:00:00Z',
                 html_url=updates.RELEASES + '/tag/' + tag,
@@ -70,6 +70,14 @@ class UpdatesTests(unittest.TestCase):
         for data in (b'bad json', b'{}'):
             with patch('updates.request', return_value=io.BytesIO(data)):
                 with self.assertRaises(ValueError): updates.fetch_releases()
+
+    def test_platform_installer_selection(self):
+        with patch.object(sys, 'platform', 'darwin'), patch('updates.platform.machine', return_value='arm64'):
+            self.assertEqual(updates.installer_name('1.2.3'), 'Nukify-1.2.3-macOS-arm64.dmg')
+            item = release('1.2.3')
+            self.assertIsNotNone(updates.select_release([item], '1.0.0'))
+            with patch.object(sys, 'platform', 'win32'):
+                self.assertIsNone(updates.select_release([item], '1.0.0'))
 
     def test_settings_and_rate_limit(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -7,8 +7,8 @@ from viewer import display_pixels
 
 class ColorTests(unittest.TestCase):
     def test_ocio_display_and_alpha(self):
-        from runtime import engine_path
-        config=Path(engine_path()).parent/'4.5/datafiles/colormanagement/config.ocio'
+        from runtime import engine_path, ocio_path
+        config=ocio_path(engine_path())
         if not config.is_file():self.skipTest('Blender config fixture not available')
         processor=display_processor(str(config),'sRGB','Standard')
         source=np.array([[[.25,.25,.25,.5]]],np.float32);before=source.copy()

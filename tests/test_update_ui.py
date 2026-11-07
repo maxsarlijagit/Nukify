@@ -101,7 +101,7 @@ class UpdateUITests(unittest.TestCase):
         self.window.allow_close = True
         with patch('update_ui.subprocess.Popen') as launch:
             self.controller.launch_installer()
-            launch.assert_called_once_with(['fixture.exe', '/NORESTART'], close_fds=True)
+            launch.assert_called_once_with(['open', 'fixture.exe'] if sys.platform == 'darwin' else ['fixture.exe', '/NORESTART'], close_fds=True)
         with patch('update_ui.subprocess.Popen', side_effect=OSError('cannot launch')):
             self.controller.launch_installer()
             self.assertTrue(self.window.isVisible())

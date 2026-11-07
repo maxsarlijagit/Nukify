@@ -152,11 +152,11 @@ class GraphInteraction:
             self.owner.history.append(before);self.owner.future.clear();self.owner.dirty=True
 
     def keyPressEvent(self,event):
-        sequence=QKeySequence(event.keyCombination()).toString()
+        sequence=QKeySequence(event.keyCombination()).toString(QKeySequence.PortableText)
         from shortcuts import DEFAULTS
         command=next((k for k,v in getattr(self.owner,'graph_shortcuts',DEFAULTS).items() if v and v==sequence),None)
         if command:
-            mapped=QKeySequence(DEFAULTS[command])[0]
+            mapped=QKeySequence(DEFAULTS[command],QKeySequence.PortableText)[0]
             key=mapped.key();ctrl=bool(mapped.keyboardModifiers() & Qt.ControlModifier)
         elif event.key()==Qt.Key_Escape:key=event.key();ctrl=False
         else:super().keyPressEvent(event);return

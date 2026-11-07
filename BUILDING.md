@@ -1,4 +1,4 @@
-# Desarrollo y compilación (Windows x64)
+# Desarrollo y compilación (Windows x64 y macOS Apple Silicon)
 
 ## Requisitos
 
@@ -55,3 +55,40 @@ $env:QT_QPA_PLATFORM='offscreen'
 ```
 
 Las DLL de Qt/PySide son dinámicas y están en `_internal/`. Los archivos de fuente incluidos permiten modificar/recompilar esos componentes; Nukify no impone verificaciones criptográficas sobre reemplazos de Qt. Consultar los README de cada archivo upstream para sus toolchains y opciones de compilación.
+
+## macOS Apple Silicon
+
+Compilar nativamente en macOS 12+ con Python 3.12 arm64. No mezclar ruedas Windows con `desktop/vendor`: usar un checkout limpio o un directorio vendor exclusivo de esta plataforma.
+
+```sh
+python3.12 -m venv .buildenv
+.buildenv/bin/python -m pip install -r requirements-build.txt
+.buildenv/bin/python -m pip install --target desktop/vendor --only-binary=:all: --platform macosx_11_0_arm64 --python-version 311 --implementation cp --abi cp311 --no-deps -r requirements-worker.txt
+# Para pruebas directas desde Python de UI:
+.buildenv/bin/python -m pip install -r requirements-worker.txt
+export NUKIFY_BLENDER='/Applications/Blender.app/Contents/MacOS/Blender'
+QT_QPA_PLATFORM=offscreen .buildenv/bin/python -m unittest discover -s tests -p 'test_*.py'
+QT_QPA_PLATFORM=offscreen .buildenv/bin/python tests/ui_layout_090.py
+"$NUKIFY_BLENDER" --background --factory-startup --threads 4 --python-exit-code 1 --python tests/blender_nodes.py
+```
+
+Descargar el DMG oficial indicado en `packaging/macos.json` y verificar su SHA256 contra el archivo `.sha256` de Blender. Commitear los cambios antes de compilar; el script rechaza un árbol sucio para que el commit registrado corresponda a las fuentes distribuidas.
+
+```sh
+.buildenv/bin/python scripts/build_macos.py --blender-dmg /ruta/blender-4.5.14-macos-arm64.dmg
+```
+
+Genera `releases/0.11.1/macOS-arm64/Nukify.app`, un DMG con enlace a Aplicaciones, un ZIP y `SHA256SUMS-macOS-arm64.txt`. Incluye Blender, fuentes upstream/originales, fuentes de Nukify, avisos y manifiesto. El motor se copia sin alterar su estructura dentro de `Contents/Resources/engine/Blender.app`. El puente EXR usa el Python 3.11 privado de Blender en otro proceso.
+
+El paquete usa firma ad-hoc: no sustituye Developer ID ni notarización. Para distribución notarizada se necesita la identidad y cuenta Apple del mantenedor. No hay compilación Intel validada.
+
+Ejecutar las cinco suites del binario y la prueba de actualizaciones, cada una con ruta JSON absoluta:
+
+```sh
+QT_QPA_PLATFORM=offscreen releases/0.11.1/macOS-arm64/Nukify.app/Contents/MacOS/Nukify --self-test "$PWD/validation/mac-self-test.json"
+# Repetir con --advanced-test, --workflow-test, --sprints-test, --genai-test y --update-test.
+codesign --verify --deep --strict releases/0.11.1/macOS-arm64/Nukify.app
+hdiutil verify releases/0.11.1/macOS-arm64/Nukify-0.11.1-macOS-arm64.dmg
+```
+
+Antes de publicar, montar el DMG, copiar la app a un directorio temporal y repetir una suite desde esa copia. Conservar resultados en un archivo de validación junto a los binarios; no confundir esto con instalación validada en otra Mac limpia.
