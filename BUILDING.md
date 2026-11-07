@@ -78,17 +78,17 @@ Descargar el DMG oficial indicado en `packaging/macos.json` y verificar su SHA25
 .buildenv/bin/python scripts/build_macos.py --blender-dmg /ruta/blender-4.5.14-macos-arm64.dmg
 ```
 
-Genera `releases/0.11.1/macOS-arm64/Nukify.app`, un DMG con enlace a Aplicaciones, un ZIP y `SHA256SUMS-macOS-arm64.txt`. Incluye Blender, fuentes upstream/originales, fuentes de Nukify, avisos y manifiesto. El motor se copia sin alterar su estructura dentro de `Contents/Resources/engine/Blender.app`. El puente EXR usa el Python 3.11 privado de Blender en otro proceso.
+Genera `releases/0.11.2/macOS-arm64/Nukify.app`, un DMG con enlace a Aplicaciones, un ZIP y `SHA256SUMS-macOS-arm64.txt`. Incluye Blender, fuentes upstream/originales, fuentes de Nukify, avisos y manifiesto. El motor se copia sin alterar su estructura dentro de `Contents/Resources/engine/Blender.app`. El puente EXR usa el Python 3.11 privado de Blender en otro proceso.
 
 El paquete usa firma ad-hoc: no sustituye Developer ID ni notarización. Para distribución notarizada se necesita la identidad y cuenta Apple del mantenedor. No hay compilación Intel validada.
 
 Ejecutar las cinco suites del binario y la prueba de actualizaciones, cada una con ruta JSON absoluta:
 
 ```sh
-QT_QPA_PLATFORM=offscreen releases/0.11.1/macOS-arm64/Nukify.app/Contents/MacOS/Nukify --self-test "$PWD/validation/mac-self-test.json"
+QT_QPA_PLATFORM=offscreen releases/0.11.2/macOS-arm64/Nukify.app/Contents/MacOS/Nukify --self-test "$PWD/validation/mac-self-test.json"
 # Repetir con --advanced-test, --workflow-test, --sprints-test, --genai-test y --updates-test.
-codesign --verify --deep --strict releases/0.11.1/macOS-arm64/Nukify.app
-hdiutil verify releases/0.11.1/macOS-arm64/Nukify-0.11.1-macOS-arm64.dmg
+codesign --verify --deep --strict releases/0.11.2/macOS-arm64/Nukify.app
+hdiutil verify releases/0.11.2/macOS-arm64/Nukify-0.11.2-macOS-arm64.dmg
 ```
 
 Antes de publicar, montar el DMG, copiar la app a un directorio temporal y repetir una suite desde esa copia. Conservar resultados en un archivo de validación junto a los binarios; no confundir esto con instalación validada en otra Mac limpia.
