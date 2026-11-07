@@ -11,7 +11,7 @@ jobs:
           - os: windows-latest
             worker_platform: win_amd64
           - os: macos-15
-            worker_platform: macosx_11_0_arm64
+            worker_platform: macosx_14_0_arm64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4

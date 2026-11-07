@@ -102,7 +102,7 @@ def main():
         for name in tracked:
             if name and (ROOT / name).is_file():
                 archive.write(ROOT / name, name)
-    manifest = dict(app=version, platform='macOS-arm64', engine=config['blender_version'],
+    manifest = dict(app=version, platform='macOS-arm64', minimum_macos=mac['minimum_macos'], engine=config['blender_version'],
                     engine_build=config['blender_build'], engine_dmg_sha256=mac['blender_dmg_sha256'],
                     engine_sha256=sha256(blender),
                     source_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
@@ -111,7 +111,7 @@ def main():
     (app / 'Contents/MacOS/release.json').write_text(json.dumps(manifest, indent=2))
     plist = app / 'Contents/Info.plist'
     data = plistlib.loads(plist.read_bytes())
-    data.update(CFBundleShortVersionString=version, CFBundleVersion=version, LSMinimumSystemVersion='12.0')
+    data.update(CFBundleShortVersionString=version, CFBundleVersion=version, LSMinimumSystemVersion=mac['minimum_macos'])
     plist.write_bytes(plistlib.dumps(data))
     run('codesign', '--force', '--deep', '--sign', '-', app)
     run('codesign', '--verify', '--deep', '--strict', app)
@@ -119,7 +119,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='nukify-dmg-') as staging:
         run('ditto', app, Path(staging) / 'Nukify.app')
         (Path(staging) / 'Applications').symlink_to('/Applications', target_is_directory=True)
-        (Path(staging) / 'INSTALL.txt').write_text('Drag Nukify.app to Applications. Requires macOS 12+, Apple Silicon.\nThis beta is ad-hoc signed, not notarized. See README for Gatekeeper instructions.\n')
+        (Path(staging) / 'INSTALL.txt').write_text('Drag Nukify.app to Applications. Requires macOS 14+, Apple Silicon.\nThis beta is ad-hoc signed, not notarized. See README for Gatekeeper instructions.\n')
         run('hdiutil', 'create', '-volname', 'Nukify', '-srcfolder', staging, '-ov', '-format', 'UDZO', output / f'{stem}.dmg')
     run('ditto', '-c', '-k', '--sequesterRsrc', '--keepParent', app, output / f'{stem}.zip')
     artifacts = [output / f'{stem}.dmg', output / f'{stem}.zip']

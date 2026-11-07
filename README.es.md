@@ -143,7 +143,7 @@ Nukify es independiente y no está afiliado a Blender Foundation ni a Foundry. L
 
 ## macOS · Apple Silicon
 
-Descargá **Nukify-0.11.2-macOS-arm64.dmg** desde [Releases](https://github.com/maxsarlijagit/Nukify/releases), abrilo y arrastrá **Nukify.app** a **Aplicaciones**. El ZIP contiene la misma aplicación para instalación manual. Requiere **macOS 12 o posterior y Apple Silicon**; no se distribuye una compilación Intel. Blender y los entornos Python vienen incluidos dentro de la aplicación.
+Descargá **Nukify-0.11.2-macOS-arm64.dmg** desde [Releases](https://github.com/maxsarlijagit/Nukify/releases), abrilo y arrastrá **Nukify.app** a **Aplicaciones**. El ZIP contiene la misma aplicación para instalación manual. Requiere **macOS 14 o posterior y Apple Silicon**; no se distribuye una compilación Intel. Blender y los entornos Python vienen incluidos dentro de la aplicación.
 
 La beta tiene firma ad-hoc; **no tiene firma Developer ID ni notarización de Apple**. Verificá `SHA256SUMS-macOS-arm64.txt`. Si macOS bloquea el primer inicio, intentá abrirla y luego usá **Configuración del Sistema → Privacidad y seguridad → Abrir de todos modos**, únicamente si confiás en la descarga. No desactives Gatekeeper globalmente. El actualizador abre el DMG: cerrá Nukify y reemplazá la aplicación arrastrándola nuevamente a Aplicaciones.
 

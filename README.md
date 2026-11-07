@@ -35,7 +35,7 @@ Sources and notices for the main bundled components are included under `sources/
 
 ### macOS (Apple Silicon)
 
-Download **Nukify-0.11.2-macOS-arm64.dmg** from [Releases](https://github.com/maxsarlijagit/Nukify/releases), open it and drag **Nukify.app** onto **Applications**. The ZIP contains the same application for manual installation. Keep the complete `.app`: Blender and both Python environments are included. Requires **macOS 12 or later and an Apple Silicon Mac**; Intel builds are not provided.
+Download **Nukify-0.11.2-macOS-arm64.dmg** from [Releases](https://github.com/maxsarlijagit/Nukify/releases), open it and drag **Nukify.app** onto **Applications**. The ZIP contains the same application for manual installation. Keep the complete `.app`: Blender and both Python environments are included. Requires **macOS 14 or later and an Apple Silicon Mac**; Intel builds are not provided.
 
 This beta is **ad-hoc signed, without Developer ID signing or Apple notarization**. Verify the download against `SHA256SUMS-macOS-arm64.txt`. macOS may block the first launch: after attempting to open Nukify, use **System Settings → Privacy & Security → Open Anyway** if you trust this release. Do not disable Gatekeeper system-wide. The updater opens the DMG; quit Nukify and drag the new application to Applications to replace it.
 

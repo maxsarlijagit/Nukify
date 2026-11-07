@@ -58,12 +58,12 @@ Las DLL de Qt/PySide son dinámicas y están en `_internal/`. Los archivos de fu
 
 ## macOS Apple Silicon
 
-Compilar nativamente en macOS 12+ con Python 3.12 arm64. No mezclar ruedas Windows con `desktop/vendor`: usar un checkout limpio o un directorio vendor exclusivo de esta plataforma.
+Compilar nativamente en macOS 14+ con Python 3.12 arm64. No mezclar ruedas Windows con `desktop/vendor`: usar un checkout limpio o un directorio vendor exclusivo de esta plataforma.
 
 ```sh
 python3.12 -m venv .buildenv
 .buildenv/bin/python -m pip install -r requirements-build.txt
-.buildenv/bin/python -m pip install --target desktop/vendor --only-binary=:all: --platform macosx_11_0_arm64 --python-version 311 --implementation cp --abi cp311 --no-deps -r requirements-worker.txt
+.buildenv/bin/python -m pip install --target desktop/vendor --only-binary=:all: --platform macosx_14_0_arm64 --python-version 311 --implementation cp --abi cp311 --no-deps -r requirements-worker.txt
 # Para pruebas directas desde Python de UI:
 .buildenv/bin/python -m pip install -r requirements-worker.txt
 export NUKIFY_BLENDER='/Applications/Blender.app/Contents/MacOS/Blender'
